@@ -111,7 +111,6 @@ function EmpEdit() {
         });
     }
   
-  
     return (
         <Layout>
             <div className="container">

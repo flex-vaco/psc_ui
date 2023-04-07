@@ -3,7 +3,6 @@ import { Link, useParams } from "react-router-dom";
 import axios from 'axios';
 import Layout from "../components/Layout"
  
-  
 function EmpShow() {
     const [id, setId] = useState(useParams().id)
     const [empDetails, setEmpDetails] = useState({
