@@ -13,7 +13,7 @@ function EmpShow() {
         role: '',
         primary_skills: '',
         secondary_skills: '',
-        total_work_experience_months: '',
+        total_work_experience_years: '',
         rate_per_hour: '',
         vaco_join_date: '',
         home_location_city: '',
@@ -50,8 +50,8 @@ function EmpShow() {
                         <p><b className="text-muted">Email: </b>{empDetails.email}</p>
                         <p><b className="text-muted">Primary Skills: </b>{empDetails.primary_skills}</p>
                         <p><b className="text-muted">Secondary Skills: </b>{empDetails.secondary_skills}</p>
-                        <p><b className="text-muted">Statuss: </b>{empDetails.status}</p>
-                        <p><b className="text-muted">Experience: </b>{empDetails.total_work_experience_months} months</p>
+                        <p><b className="text-muted">Status: </b>{empDetails.status}</p>
+                        <p><b className="text-muted">Experience: </b>{empDetails.total_work_experience_years} years</p>
                         <p><b className="text-muted">Hourly Rate: </b>{empDetails.rate_per_hour} USD</p>
                         <p><b className="text-muted">Home Location City: </b>{empDetails.home_location_city}</p>
                         <p><b className="text-muted">Office Location City: </b>{empDetails.office_location_city}</p>

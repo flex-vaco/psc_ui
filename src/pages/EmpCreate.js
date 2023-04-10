@@ -10,12 +10,12 @@ function EmpCreate() {
     const [last_name, setLastName] = useState('');
     const [primary_skills, setPrimarySkills] = useState('');
     const [secondary_skills, setSecondarySkills] = useState('');
-    const [total_work_experience_months, setTotWorkExp] = useState('');
+    const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
     const [office_location_city, setOfficeLocCity] = useState('');
     const [role, setRole] = useState('');
-    const [status, setStatus] = useState('');
+    const [status, setStatus] = useState('Active');
     const [supervisor_name, setSupervisorName] = useState('');
     const [supervisor_email, setSupervisorEmail] = useState('');
     const [vaco_join_date, setVacoJoinDate] = useState('');
@@ -40,7 +40,7 @@ function EmpCreate() {
           role: role,
           primary_skills: primary_skills,
           secondary_skills: secondary_skills,
-          total_work_experience_months: total_work_experience_months,
+          total_work_experience_years: total_work_experience_years,
           rate_per_hour: rate_per_hour,
           vaco_join_date: vaco_join_date,
           home_location_city: home_location_city,
@@ -129,14 +129,14 @@ function EmpCreate() {
                                     name="email"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="total_work_experience_months">Total Experience (in Months)</label>
+                                <label htmlFor="total_work_experience_years">Total Experience </label>
                                 <input 
                                     onChange={(event)=>{setTotWorkExp(event.target.value)}}
-                                    value={total_work_experience_months}
+                                    value={total_work_experience_years}
                                     type="number"
                                     className="form-control"
-                                    id="total_work_experience_months"
-                                    name="total_work_experience_months"/>
+                                    id="total_work_experience_years"
+                                    name="total_work_experience_years"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="rate_per_hour">Rate Per Hour (USD)</label>
@@ -235,12 +235,13 @@ function EmpCreate() {
                                     id="supervisor_email"
                                     name="supervisor_email"/>
                             </div>
-                            <div className="form-group">
-                                <label htmlFor="is_onsite">Is working On site?</label>
+                            <div className="form-check-prepend">
+                                <label className="form-check-label" for="is_onsite"><span>Is working On site?</span></label>
+                                {" "}
                                 <input 
                                     type="checkbox"
                                     checked={is_onsite}
-                                    className="form-check-input form-control"
+                                    className="form-check-input"
                                     id="is_onsite"
                                     name="is_onsite"
                                     onChange={()=>{setIsOnsite(!is_onsite)}}

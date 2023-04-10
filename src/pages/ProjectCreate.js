@@ -10,7 +10,7 @@ function ProjectCreate() {
     const [last_name, setLastName] = useState('');
     const [primary_skills, setPrimarySkills] = useState('');
     const [secondary_skills, setSecondarySkills] = useState('');
-    const [total_work_experience_months, setTotWorkExp] = useState('');
+    const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
     const [office_location_city, setOfficeLocCity] = useState('');
@@ -40,7 +40,7 @@ function ProjectCreate() {
           role: role,
           primary_skills: primary_skills,
           secondary_skills: secondary_skills,
-          total_work_experience_months: total_work_experience_months,
+          total_work_experience_years: total_work_experience_years,
           rate_per_hour: rate_per_hour,
           vaco_join_date: vaco_join_date,
           home_location_city: home_location_city,
@@ -129,14 +129,14 @@ function ProjectCreate() {
                                     name="email"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="total_work_experience_months">Total Experience (in Months)</label>
+                                <label htmlFor="total_work_experience_years">Total Experience (in Months)</label>
                                 <input 
                                     onChange={(event)=>{setTotWorkExp(event.target.value)}}
-                                    value={total_work_experience_months}
+                                    value={total_work_experience_years}
                                     type="number"
                                     className="form-control"
-                                    id="total_work_experience_months"
-                                    name="total_work_experience_months"/>
+                                    id="total_work_experience_years"
+                                    name="total_work_experience_years"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="rate_per_hour">Rate Per Hour (USD)</label>
