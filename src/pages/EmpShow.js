@@ -41,7 +41,7 @@ function EmpShow() {
                     <div className="card-header">
                         <Link 
                             className="btn btn-outline-info float-right"
-                            to="/"> View All Projects
+                            to="/"> View All Employees
                         </Link>
                     </div>
                     <div className="card-body">
