@@ -2,12 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
+import '@popperjs/core';
+import "bootstrap";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = "http://127.0.0.1:3006"//process.env.API_BASE_URL
+const token = localStorage.getItem('jwt-access-token') || "-RAJENDER-"
+
+// Request interceptors for API calls
+axios.interceptors.request.use(
+  config => {
+    config.headers['Authorization'] = `Bearer ${token}`;
+      return config;
+    },
+    error => {
+      return Promise.reject(error);
+    }
+);
 
 root.render(
   <React.StrictMode>

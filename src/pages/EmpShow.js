@@ -36,13 +36,9 @@ function EmpShow() {
     return (
         <Layout>
            <div className="container">
-            <h2 className="text-center mt-5 mb-3">Employee Details</h2>
                 <div className="card">
                     <div className="card-header">
-                        <Link 
-                            className="btn btn-outline-info float-right"
-                            to="/"> View All Employees
-                        </Link>
+                        <h4 className="text-center">Employee Details</h4>
                     </div>
                     <div className="card-body">
                         <p><b className="text-muted">Name: </b>{empDetails.first_name}, {empDetails.last_name}</p>

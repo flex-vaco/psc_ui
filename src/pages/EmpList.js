@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
- 
+import * as Utils from "../lib/Utils"
+
 function EmpList() {
     const  [empList, setEmpList] = useState([])
   
@@ -55,62 +56,78 @@ function EmpList() {
     }
   
     return (
-        <Layout>
-           <div className="container">
-            <h2 className="text-center mt-5 mb-3">Employees List</h2>
-                <div className="card">
-                    <div className="card-header">
-                        <Link 
-                            className="btn btn-outline-primary"
-                            to="/create">Create New Employee
-                        </Link>
-                    </div>
-                    <div className="card-body">
-              
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Primary Skills</th>
-                                    <th width="240px">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {empList.map((empDetails, key)=>{
-                                    return (
-                                        <tr key={key}>
-                                            <td>{empDetails.first_name}, {empDetails.last_name}</td>
-                                            <td>{empDetails.email}</td>
-                                            <td>{empDetails.role}</td>
-                                            <td>{empDetails.primary_skills}</td>
-                                            <td>
-                                                <Link
-                                                    to={`/show/${empDetails.id}`}
-                                                    className="btn btn-outline-info mx-1">
-                                                    Show
-                                                </Link>
-                                                <Link
-                                                    className="btn btn-outline-success mx-1"
-                                                    to={`/edit/${empDetails.id}`}>
-                                                    Edit
-                                                </Link>
-                                                <button 
-                                                    onClick={()=>handleDelete(empDetails.id)}
-                                                    className="btn btn-outline-danger mx-1">
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+      <Layout>
+        <div className="container-fluid">
+          <div className="card w-auto">
+            <div className="card-header">
+              <h4 className="text-center">Employee List</h4>
             </div>
-        </Layout>
+            <div className="card-body table-responsive">
+              <table className="table table-hover">
+                <thead className="bg-light">
+                  <tr>
+                    <th>Action</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Primary Skills</th>
+                    <th>Secondary Skills</th>
+                    <th>Status</th>
+                    <th>Exp.(yrs.)</th>
+                    <th>Rate/hr</th>
+                    <th>Vaco Join Date</th>
+                    <th>Home Location</th>
+                    <th>Office Location</th>
+                    <th>Supervisor</th>
+                    <th>Supervisor Email</th>
+                    <th>On Site</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {empList.map((empDetails, key) => {
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <button
+                            onClick={() => handleDelete(empDetails.id)}
+                            className="btn btn-outline-danger" 
+                          >
+                            <i className="bi bi-trash"></i>
+                          </button>
+                          <Link
+                            className="btn btn-outline-success"
+                            to={`/empEdit/${empDetails.id}`}
+                          >
+                            <i className="bi bi-pencil" font-size="2rem;"></i>
+                          </Link>
+                        </td>
+                        <td>
+                          <Link to={`/empShow/${empDetails.id}`}>
+                            {empDetails.first_name}, {empDetails.last_name}
+                          </Link>
+                        </td>
+                        <td>{empDetails.email}</td>
+                        <td>{empDetails.role}</td>
+                        <td>{empDetails.primary_skills}</td>
+                        <td>{empDetails.secondary_skills}</td>
+                        <td>{empDetails.status}</td>
+                        <td>{empDetails.total_work_experience_years}</td>
+                        <td>{empDetails.rate_per_hour}</td>
+                        <td>{Utils.formatDateYYYYMMDD(empDetails.vaco_join_date)}</td>
+                        <td>{empDetails.home_location_city}</td>
+                        <td>{empDetails.office_location_city}</td>
+                        <td>{empDetails.supervisor_name}</td>
+                        <td>{empDetails.supervisor_email}</td>
+                        <td>{(empDetails.is_onsite) ? "YES" : "NO"}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Layout>
     );
 }
   

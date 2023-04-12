@@ -1,0 +1,60 @@
+import React, {useState, useEffect} from 'react';
+import { Link, useParams } from "react-router-dom";
+import axios from 'axios';
+import Layout from "../components/Layout"
+ 
+function ProjectShow() {
+    const [id, setId] = useState(useParams().id)
+    const [projectDetails, setProjectDetails] = useState({
+        client_name: '',
+        client_location: '',
+        contact_person: '',
+        contact_email: '',
+        contact_phone: '',
+        start_date: '',
+        expected_end_date: '',
+        actual_end_date: '',
+        technologies_required: '',
+        description: '',
+        status: '',
+        head_count: '',
+    })
+ 
+    useEffect(() => {
+        axios.get(`/projects/${id}`)
+        .then(function (response) {
+            setProjectDetails(response.data.projects[0])
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }, [])
+  
+    return (
+        <Layout>
+           <div className="container">
+                <div className="card">
+                    <div className="card-header">
+                        <h4 className="text-center">Project Details</h4>
+                    </div>
+                    <div className="card-body">
+                        <p><b className="text-muted">Client Name: </b>{projectDetails.client_name}, {projectDetails.last_name}</p>
+                        <p><b className="text-muted">Location: </b>{projectDetails.client_location}</p>
+                        <p><b className="text-muted">Contact Person: </b>{projectDetails.contact_person}</p>
+                        <p><b className="text-muted">Contact Person Email: </b>{projectDetails.contact_email}</p>
+                        <p><b className="text-muted">Contact Person Phone: </b>{projectDetails.contact_phone}</p>
+                        <p><b className="text-muted">Status: </b>{projectDetails.status}</p>
+                        <p><b className="text-muted">Project Started on: </b>{projectDetails.start_date}</p>
+                        <p><b className="text-muted">Expected End Date: </b>{projectDetails.expected_end_date}</p>
+                        <p><b className="text-muted">Actual End Date: </b>{projectDetails.actual_end_date}</p>
+                        <p><b className="text-muted">Technologies: </b>{projectDetails.technologies_required}</p>
+                        <p><b className="text-muted">Description: </b>{projectDetails.description}</p>
+                        <p><b className="text-muted">Head Count: </b>{projectDetails.head_count}</p>
+                    </div>
+                </div>
+            </div>
+        </Layout>
+    );
+}
+  
+export default ProjectShow;

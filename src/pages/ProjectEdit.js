@@ -1,11 +1,12 @@
-import React, {useState} from 'react'
-import { Link, useNavigate } from "react-router-dom"
+import React, { useState, useEffect } from 'react'
+import { Link, useParams } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
+import * as Utils from "../lib/Utils"
  
- 
-function ProjectCreate() {
+function ProjectEdit() {
+    const [id, setId] = useState(useParams().id)
     const [client_name, setClientName] = useState('');
     const [client_location, setClientLocation] = useState('');
     const [contact_person, setContactPerson] = useState('');
@@ -19,63 +20,70 @@ function ProjectCreate() {
     const [description, setDescription] = useState('');
     const [head_count, setHeadCount] = useState('');
     const [isSaving, setIsSaving] = useState(false)
-    const navigate = useNavigate();
 
-    const handleSave = () => {
-        setIsSaving(true);
-        const config = {
-          headers: {
-            "Content-Length": 0,
-            "Content-Type": "application/json",
-          },
-          responseType: "text",
-        };
-        const data = {
-          client_name: client_name,
-          client_location: client_location,
-          contact_person: contact_person,
-          contact_email: contact_email,
-          contact_phone: contact_phone,
-          start_date: start_date,
-          expected_end_date: expected_end_date,
-          actual_end_date: actual_end_date,
-          technologies_required: technologies_required,
-          description: description,
-          status: status,
-          head_count: head_count,
-        };
-        axios.post('/projects/add', data, config)
-          .then(function (response) {
+    useEffect(() => {
+        axios.get(`/projects/${id}`)
+        .then(function (response) {
+            let projectDetails = response.data.projects[0];
+            setClientName(projectDetails.client_name);
+            setClientLocation(projectDetails.client_location);
+            setContactPerson(projectDetails.contact_person);
+            setContactEmail(projectDetails.contact_email);
+            setContactPhone(projectDetails.contact_phone);
+            setActualEndDate(Utils.formatDateYYYYMMDD(projectDetails.actual_end_date));
+            setStartDate(Utils.formatDateYYYYMMDD(projectDetails.start_date));
+            setExpectedEndDate(Utils.formatDateYYYYMMDD(projectDetails.expected_end_date));
+            setTechRequired(projectDetails.technologies_required);
+            setStatus(projectDetails.status);
+            setDescription(projectDetails.description);
+            setHeadCount(projectDetails.head_count);
+
+        })
+        .catch(function (error) {
             Swal.fire({
-                icon: 'success',
-                title: 'Project Details saved successfully!',
+                 icon: 'error',
+                title: 'An Error Occured!',
                 showConfirmButton: false,
                 timer: 1500
             })
-            navigate("/projects");
-            setIsSaving(false);
-            setClientName('');
-            setClientLocation('');
-            setContactPerson('');
-            setContactEmail('');
-            setContactPhone('');
-            setStartDate('');
-            setExpectedEndDate('');
-            setActualEndDate('');
-            setTechRequired('');
-            setDescription('');
-            setStatus('');
-            setHeadCount(''); 
-          })
-          .catch(function (error) {
+        })
+          
+    }, [])
+
+    const handleSave = () => {
+        setIsSaving(true);
+        axios.post(`/projects/update/${id}`, {
+            client_name: client_name,
+            client_location: client_location,
+            contact_person: contact_person,
+            contact_email: contact_email,
+            contact_phone: contact_phone,
+            start_date: start_date,
+            expected_end_date: expected_end_date,
+            actual_end_date: actual_end_date,
+            technologies_required: technologies_required,
+            description: description,
+            status: status,
+            head_count: head_count,
+        })
+        .then(function (response) {
             Swal.fire({
-                icon: 'error',
+                icon: 'success',
+                title: 'Project updated successfully!',
+                showConfirmButton: false,
+                timer: 1500
+            })
+            setIsSaving(false);
+        })
+        .catch(function (error) {
+            Swal.fire({
+                 icon: 'error',
                 title: 'An Error Occured!',
                 showConfirmButton: false,
                 timer: 1500
             })
             setIsSaving(false)
-          });
+        });
     }
   
     return (
@@ -83,10 +91,10 @@ function ProjectCreate() {
             <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Add New Project</h4>
+                        <h4 className="text-center">Edit Project Details</h4>
                     </div>
                     <div className="card-body">
-                        <form>
+                    <form>
                             <div className="form-group">
                                 <label htmlFor="client_name">Client Name</label>
                                 <input 
@@ -132,7 +140,7 @@ function ProjectCreate() {
                                 <input 
                                     onChange={(event)=>{setContactPhone(event.target.value)}}
                                     value={contact_phone}
-                                    type="number"
+                                    type="text"
                                     className="form-control"
                                     id="contact_phone"
                                     name="contact_phone"/>
@@ -210,9 +218,9 @@ function ProjectCreate() {
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 
-                                type="submit"
-                                className="btn btn-outline-primary mt-3">
-                                Save Project
+                                type="button"
+                                className="btn btn-outline-success mt-3">
+                                Update Project
                             </button>
                         </form>
                     </div>
@@ -222,4 +230,4 @@ function ProjectCreate() {
     );
 }
   
-export default ProjectCreate;
+export default ProjectEdit;

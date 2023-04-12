@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Link } from "react-router-dom"
+import {useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -22,7 +22,8 @@ function EmpCreate() {
     const [email, setEmail] = useState('');
     const [is_onsite, setIsOnsite] = useState(false);
     const [isSaving, setIsSaving] = useState(false)
-  
+    const navigate = useNavigate();
+
     const handleSave = () => {
         setIsSaving(true);
         const config = {
@@ -57,6 +58,7 @@ function EmpCreate() {
                 showConfirmButton: false,
                 timer: 1500
             })
+            navigate("/employees");
             setIsSaving(false);
             setFirstName('');
             setLastName('');
@@ -88,13 +90,9 @@ function EmpCreate() {
     return (
         <Layout>
             <div className="container">
-                <h2 className="text-center mt-5 mb-3">Add New Employee</h2>
                 <div className="card">
                     <div className="card-header">
-                        <Link 
-                            className="btn btn-outline-info float-right"
-                            to="/">View All Employees
-                        </Link>
+                        <h4 className="text-center">Add Employee Details</h4>
                     </div>
                     <div className="card-body">
                         <form>
@@ -190,8 +188,9 @@ function EmpCreate() {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="status">Status</label>
-                                <select name="status" id="status" className="form-control" onChange={(event)=>{setStatus(event.target.value)}}>
-                                    <option value="Active">Active</option>
+                                <select name="status" id="status" className="form-control"
+                                 onChange={(event)=>{setStatus(event.target[event.target.selectedIndex].text)}}>
+                                    <option value="Active" selected>Active</option>
                                     <option value="Inactive">Inactive</option>
                                 </select>
                             </div>

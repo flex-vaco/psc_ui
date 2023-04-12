@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
+import * as Utils from "../lib/Utils"
  
 function EmpEdit() {
     const [id, setId] = useState(useParams().id)
@@ -22,16 +23,6 @@ function EmpEdit() {
     const [email, setEmail] = useState('');
     const [is_onsite, setIsOnsite] = useState(false);
     const [isSaving, setIsSaving] = useState(false)
-  
-    const convertDateToYYYYMMDD = (givenDate) => {
-      var myDate = new Date(givenDate);
-      let dd = myDate.getDate();
-      dd = dd < 10 ? "0" + dd.toString() : dd.toString();
-      let mm = myDate.getMonth() + 1; // add 1 as month start from 0
-      mm = mm < 10 ? "0" + mm.toString() : mm.toString();
-      const yyyy = myDate.getFullYear();
-      return `${yyyy}-${mm}-${dd}`;
-    };
 
     useEffect(() => {
         axios.get(`/employees/${id}`)
@@ -43,7 +34,7 @@ function EmpEdit() {
             setSecondarySkills(empDetails.secondary_skills);
             setTotWorkExp(empDetails.total_work_experience_years);
             setRatePerHour(empDetails.rate_per_hour);
-            setVacoJoinDate(convertDateToYYYYMMDD(empDetails.vaco_join_date));
+            setVacoJoinDate(Utils.formatDateYYYYMMDD(empDetails.vaco_join_date));
             setHomeLocCity(empDetails.home_location_city);
             setOfficeLocCity(empDetails.office_location_city);
             setRole(empDetails.role);
@@ -114,13 +105,9 @@ function EmpEdit() {
     return (
         <Layout>
             <div className="container">
-                <h2 className="text-center mt-5 mb-3">Edit Employee Details</h2>
                 <div className="card">
                     <div className="card-header">
-                        <Link 
-                            className="btn btn-outline-info float-right"
-                            to="/">View All Employees
-                        </Link>
+                        <h4 className="text-center">Edit Employee Details</h4>
                     </div>
                     <div className="card-body">
                         <form>

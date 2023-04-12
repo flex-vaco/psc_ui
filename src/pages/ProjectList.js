@@ -3,7 +3,8 @@ import { Link } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
- 
+import * as Utils from "../lib/Utils"
+
 function ProjectList() {
     const  [projectList, setProjectList] = useState([])
   
@@ -20,7 +21,7 @@ function ProjectList() {
           console.log(error);
         })
     }
-  
+
     const handleDelete = (id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -53,64 +54,78 @@ function ProjectList() {
             }
           })
     }
-  
+
     return (
-        <Layout>
-           <div className="container">
-            <h2 className="text-center mt-5 mb-3">Projects List</h2>
-                <div className="card">
-                    <div className="card-header">
-                        <Link 
-                            className="btn btn-outline-primary"
-                            to="/projectCreate">Create New Project
-                        </Link>
-                    </div>
-                    <div className="card-body">
-              
-                        <table className="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Client Name</th>
-                                    <th>Point of Contact</th>
-                                    <th>Project Status</th>
-                                    <th>Technologies Involved</th>
-                                    <th width="240px">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {projectList.map((projectDetails, key)=>{
-                                    return (
-                                        <tr key={key}>
-                                            <td>{projectDetails.client_name}</td>
-                                            <td>{projectDetails.contact_person}</td>
-                                            <td>{projectDetails.status}</td>
-                                            <td>{projectDetails.technologies_required}</td>
-                                            <td>
-                                                <Link
-                                                    to={`/show/${projectDetails.id}`}
-                                                    className="btn btn-outline-info mx-1">
-                                                    Show
-                                                </Link>
-                                                <Link
-                                                    className="btn btn-outline-success mx-1"
-                                                    to={`/edit/${projectDetails.id}`}>
-                                                    Edit
-                                                </Link>
-                                                <button 
-                                                    onClick={()=>handleDelete(projectDetails.id)}
-                                                    className="btn btn-outline-danger mx-1">
-                                                    Delete
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+      <Layout>
+        <div className="container-fluid">
+          <div className="card w-auto">
+            <div className="card-header">
+              <h4 className="text-center">Project List</h4>
             </div>
-        </Layout>
+            <div className="card-body table-responsive">
+              <table className="table table-hover">
+                <thead className="bg-light">
+                  <tr>
+                    <th>Action</th>
+                    <th>Client Name</th>
+                    <th>Client Location</th>
+                    <th>Contact Person</th>
+                    <th>Contact Email</th>
+                    <th>Contact Phone</th>
+                    <th>Start Date</th>
+                    <th>Expected End Date</th>
+                    <th>Actual End Date</th>
+                    <th>Project Status</th>
+                    <th>Technologies Involved</th>
+                    <th>Head Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {projectList.map((projectDetails, key) => {
+                    return (
+                      <tr key={key}>
+                        <td>
+                          <button
+                            onClick={() => handleDelete(projectDetails.id)}
+                            className="btn btn-outline-danger mx-1"
+                          >
+                            <i className="bi bi-trash"></i>
+                          </button>
+                          <Link
+                            className="btn btn-outline-success mx-1"
+                            to={`/projectEdit/${projectDetails.id}`}
+                          >
+                            <i className="bi bi-pencil"></i>
+                          </Link>
+                        </td>
+                        <td>
+                          <Link
+                            to={`/projectShow/${projectDetails.id}`}
+                          >
+                            {projectDetails.client_name}
+                          </Link>
+                        </td>
+                        <td>{projectDetails.client_location}</td>
+
+                        <td>{projectDetails.contact_person}</td>
+                        <td>{projectDetails.contact_email}</td>
+                        <td>{projectDetails.contact_phone}</td>
+                        <td>{Utils.formatDateYYYYMMDD(projectDetails.start_date)}</td>
+                        <td>{Utils.formatDateYYYYMMDD(projectDetails.expected_end_date)}</td>
+                        <td>{Utils.formatDateYYYYMMDD(projectDetails.actual_end_date)}</td>
+                        <td>{projectDetails.status}</td>
+                        <td>{projectDetails.technologies_required}</td>
+                        <td>{projectDetails.head_count}</td>
+
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </Layout>
     );
 }
   
