@@ -62,7 +62,7 @@ function EmpShow() {
 
   return (
     <>
-      <div className="container w-25">
+      <div className="container w-auto">
         <h2 className="text-center mt-5 mb-3">Project Fractional</h2>
         <div className="card">
           <div className="card-header">

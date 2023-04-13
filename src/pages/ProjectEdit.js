@@ -6,7 +6,7 @@ import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
  
 function ProjectEdit() {
-    const [id, setId] = useState(useParams().id)
+    const [project_id, setId] = useState(useParams().id)
     const [client_name, setClientName] = useState('');
     const [client_location, setClientLocation] = useState('');
     const [contact_person, setContactPerson] = useState('');
@@ -22,7 +22,7 @@ function ProjectEdit() {
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
-        axios.get(`/projects/${id}`)
+        axios.get(`/projects/${project_id}`)
         .then(function (response) {
             let projectDetails = response.data.projects[0];
             setClientName(projectDetails.client_name);
@@ -52,7 +52,7 @@ function ProjectEdit() {
 
     const handleSave = () => {
         setIsSaving(true);
-        axios.post(`/projects/update/${id}`, {
+        axios.post(`/projects/update/${project_id}`, {
             client_name: client_name,
             client_location: client_location,
             contact_person: contact_person,

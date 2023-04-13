@@ -22,7 +22,7 @@ function EmpList() {
         })
     }
   
-    const handleDelete = (id) => {
+    const handleDelete = (emp_id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -33,7 +33,7 @@ function EmpList() {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                axios.get(`/employees/delete/${id}`)
+                axios.get(`/employees/delete/${emp_id}`)
                 .then(function (response) {
                     Swal.fire({
                         icon: 'success',
@@ -89,20 +89,20 @@ function EmpList() {
                       <tr key={key}>
                         <td>
                           <button
-                            onClick={() => handleDelete(empDetails.id)}
+                            onClick={() => handleDelete(empDetails.emp_id)}
                             className="btn btn-outline-danger" 
                           >
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
                             className="btn btn-outline-success"
-                            to={`/empEdit/${empDetails.id}`}
+                            to={`/empEdit/${empDetails.emp_id}`}
                           >
                             <i className="bi bi-pencil" font-size="2rem;"></i>
                           </Link>
                         </td>
                         <td>
-                          <Link to={`/empShow/${empDetails.id}`}>
+                          <Link to={`/empShow/${empDetails.emp_id}`}>
                             {empDetails.first_name}, {empDetails.last_name}
                           </Link>
                         </td>

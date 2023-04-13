@@ -4,7 +4,7 @@ import axios from 'axios';
 import Layout from "../components/Layout"
  
 function ProjectShow() {
-    const [id, setId] = useState(useParams().id)
+    const [project_id, setId] = useState(useParams().id)
     const [projectDetails, setProjectDetails] = useState({
         client_name: '',
         client_location: '',
@@ -21,7 +21,7 @@ function ProjectShow() {
     })
  
     useEffect(() => {
-        axios.get(`/projects/${id}`)
+        axios.get(`/projects/${project_id}`)
         .then(function (response) {
             setProjectDetails(response.data.projects[0])
         })

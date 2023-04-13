@@ -22,7 +22,7 @@ function ProjectList() {
         })
     }
 
-    const handleDelete = (id) => {
+    const handleDelete = (project_id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -33,7 +33,7 @@ function ProjectList() {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                axios.get(`/projects/delete/${id}`)
+                axios.get(`/projects/delete/${project_id}`)
                 .then(function (response) {
                     Swal.fire({
                         icon: 'success',
@@ -86,21 +86,21 @@ function ProjectList() {
                       <tr key={key}>
                         <td>
                           <button
-                            onClick={() => handleDelete(projectDetails.id)}
+                            onClick={() => handleDelete(projectDetails.project_id)}
                             className="btn btn-outline-danger mx-1"
                           >
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
                             className="btn btn-outline-success mx-1"
-                            to={`/projectEdit/${projectDetails.id}`}
+                            to={`/projectEdit/${projectDetails.project_id}`}
                           >
                             <i className="bi bi-pencil"></i>
                           </Link>
                         </td>
                         <td>
                           <Link
-                            to={`/projectShow/${projectDetails.id}`}
+                            to={`/projectShow/${projectDetails.project_id}`}
                           >
                             {projectDetails.client_name}
                           </Link>

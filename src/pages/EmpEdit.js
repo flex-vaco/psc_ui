@@ -6,7 +6,7 @@ import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
  
 function EmpEdit() {
-    const [id, setId] = useState(useParams().id)
+    const [emp_id, setId] = useState(useParams().id)
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [primary_skills, setPrimarySkills] = useState('');
@@ -25,7 +25,7 @@ function EmpEdit() {
     const [isSaving, setIsSaving] = useState(false)
 
     useEffect(() => {
-        axios.get(`/employees/${id}`)
+        axios.get(`/employees/${emp_id}`)
         .then(function (response) {
             let empDetails = response.data.employees[0]
             setFirstName(empDetails.first_name);
@@ -65,7 +65,7 @@ function EmpEdit() {
     getStatusOptions();
     const handleSave = () => {
         setIsSaving(true);
-        axios.post(`/employees/update/${id}`, {
+        axios.post(`/employees/update/${emp_id}`, {
             first_name: first_name,
             last_name: last_name,
             status: status,

@@ -4,7 +4,7 @@ import axios from 'axios';
 import Layout from "../components/Layout"
  
 function EmpShow() {
-    const [id, setId] = useState(useParams().id)
+    const [emp_id, setId] = useState(useParams().id)
     const [empDetails, setEmpDetails] = useState({
         first_name: '',
         last_name: '',
@@ -24,7 +24,7 @@ function EmpShow() {
     })
  
     useEffect(() => {
-        axios.get(`/employees/${id}`)
+        axios.get(`/employees/${emp_id}`)
         .then(function (response) {
             setEmpDetails(response.data.employees[0])
         })
