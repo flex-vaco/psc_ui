@@ -28,7 +28,7 @@ function App() {
           <Route path="/empCreate"  element={<EmpCreate/>} />
           <Route path="/empEdit/:id"  element={<EmpEdit/>} />
           <Route path="/empShow/:id"  element={<EmpShow/>} />
-          <Route path="/filter/:searchSkill"  element={<EmpFilteredList/>} />
+          <Route path="/filter/:searchSkill?"  element={<EmpFilteredList/>} />
           <Route path="/home"  element={<Home/>} />
           <Route path="/create"  element={<EmpCreate/>} />
           <Route path="/edit/:id"  element={<EmpEdit/>} />

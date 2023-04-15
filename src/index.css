@@ -88,6 +88,16 @@ ul.dropdown-menu.show {
 .login_footer a:hover {
   color: #f47b34;
 }
+.h-divider{
+  margin-top:5px;
+  margin-bottom:5px;
+  height:1px;
+  width:100%;
+  border-top:1px solid gray;
+ }
+
+ html * { font-size: 16px !important; color: rgba(32,32,32,1) !important; font-family: Avenir Next !important; }
+
 
 .profile_pictureempdetails {
   width: 40%;

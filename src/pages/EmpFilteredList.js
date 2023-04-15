@@ -10,29 +10,57 @@ function EmpFilteredList() {
     const [selectedRole, setSelectedRole] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedExp, setSelectedExp] = useState('');
-    const [skill, setSkill] = useState(useParams().searchSkill);
-
-    console.log(useParams().searchSkill);
+    const [selectedSkill, setSelectedSkill] = useState([]);
+    const [techSkills, setTechSkills] = useState([]);
 
     useEffect(() => {
-        fetchEmpList()
-    },[selectedLocation, selectedExp, selectedRole, skill])
-     
+        console.log('test');
+        fetchEmpList();
+    },[selectedLocation, selectedExp, selectedRole, selectedSkill])
+    
+    useEffect(() => {
+        fetchTechSkills();
+    },[])
+
+    const handleTechSkillChange = (event,selectedSkill) => {
+        setSelectedSkill((prev)=>{
+            if (event.target.checked) {
+                return [selectedSkill, ...prev];
+            }
+            else {
+                return prev.filter((skill) => {
+                    return skill !== selectedSkill
+                });
+            }
+        });
+        console.log(selectedSkill);
+    }
+
+
+    const fetchTechSkills = () => {
+        //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
+        axios.get(`/application/getTechnologies`)
+        .then(function (response)   {
+          setTechSkills(response.data.technologies);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+
     const fetchEmpList = () => {
         //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
         axios.get(`employees/filter`, {
             params : {
-              skill: skill,
-              exp: selectedExp,
+              skill: selectedSkill,
+              exp: selectedExp >= 0 ? selectedExp : null,
               location: selectedLocation,
               role: selectedRole
             }
         }
         )
         .then(function (response)   {
-          setEmpList(response.data.employees);
-          console.log(response.data.employees);
-          console.log(skill);
+            setEmpList(response.data.employees);
         })
         .catch(function (error) {
           console.log(error);
@@ -44,67 +72,138 @@ function EmpFilteredList() {
     return (
         <Layout>
            <div className="container-fluid">
-            <h2 className="text-center mt-5 mb-3">Listing Page</h2>
-            
-            <form className="row g-3">
-            <div className="col-6">
-                <input placeholder='Skill'
-                            onChange={(event)=>{setSkill(event.target.value)}}
-                            value={skill}
-                            type="text"
-                            className="form-control "
-                            id="skill"
-                            name="skill"/>
+  
+            <form className="row g-3 h-100">    
+                <div className="col-1 h-100"></div> 
+                <div className="col-2 h-100">
+                    <div className="">
+                       Skills
+                    </div>
+                    {techSkills.map((techSkill, key) => {
+                        return(<div className="form-check" key={key}>
+                                    <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
+                                    <label className="form-check-label" for="flexCheckDefault">
+                                         {techSkill}
+                                    </label>
+                                </div>)
+                    })
+                    }
+                    <hr className="style12 mb-3"></hr>
+                    <div className="form-group">
+                        <label for="location">Location</label>
+                        <input placeholder='search locations'
+                                        onChange={(event)=>{setSelectedLocation(event.target.value)}}
+                                        type="text"
+                                        className="form-control"
+                                        id="location"
+                                        name="location"/>
+                    </div>
+                    <hr className="style12 mb-3"></hr>
+                    <div className="form-group"> 
+                            <label for="exp">Experience</label>
+                        
+
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(0)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    Fresher
+                                </label>
+                            </div>
+
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(2)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    2 years
+                                </label>
+                                </div>
+                            <div>
+                            
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(4)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    4 years
+                                </label>
+                                </div>
+                            <div></div>
+
+                            
+                        <input type="range" 
+                                className='multi-range'
+                                step="*" 
+                                min="-1" 
+                                max="20" 
+                                onChange={(event)=>{setSelectedExp(event.target.value)}}
+                                id="exp"
+                             />
+                        <div className='text-center'>
+                            {selectedExp > 0 &&  (<label>{selectedExp} years</label>)}   
+                        </div>
+                        </div>
+                    </div>
+                    <hr className="style12 mb-3"></hr>
+                    <div className="form-group"> 
+                            <label >Availability</label>
+                        
+
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(0)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    1 Hour
+                                </label>
+                            </div>
+
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(2)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    2 Hour
+                                </label>
+                                </div>
+                            <div>
+                            
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(4)}} name="radioExperience" />
+                                <label className="form-check-label">
+                                    8 Hour
+                                </label>
+                                </div>
+                            <div></div>
+
+                            
+                        <input type="range" 
+                                className='multi-range'
+                                step="*" 
+                                min="-1" 
+                                max="8" 
+                                onChange={(event)=>{setSelectedExp(event.target.value)}}
+                                id="availability"
+                             />
+                        <div className='text-center'>
+                            {selectedExp > 0 &&  (<label>{selectedExp} years</label>)}   
+                        </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="col-6">
-                <input placeholder='Role'
-                            onChange={(event)=>{setSelectedRole(event.target.value)}}
-                            type="text"
-                            className="form-control "
-                            id="role"
-                            name="role"/>
-                </div>
-                <div className="col-6">
-                <input placeholder='Location'
-                                    onChange={(event)=>{setSelectedLocation(event.target.value)}}
-                                    type="text"
-                                    className="form-control"
-                                    id="location"
-                                    name="location"/>
-                </div>
-                <div className="col-6">
-                    <input placeholder='Experience'
-                                    onChange={(event)=>{setSelectedExp(event.target.value)}}
-                                    type="text"
-                                    className="form-control"
-                                    id="exp"
-                                    name="exp"/>
-                    
-                </div>
-                <div className="col-12">
+                <div className="col-8">
                     <div className="card">
                         
-                        <div className="card-body">
+                        <div className="card-body row my-3">
                 
-                            <table className="table">
-                            
-                            
-                                <tbody>
-                                    
-                                    {empList.map((empDetails, key)=>{
+                         
+                                    {empList && empList.map((empDetails, key)=>{
                                         return (
                                     
-                                        <EmployeeProfileCard employee={empDetails}></EmployeeProfileCard>
+                                           <EmployeeProfileCard employee={empDetails} key={empDetails.emp_id}></EmployeeProfileCard>
                                         )
                                     
                                         })
                                     }
-                                </tbody>
-                            </table>
+                              
                         </div>
                     </div>
                 </div>
+                <div className="col-1 h-100"></div> 
             </form>
+
             </div>
         </Layout>
     );
