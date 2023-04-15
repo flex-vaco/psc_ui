@@ -12,7 +12,7 @@ const Navbar = () => {
     <div className="container-fluid">
       <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid g-3">
-          <Link className="navbar-brand mx-3" href="#">Fractional</Link>
+          <Link className="navbar-brand mx-3" to="/home">Fractional</Link>
           <div className="collapse navbar-collapse" id="navbarNav">
             <ul className="navbar-nav">
               <li className="nav-item dropdown">
@@ -28,6 +28,13 @@ const Navbar = () => {
                 <ul className="dropdown-menu">
                   <li><Link className="dropdown-item" to="/projects">List</Link></li>
                   <li><Link className="dropdown-item" to="/projectCreate">Add Project</Link></li>
+                </ul>
+              </li>
+              <li className="nav-item dropdown">
+                <Link className="nav-link dropdown-toggle" data-bs-toggle="dropdown">Allocations</Link>
+                <ul className="dropdown-menu">
+                  <li><Link className="dropdown-item" to="/empProjList">List</Link></li>
+                  <li><Link className="dropdown-item" to="/empProjCreate">Add Allocation</Link></li>
                 </ul>
               </li>
             </ul>

@@ -12,6 +12,10 @@ import ProjectCreate from "./pages/ProjectCreate"
 import ProjectEdit from "./pages/ProjectEdit"
 import ProjectShow from "./pages/ProjectShow"
 
+import EmpProjAlocCreate from "./pages/EmpProjAlocCreate";
+import EmpProjAlocList from "./pages/EmpProjAlocList";
+import EmpProjAlocEdit from "./pages/EmpProjAlocEdit";
+
 import EmpFilteredList from './pages/EmpFilteredList'
 import Home from './pages/Home'
 
@@ -33,6 +37,9 @@ function App() {
           <Route path="/projectCreate"  element={<ProjectCreate/>} />
           <Route path="/projectEdit/:id"  element={<ProjectEdit/>} />
           <Route path="/projectShow/:id"  element={<ProjectShow/>} />
+          <Route path="/empProjCreate"  element={<EmpProjAlocCreate/>} />
+          <Route path="/empProjList"  element={<EmpProjAlocList/>} />
+          <Route path="/empProjEdit/:id"  element={<EmpProjAlocEdit/>} />
       </Routes>
     </Router>
   );
