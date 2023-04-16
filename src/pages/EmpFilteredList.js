@@ -1,10 +1,10 @@
-import React,{ useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link, useParams } from "react-router-dom"
 import axios from 'axios'
 import Layout from "../components/Layout"
 import EmployeeProfileCard from '../components/employee/EmploeeProfileCard'
 
- 
+
 function EmpFilteredList() {
     const [empList, setEmpList] = useState([])
     const [selectedRole, setSelectedRole] = useState('');
@@ -14,16 +14,17 @@ function EmpFilteredList() {
     const [techSkills, setTechSkills] = useState([]);
 
     useEffect(() => {
+        console.log(selectedExp);
         console.log('test');
         fetchEmpList();
-    },[selectedLocation, selectedExp, selectedRole, selectedSkill])
-    
+    }, [selectedLocation, selectedExp, selectedRole, selectedSkill, selectedSkill])
+
     useEffect(() => {
         fetchTechSkills();
-    },[])
+    }, [])
 
-    const handleTechSkillChange = (event,selectedSkill) => {
-        setSelectedSkill((prev)=>{
+    const handleTechSkillChange = (event, selectedSkill) => {
+        setSelectedSkill((prev) => {
             if (event.target.checked) {
                 return [selectedSkill, ...prev];
             }
@@ -40,45 +41,52 @@ function EmpFilteredList() {
     const fetchTechSkills = () => {
         //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
         axios.get(`/application/getTechnologies`)
-        .then(function (response)   {
-          setTechSkills(response.data.technologies);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
+            .then(function (response) {
+                setTechSkills(response.data.technologies);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
 
     const fetchEmpList = () => {
         //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
         axios.get(`employees/filter`, {
-            params : {
-              skill: selectedSkill,
-              exp: selectedExp >= 0 ? selectedExp : null,
-              location: selectedLocation,
-              role: selectedRole
+            params: {
+                skill: selectedSkill,
+                exp: selectedExp >= 0 ? selectedExp : null,
+                skill: selectedSkill,
+                exp: selectedExp >= 0 ? selectedExp : null,
+                location: selectedLocation,
+                role: selectedRole
             }
         }
         )
-        .then(function (response)   {
-            setEmpList(response.data.employees);
-        })
-        .catch(function (error) {
-          console.log(error);
-        })
+            .then(function (response) {
+                setEmpList(response.data.employees);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
     }
-  
- 
-  
+
+
+
     return (
         <Layout>
-           <div className="container-fluid">
-  
-            <form className="row g-3 h-100">    
-                <div className="col-1 h-100"></div> 
-                <div className="col-2 h-100">
-                    <div className="">
-                       Skills
-                    </div>
+            <div className="container-fluid">
+
+                <form className="row g-3 h-100">
+
+                    <div className="col-1 h-100"></div>
+
+                    <form className="row g-3 h-100">
+                        <div className="col-1 h-100"></div>
+                        <div className="col-2 h-100">
+                            <div className="">
+                                Skills
+                            </div>
+                          
                     {techSkills.map((techSkill, key) => {
                         return(<div className="form-check" key={key}>
                                     <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
@@ -89,7 +97,7 @@ function EmpFilteredList() {
                     })
                     }
                     <hr className="style12 mb-3"></hr>
-                    <div className="form-group">
+                    <div classNameName="form-group">
                         <label for="location">Location</label>
                         <input placeholder='search locations'
                                         onChange={(event)=>{setSelectedLocation(event.target.value)}}
@@ -99,19 +107,19 @@ function EmpFilteredList() {
                                         name="location"/>
                     </div>
                     <hr className="style12 mb-3"></hr>
-                    <div className="form-group"> 
+                        <div className="form-group"> 
                             <label for="exp">Experience</label>
                         
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(0)}} name="radioExperience" />
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(0)}} name="flexRadioDefault" id="flexRadioDefault1"/>
                                 <label className="form-check-label">
                                     Fresher
                                 </label>
                             </div>
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(2)}} name="radioExperience" />
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(2)}} name="flexRadioDefault" />
                                 <label className="form-check-label">
                                     2 years
                                 </label>
@@ -119,7 +127,7 @@ function EmpFilteredList() {
                             <div>
                             
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(4)}} name="radioExperience" />
+                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(4)}} name="flexRadioDefault" />
                                 <label className="form-check-label">
                                     4 years
                                 </label>
@@ -131,58 +139,20 @@ function EmpFilteredList() {
                                 className='multi-range'
                                 step="*" 
                                 min="-1" 
+                                min="-1" 
                                 max="20" 
                                 onChange={(event)=>{setSelectedExp(event.target.value)}}
                                 id="exp"
                              />
                         <div className='text-center'>
-                            {selectedExp > 0 &&  (<label>{selectedExp} years</label>)}   
+                            {selectedExp > 0 &&  (<label>{selectedExp} years</label>)}
+                            
                         </div>
                         </div>
                     </div>
                     <hr className="style12 mb-3"></hr>
-                    <div className="form-group"> 
-                            <label >Availability</label>
-                        
-
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(0)}} name="radioExperience" />
-                                <label className="form-check-label">
-                                    1 Hour
-                                </label>
-                            </div>
-
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(2)}} name="radioExperience" />
-                                <label className="form-check-label">
-                                    2 Hour
-                                </label>
-                                </div>
-                            <div>
-                            
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" onChange={(event)=>{setSelectedExp(4)}} name="radioExperience" />
-                                <label className="form-check-label">
-                                    8 Hour
-                                </label>
-                                </div>
-                            <div></div>
-
-                            
-                        <input type="range" 
-                                className='multi-range'
-                                step="*" 
-                                min="-1" 
-                                max="8" 
-                                onChange={(event)=>{setSelectedExp(event.target.value)}}
-                                id="availability"
-                             />
-                        <div className='text-center'>
-                            {selectedExp > 0 &&  (<label>{selectedExp} years</label>)}   
-                        </div>
-                        </div>
-                    </div>
                 </div>
+            
                 <div className="col-8">
                     <div className="card">
                         
@@ -203,10 +173,14 @@ function EmpFilteredList() {
                 </div>
                 <div className="col-1 h-100"></div> 
             </form>
-
+</form>
             </div>
-        </Layout>
-    );
+
+
+
+                  
+                    </Layout>
+                    );
 }
-  
+
 export default EmpFilteredList;
