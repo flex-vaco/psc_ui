@@ -10,8 +10,8 @@ import '@popperjs/core';
 import "bootstrap";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = "http://127.0.0.1:3006"//process.env.API_BASE_URL
-const token = localStorage.getItem('jwt-access-token') || "-RAJENDER-"
+axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+const token = localStorage.getItem('jwt-access-token') || "-RAJENDER-";
 
 // Request interceptors for API calls
 axios.interceptors.request.use(
