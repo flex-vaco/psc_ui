@@ -11,3 +11,80 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.nav_search {
+  width: 100%;
+}
+
+.nav_profileimg {
+  width: 25px;
+}
+
+.nav_search button.btn.btn-outline-success {
+  border-radius: 0;
+  background-color: #f47b34;
+  border: #f47b34;
+  color: #fff;
+}
+
+.nav_search input.form-control {
+  border-radius: 0;
+}
+
+.nav_search .form-control:focus {
+  color: #212529;
+  background-color: #fff;
+  border-color: #f47b34;
+  outline: 0;
+  box-shadow: 0 0 0 0 #f47b34;
+}
+
+ul.dropdown-menu.show {
+  border-radius: 16px;
+  border: none;
+}
+
+.login_header{
+ color:#000
+} 
+
+.form-bg-radius {
+  border-radius: 1rem;
+  background-color: #fff !important;
+  box-shadow: 0rem 0rem 1rem 1rem rgba(0, 0, 0, 0.02) !important;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  border: 1px solid #00000047 !important;
+}
+.poweredby_logo {
+  margin-top: 15%;
+  font-size: 12px;
+}
+
+.poweredby_logo img {
+  width: 20%;
+}
+.login_button {
+  background-color: #f47b34 !important;
+  border: #f47b34 !important;
+}
+
+.w-auto.login_footer {
+    height: 40px;
+    /* position: fixed; */
+    bottom: 0%;
+    background-color: #0e4372;
+    color: #fff;
+    margin-top: 6%;
+    min-height: 58px;
+    /* vertical-align: middle; */
+    padding-top: 2%;
+}
+
+.login_footer a {
+  color: #f47b34;
+}
+
+.login_footer a:hover {
+  color: #f47b34;
+}

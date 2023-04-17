@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Layout from "../components/Layout";
+import Footer from "../components/Footer";
 
 function EmpShow() {
   const [tryingLogin, setTryingLogin] = useState(false);
@@ -62,62 +63,71 @@ function EmpShow() {
 
   return (
     <>
+    <br/>
+    <div className="container w-auto">
       <div className="container w-auto">
-        <h2 className="text-center mt-5 mb-3">Project Fractional</h2>
-        <div className="card">
-          <div className="card-header">
-            <h3 className="text-center">Login</h3>
-          </div>
-          <div className="card-body">
-          {(errMessage)? <p className="text-danger"> {errMessage}</p> : ""}
-            <form>
-              <div className="form-group">
-                <label htmlFor="email">Email</label>
-                <input
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                  }}
-                  value={email}
-                  type="text"
-                  className="form-control"
-                  id="email"
-                  name="email"
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input
-                  onChange={(event) => {
-                    setPassword(event.target.value);
-                  }}
-                  value={password}
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  name="password"
-                />
-              </div>
-              <div className="row">
-                <div className="col-sm-6">
-                  <button
-                    disabled={tryingLogin}
-                    onClick={handleLogin}
-                    type="submit"
-                    className="btn btn-outline-primary mt-3"
-                  >
-                    Login
-                  </button>
-                </div>
-                {/* <div className="col-sm-6">
-                  <Link className="btn btn-outline-info mt-3 float-right">
-                    Sign-up
-                  </Link>
-                </div> */}
-              </div>
-            </form>
-          </div>
-        </div>
+        <img src='images/Logo.png' alt="My Image" />
       </div>
+      <br/>
+      <div class="container w-auto">
+            <div class="">
+                <div class="rounded d-flex justify-content-center">
+                    <div class="col-lg-4 col-md-6 col-sm-12 form-bg-radius">
+                        <div class="text-center">
+                            <h4 className="login_header">Log in to VacoFlex</h4>
+                        </div>
+                        {(errMessage)? <p className="text-danger"> {errMessage}</p> : ""}
+                        <form>
+                          <div class="p-4 text-center">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="bi bi-person-fill text-gray"></i></span>
+                                    <input
+                                      placeholder="Username or Email"
+                                      onChange={(event) => {
+                                        setEmail(event.target.value);
+                                      }}
+                                      value={email}
+                                      type="text"
+                                      className="form-control"
+                                      id="email"
+                                      name="email"
+                                    />
+                                </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text"><i class="bi bi-lock-fill text-gray"></i></span>
+                                    <input 
+                                      placeholder="password" 
+                                      onChange={(event) => {
+                                        setPassword(event.target.value);
+                                      }}
+                                      value={password}
+                                      type="password"
+                                      className="form-control"
+                                      id="password"
+                                      name="password"
+                                    />
+                                </div>
+                                <button class="btn btn-primary text-center mt-2 px-5 login_button" 
+                                  disabled={tryingLogin}
+                                  onClick={handleLogin}
+                                  type="submit"
+                                >
+                                    Login
+                                </button>
+                          </div>    
+                        </form>
+                        <div class="text-center poweredby_logo">
+                          Powered by <img src='images/VacoBinary_Logo.png' alt="My Image" />
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div className="container w-auto login_footer">
+          <Footer />
+        </div>                              
+    </div>   
     </>
   );
 }

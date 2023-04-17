@@ -9,53 +9,63 @@ const Navbar = () => {
   }
 
   return (
-    <div className="container-fluid">
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <div className="container-fluid">
-        <Link className="navbar-brand mx-3" to="/home">Fractional</Link>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
+    <div className="container w-auto">
+   
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/home"><img src="images/Logo.png"/></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-            <li className="nav-item dropdown">
-              <Link className="nav-link dropdown-toggle" to="#" id="employeesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employees</Link>
-              <ul className="dropdown-menu" aria-labelledby="employeesDropdown">
-                <li><Link className="dropdown-item" to="/home">Search</Link></li>
-                <li><Link className="dropdown-item" to="/employees">List</Link></li>
-                <li><Link className="dropdown-item" to="/empCreate">Add Employee</Link></li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <form class="d-flex nav_search">
+            <input class="form-control" type="search" placeholder="What skills are you looking to hire?" aria-label="Search" />
+            <button class="btn btn-outline-success" type="submit"><i class="bi bi-search text-gray"></i></button>
+          </form>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownemp" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Employees
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownemp">
+                <li><a class="dropdown-item" href="/home">Search</a></li>
+                <li><a class="dropdown-item" href="/employees">List</a></li>
+                <li><a class="dropdown-item" href="/empCreate">Add Employee</a></li>
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <Link className="nav-link dropdown-toggle" to="#" id="projectsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Projects</Link>
-              <ul className="dropdown-menu" aria-labelledby="projectsDropdown">
-                <li><Link className="dropdown-item" to="/projects">List</Link></li>
-                <li><Link className="dropdown-item" to="/projectCreate">Add Project</Link></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownproject" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Projects
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownproject">
+                <li><a class="dropdown-item" href="/projects">List</a></li>
+                <li><a class="dropdown-item" href="projectCreate">Add Project</a></li>
               </ul>
             </li>
-            <li className="nav-item dropdown">
-              <Link className="nav-link dropdown-toggle" to="#" id="allocationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Allocations</Link>
-              <ul className="dropdown-menu" aria-labelledby="allocationsDropdown">
-                <li><Link className="dropdown-item" to="/empProjList">List</Link></li>
-                <li><Link className="dropdown-item" to="/empProjCreate">Add Allocation</Link></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Allocations
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownallocation">
+                <li><a class="dropdown-item" href="/empProjList">List</a></li>
+                <li><a class="dropdown-item" href="/empProjCreate">Add Allocation</a></li>
               </ul>
             </li>
-            <li className="nav-item">
-              <button
-                onClick={handleLogout}
-                type="submit"
-                className="btn btn-outline-dark mx-2 float-end"
-              >
-                Logout
-              </button>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownuser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="images/img_avatar1.png" alt="Avatar Logo" class="rounded-pill nav_profileimg"/>
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownuser">
+                <li><a class="dropdown-item" href="#">My profile</a></li>
+                <li> 
+                  <a class="dropdown-item"
+                    onClick={handleLogout}
+                    type="submit"
+                  >
+                    Logout
+                  </a>
+                </li>
+              </ul>
             </li>
           </ul>
         </div>
