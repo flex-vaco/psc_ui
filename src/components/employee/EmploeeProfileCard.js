@@ -10,8 +10,9 @@ function EmployeeProfileCard(props) {
         <div className="btn-toolbar pull-right">
             <button type="button" className="btn btn-outline-primary btn-sm mt-3 mx-1">Book</button>
 
-            <button type="button" className="btn btn-outline-info btn-sm mt-3 mx-1">View Resume</button>
-
+            <a  href={`${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}`} target="_blank" className="btn btn-outline-info btn-sm mt-3 mx-1">
+                View Resume            
+            </a>
             <button type="button" className="btn  btn-outline-secondary btn-sm mt-3 mx-1">Get in touch</button>
         </div>
         </div>

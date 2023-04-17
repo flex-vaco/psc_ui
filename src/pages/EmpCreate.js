@@ -10,6 +10,8 @@ function EmpCreate() {
     const [last_name, setLastName] = useState('');
     const [primary_skills, setPrimarySkills] = useState('');
     const [secondary_skills, setSecondarySkills] = useState('');
+    const [education, setEducation] = useState('');
+    const [profile_information, setProfileInformation] = useState('');
     const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
@@ -21,35 +23,49 @@ function EmpCreate() {
     const [vaco_join_date, setVacoJoinDate] = useState('');
     const [email, setEmail] = useState('');
     const [is_onsite, setIsOnsite] = useState(false);
-    const [isSaving, setIsSaving] = useState(false)
+    const [isSaving, setIsSaving] = useState(false);
+    const [selected_resume, setSelectedResume] = useState(null);
+    const [profile_picture, setSelectedProfilePicture] = useState(null);
     const navigate = useNavigate();
+
+    const handleResumeChange = (e) => {
+        setSelectedResume(e.target.files[0]);
+    };
+    
+    const handleProfileChange = (e) => {
+        setSelectedProfilePicture(e.target.files[0]);
+    };
 
     const handleSave = () => {
         setIsSaving(true);
         const config = {
           headers: {
-            "Content-Length": 0,
-            "Content-Type": "application/json",
-          },
-          responseType: "text",
+            'Content-Type': 'multipart/form-data'
+          }
         };
-        const data = {
-          first_name: first_name,
-          last_name: last_name,
-          status: status,
-          email: email,
-          role: role,
-          primary_skills: primary_skills,
-          secondary_skills: secondary_skills,
-          total_work_experience_years: total_work_experience_years,
-          rate_per_hour: rate_per_hour,
-          vaco_join_date: vaco_join_date,
-          home_location_city: home_location_city,
-          office_location_city: office_location_city,
-          supervisor_name: supervisor_name,
-          supervisor_email: supervisor_email,
-          is_onsite: is_onsite,
-        };
+
+        var onSite = Number(is_onsite);
+        const data = new FormData();
+        data.append('first_name', first_name);
+        data.append('last_name', last_name);
+        data.append('status', status);
+        data.append('email', email);
+        data.append('role', role);
+        data.append('primary_skills', primary_skills);
+        data.append('secondary_skills', secondary_skills);
+        data.append('education', education);
+        data.append('profile_information', profile_information);
+        data.append('total_work_experience_years', total_work_experience_years);
+        data.append('rate_per_hour', rate_per_hour);
+        data.append('vaco_join_date', vaco_join_date);
+        data.append('home_location_city', home_location_city);
+        data.append('office_location_city', office_location_city);
+        data.append('supervisor_name', supervisor_name);
+        data.append('supervisor_email', supervisor_email);
+        data.append('is_onsite', onSite);
+        data.append('resume', selected_resume);
+        data.append('profile_picture', profile_picture);
+
         axios.post('/employees/add', data, config)
           .then(function (response) {
             Swal.fire({
@@ -64,6 +80,8 @@ function EmpCreate() {
             setLastName('');
             setPrimarySkills('');
             setSecondarySkills('');
+            setEducation('');
+            setProfileInformation('');
             setTotWorkExp('');
             setRatePerHour('');
             setVacoJoinDate('');
@@ -75,6 +93,8 @@ function EmpCreate() {
             setSupervisorEmail('');
             setEmail('');
             setIsOnsite(false);
+            setSelectedResume('null');
+            setSelectedProfilePicture('null');
           })
           .catch(function (error) {
             Swal.fire({
@@ -167,6 +187,26 @@ function EmpCreate() {
                                     name="secondary_skills"></textarea>
                             </div>
                             <div className="form-group">
+                                <label htmlFor="education">Education</label>
+                                <textarea 
+                                    value={education}
+                                    onChange={(event)=>{setEducation(event.target.value)}}
+                                    className="form-control"
+                                    id="education"
+                                    rows="3"
+                                    name="education"></textarea>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="profile_information">Profile Information</label>
+                                <textarea 
+                                    value={profile_information}
+                                    onChange={(event)=>{setProfileInformation(event.target.value)}}
+                                    className="form-control"
+                                    id="profile_information"
+                                    rows="3"
+                                    name="profile_information"></textarea>
+                            </div>
+                            <div className="form-group">
                                 <label htmlFor="role">Role</label>
                                 <input 
                                     onChange={(event)=>{setRole(event.target.value)}}
@@ -233,6 +273,24 @@ function EmpCreate() {
                                     className="form-control"
                                     id="supervisor_email"
                                     name="supervisor_email"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="resume">Resume</label>
+                                <input
+                                    type="file"
+                                    name="resume"
+                                    className="form-control"
+                                    onChange={handleResumeChange}
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="profile_picture">Profile Picture</label>
+                                <input
+                                    type="file" 
+                                    className="form-control"
+                                    name="profile_picture"
+                                    onChange={handleProfileChange}
+                                />
                             </div>
                             <div className="form-check-prepend">
                                 <label className="form-check-label" for="is_onsite"><span>Is working On site?</span></label>

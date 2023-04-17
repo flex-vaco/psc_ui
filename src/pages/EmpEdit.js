@@ -11,6 +11,8 @@ function EmpEdit() {
     const [last_name, setLastName] = useState('');
     const [primary_skills, setPrimarySkills] = useState('');
     const [secondary_skills, setSecondarySkills] = useState('');
+    const [education, setEducation] = useState('');
+    const [profile_information, setProfileInformation] = useState('');
     const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
@@ -32,6 +34,8 @@ function EmpEdit() {
             setLastName(empDetails.last_name);
             setPrimarySkills(empDetails.primary_skills);
             setSecondarySkills(empDetails.secondary_skills);
+            setEducation(empDetails.education);
+            setProfileInformation(empDetails.profile_information);
             setTotWorkExp(empDetails.total_work_experience_years);
             setRatePerHour(empDetails.rate_per_hour);
             setVacoJoinDate(Utils.formatDateYYYYMMDD(empDetails.vaco_join_date));
@@ -73,6 +77,8 @@ function EmpEdit() {
             role: role,
             primary_skills: primary_skills,
             secondary_skills: secondary_skills,
+            education: education,
+            profile_information: profile_information,
             total_work_experience_years: total_work_experience_years,
             rate_per_hour: rate_per_hour,
             vaco_join_date: vaco_join_date,
@@ -180,6 +186,26 @@ function EmpEdit() {
                                     id="secondary_skills"
                                     rows="3"
                                     name="secondary_skills"></textarea>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="education">Education</label>
+                                <textarea 
+                                    value={education}
+                                    onChange={(event)=>{setEducation(event.target.value)}}
+                                    className="form-control"
+                                    id="education"
+                                    rows="3"
+                                    name="education"></textarea>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="profile_information">Profile Information</label>
+                                <textarea 
+                                    value={profile_information}
+                                    onChange={(event)=>{setProfileInformation(event.target.value)}}
+                                    className="form-control"
+                                    id="profile_information"
+                                    rows="3"
+                                    name="profile_information"></textarea>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="role">Role</label>

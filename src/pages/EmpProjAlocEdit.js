@@ -139,8 +139,7 @@ function EmpProjAlocEdit() {
                                 <label htmlFor="employee">Employee Name</label>
                                 <select name="employee" id="employee" className="form-control" onChange={handleEmpChange} > 
                                     {empList.map((emp, key) => {
-                                        let sel = false;
-                                        sel = (emp.emp_id == emp_id) ? true : false;
+                                        const sel = (emp.emp_id == emp_id) ? true : false;
                                         return <option key={key} value={emp.emp_id} selected={sel}>{emp.first_name}, {emp.last_name}</option>;
                                     })}
                                 </select>

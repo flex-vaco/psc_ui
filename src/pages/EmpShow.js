@@ -13,6 +13,8 @@ function EmpShow() {
         role: '',
         primary_skills: '',
         secondary_skills: '',
+        education: '',
+        profile_information: '',
         total_work_experience_years: '',
         rate_per_hour: '',
         vaco_join_date: '',
@@ -21,6 +23,8 @@ function EmpShow() {
         supervisor_name: '',
         supervisor_email: '',
         is_onsite: '',
+        resume: '',
+        profile_picture: '',
     })
  
     useEffect(() => {
@@ -46,6 +50,8 @@ function EmpShow() {
                         <p><b className="text-muted">Email: </b>{empDetails.email}</p>
                         <p><b className="text-muted">Primary Skills: </b>{empDetails.primary_skills}</p>
                         <p><b className="text-muted">Secondary Skills: </b>{empDetails.secondary_skills}</p>
+                        <p><b className="text-muted">Education: </b>{empDetails.education}</p>
+                        <p><b className="text-muted">Profile Information: </b>{empDetails.profile_information}</p>
                         <p><b className="text-muted">Status: </b>{empDetails.status}</p>
                         <p><b className="text-muted">Experience: </b>{empDetails.total_work_experience_years} years</p>
                         <p><b className="text-muted">Hourly Rate: </b>{empDetails.rate_per_hour} USD</p>
@@ -54,6 +60,19 @@ function EmpShow() {
                         <p><b className="text-muted">Supervisor Name: </b>{empDetails.supervisor_name}</p>
                         <p><b className="text-muted">Supervisor Email: </b>{empDetails.supervisor_email}</p>
                         <p><b className="text-muted">Is working On-site? </b>{(empDetails.is_onsite) ? "YES" : "NO"}</p>
+                        <p><b className="text-muted">Resume: </b>
+                            <a href={(empDetails.resume) ? 
+                              `${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${empDetails.resume}` : null} 
+                              target="_blank">
+                              <i className="bi bi-person-lines-fill"></i>
+                            </a>
+                        </p>
+                        <p><b className="text-muted">Profile Picture: </b>
+                            <img className="rounded-pill profile_pictureempdetails" 
+                            src = {(empDetails.profile_picture) ? 
+                                `${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${empDetails.profile_picture}` : null} 
+                            />
+                        </p>
                     </div>
                 </div>
             </div>

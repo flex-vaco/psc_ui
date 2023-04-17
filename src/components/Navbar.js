@@ -13,7 +13,7 @@ const Navbar = () => {
    
     <nav class="navbar navbar-expand-lg navbar-light">
       <div class="container-fluid">
-        <a class="navbar-brand" href="/home"><img src="images/Logo.png"/></a>
+        <a class="navbar-brand" href="/home"><img src="/images/Logo.png"/></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -53,7 +53,7 @@ const Navbar = () => {
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownuser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="images/img_avatar1.png" alt="Avatar Logo" class="rounded-pill nav_profileimg"/>
+                <img src="/images/img_avatar1.png" alt="Avatar Logo" class="rounded-pill nav_profileimg"/>
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownuser">
                 <li><a class="dropdown-item" href="#">My profile</a></li>

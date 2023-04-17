@@ -81,6 +81,7 @@ function EmpList() {
                     <th>Supervisor</th>
                     <th>Supervisor Email</th>
                     <th>On Site</th>
+                    <th>Resume</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -119,6 +120,14 @@ function EmpList() {
                         <td>{empDetails.supervisor_name}</td>
                         <td>{empDetails.supervisor_email}</td>
                         <td>{(empDetails.is_onsite) ? "YES" : "NO"}</td>
+                        <td>
+                            <a href={(empDetails.resume) ? 
+                              `${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${empDetails.resume}` : null} 
+                              target="_blank">
+                              <i className="bi bi-person-lines-fill"></i>
+                            </a>
+                         
+                        </td>
                       </tr>
                     );
                   })}
