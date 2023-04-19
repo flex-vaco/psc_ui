@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import React from "react";
+import { useNavigate } from "react-router-dom"
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -8,9 +8,9 @@ const Navbar = () => {
     navigate("/")
     localStorage.removeItem("jwt-access-token");
   }
-  const allocationValidRoles = ["supervisor", "admin"];
-  const employeeValidRoles = ["supervisor", "admin"];
-  const projectValidRoles = ["supervisor", "admin"];
+  const allocationValidRoles = ["supervisor", "administrator"];
+  const employeeValidRoles = ["supervisor", "administrator"];
+  const projectValidRoles = ["supervisor", "administrator"];
 
   return (
     <div className="container w-auto">

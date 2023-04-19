@@ -26,6 +26,7 @@ function EmpCreate() {
     const [isSaving, setIsSaving] = useState(false);
     const [selected_resume, setSelectedResume] = useState(null);
     const [profile_picture, setSelectedProfilePicture] = useState(null);
+    const [employment_type, setSelectedEmpType] = useState('Full-time');
     const navigate = useNavigate();
 
     const handleResumeChange = (e) => {
@@ -36,6 +37,9 @@ function EmpCreate() {
         setSelectedProfilePicture(e.target.files[0]);
     };
 
+    const handleEmpTypeChange = (event) => {
+        setSelectedEmpType(event.target.value);
+    }
     const handleSave = () => {
         setIsSaving(true);
         const config = {
@@ -65,6 +69,7 @@ function EmpCreate() {
         data.append('is_onsite', onSite);
         data.append('resume', selected_resume);
         data.append('profile_picture', profile_picture);
+        data.append('employment_type', employment_type);
 
         axios.post('/employees/add', data, config)
           .then(function (response) {
@@ -215,6 +220,32 @@ function EmpCreate() {
                                     className="form-control"
                                     id="role"
                                     name="role"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="resume">Employment Type</label><br/>
+                                
+                                <input
+                                    type="radio"
+                                    value="Full-time"
+                                    className="form-check-input"
+                                    checked={employment_type === 'Full-time'}
+                                    name="employment_type"
+                                    onChange={handleEmpTypeChange}
+                                />
+                                <label htmlFor="employment_type" className="radio_emptype">
+                                    Full Time
+                                </label>
+                                <input
+                                    type="radio"
+                                    value="Part-time"
+                                    className="form-check-input"
+                                    checked={employment_type === 'Part-time'}
+                                    name="employment_type"
+                                    onChange={handleEmpTypeChange}
+                                />
+                                <label htmlFor="employment_type" className="radio_emptype">
+                                    Part Time
+                                </label>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="vaco_join_date">Joining Date at Vaco</label>
