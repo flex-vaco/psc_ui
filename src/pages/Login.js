@@ -63,12 +63,12 @@ function EmpShow() {
 
   return (
     <>
-    <br/>
-    <div className="container w-auto">
-      <div className="container w-auto">
+
+    <div className="container w-auto login_div">
+      <div className="container w-auto login_logo">
         <img src='images/Logo.png' alt="My Image" />
       </div>
-      <br/>
+
       <div class="container w-auto">
             <div class="">
                 <div class="rounded d-flex justify-content-center">
@@ -124,7 +124,7 @@ function EmpShow() {
                 </div>
             </div>
         </div>
-        <div className="container w-auto login_footer">
+        <div className="container login_footer">
           <Footer />
         </div>                              
     </div>   
