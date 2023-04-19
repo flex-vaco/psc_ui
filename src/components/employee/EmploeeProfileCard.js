@@ -1,9 +1,9 @@
 function EmployeeProfileCard(props) {
     return (
-        <div class="col-md-4 mt-4">
-            <div class="card p-4">
+        <div className="col-md-4 mt-4">
+            <div className="card p-4">
             
-                    <img class="card-img-top d-flex flex-column justify-content-center align-items-center" src="https://images.unsplash.com/photo-1517832207067-4db24a2ae47c" alt="Card image cap"/>
+                    <img className="card-img-top d-flex flex-column justify-content-center align-items-center" src="https://images.unsplash.com/photo-1517832207067-4db24a2ae47c" alt="Card image cap"/>
             
                 <div className="card-body">
                     <h4><b>{props.employee.first_name}, {props.employee.role}</b></h4>

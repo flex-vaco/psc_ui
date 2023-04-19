@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Layout from "../components/Layout";
 import Footer from "../components/Footer";
 
 function EmpShow() {
@@ -29,11 +28,12 @@ function EmpShow() {
       .post("/users/sign-in/", data, config)
       .then(function (response) {
         localStorage.setItem("jwt-access-token", response.data?.token);
+        localStorage.setItem("user_role", response.data?.user?.role);
         Swal.fire({
           icon: "success",
-          title: `Welcome ${response.data?.user?.first_name}!`,
+          title: `Welcome ${response.data?.user?.first_name}! Logged in as ${response.data?.user?.role}`,
           showConfirmButton: false,
-          timer: 2000,
+          timer: 2500,
         });
         const waitforJWT = setInterval(() => { //add a timeout to ensure jwt is set before navigation
           if (localStorage.getItem("jwt-access-token")){
@@ -69,18 +69,18 @@ function EmpShow() {
         <img src='images/Logo.png' alt="My Image" />
       </div>
 
-      <div class="container w-auto">
-            <div class="">
-                <div class="rounded d-flex justify-content-center">
-                    <div class="col-lg-4 col-md-6 col-sm-12 form-bg-radius">
-                        <div class="text-center">
+      <div className="container w-auto">
+            <div className="">
+                <div className="rounded d-flex justify-content-center">
+                    <div className="col-lg-4 col-md-6 col-sm-12 form-bg-radius">
+                        <div className="text-center">
                             <h4 className="login_header">Log in to VacoFlex</h4>
                         </div>
                         {(errMessage)? <p className="text-danger"> {errMessage}</p> : ""}
                         <form>
-                          <div class="p-4 text-center">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text"><i class="bi bi-person-fill text-gray"></i></span>
+                          <div className="p-4 text-center">
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text"><i className="bi bi-person-fill text-gray"></i></span>
                                     <input
                                       placeholder="Username or Email"
                                       onChange={(event) => {
@@ -93,8 +93,8 @@ function EmpShow() {
                                       name="email"
                                     />
                                 </div>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text"><i class="bi bi-lock-fill text-gray"></i></span>
+                                <div className="input-group mb-3">
+                                    <span className="input-group-text"><i className="bi bi-lock-fill text-gray"></i></span>
                                     <input 
                                       placeholder="password" 
                                       onChange={(event) => {
@@ -107,7 +107,7 @@ function EmpShow() {
                                       name="password"
                                     />
                                 </div>
-                                <button class="btn btn-primary text-center mt-2 px-5 login_button" 
+                                <button className="btn btn-primary text-center mt-2 px-5 login_button" 
                                   disabled={tryingLogin}
                                   onClick={handleLogin}
                                   type="submit"
@@ -116,7 +116,7 @@ function EmpShow() {
                                 </button>
                           </div>    
                         </form>
-                        <div class="text-center poweredby_logo">
+                        <div className="text-center poweredby_logo">
                           Powered by <img src='images/VacoBinary_Logo.png' alt="My Image" />
                         </div>
                     </div>

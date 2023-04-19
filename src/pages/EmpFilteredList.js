@@ -15,7 +15,6 @@ function EmpFilteredList() {
 
     useEffect(() => {
         console.log(selectedExp);
-        console.log('test');
         fetchEmpList();
     }, [selectedLocation, selectedExp, selectedRole, selectedSkill, selectedSkill])
 
@@ -90,15 +89,15 @@ function EmpFilteredList() {
                     {techSkills.map((techSkill, key) => {
                         return(<div className="form-check" key={key}>
                                     <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
-                                    <label className="form-check-label" for="flexCheckDefault">
+                                    <label className="form-check-label" htmlFor="flexCheckDefault">
                                          {techSkill}
                                     </label>
                                 </div>)
                     })
                     }
                     <hr className="style12 mb-3"></hr>
-                    <div classNameName="form-group">
-                        <label for="location">Location</label>
+                    <div className="form-group">
+                        <label htmlFor="location">Location</label>
                         <input placeholder='search locations'
                                         onChange={(event)=>{setSelectedLocation(event.target.value)}}
                                         type="text"
@@ -108,7 +107,7 @@ function EmpFilteredList() {
                     </div>
                     <hr className="style12 mb-3"></hr>
                         <div className="form-group"> 
-                            <label for="exp">Experience</label>
+                            <label htmlFor="exp">Experience</label>
                         
 
                             <div className="form-check">
@@ -138,7 +137,6 @@ function EmpFilteredList() {
                         <input type="range" 
                                 className='multi-range'
                                 step="*" 
-                                min="-1" 
                                 min="-1" 
                                 max="20" 
                                 onChange={(event)=>{setSelectedExp(event.target.value)}}
