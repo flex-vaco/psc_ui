@@ -19,6 +19,10 @@ import EmpProjAlocEdit from "./pages/EmpProjAlocEdit";
 import EmpFilteredList from './pages/EmpFilteredList'
 import Home from './pages/Home'
 
+import UserCreate from "./pages/UserCreate";
+import UserList from "./pages/UserList";
+import UserEdit from "./pages/UserEdit";
+
 function App() {
   return (
     <Router>
@@ -40,6 +44,9 @@ function App() {
           <Route path="/empProjCreate"  element={<EmpProjAlocCreate/>} />
           <Route path="/empProjList"  element={<EmpProjAlocList/>} />
           <Route path="/empProjEdit/:id"  element={<EmpProjAlocEdit/>} />
+          <Route path="/userCreate"  element={<UserCreate/>} />
+          <Route path="/userList"  element={<UserList/>} />
+          <Route path="/userEdit/:id"  element={<UserEdit/>} />
       </Routes>
     </Router>
   );

@@ -11,6 +11,7 @@ const Navbar = () => {
   const allocationValidRoles = ["supervisor", "administrator"];
   const employeeValidRoles = ["supervisor", "administrator"];
   const projectValidRoles = ["supervisor", "administrator"];
+  const userValidRoles = ["administrator"];
 
   return (
     <div className="container w-auto">
@@ -65,12 +66,25 @@ const Navbar = () => {
               </li>
                : ""
             }
+            {
+              (userValidRoles.includes(activeUserRole)) ? 
+                <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Users
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdownallocation">
+                  <li><a className="dropdown-item" href="/userList">List</a></li>
+                  <li><a className="dropdown-item" href="/userCreate">Add User</a></li>
+                </ul>
+              </li>
+               : ""
+            }
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownuser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="/images/img_avatar1.png" alt="Avatar Logo" className="rounded-pill nav_profileimg"/>
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdownuser">
-                <li><a className="dropdown-item" href="#">My profile</a></li>
+                <li><a className="dropdown-item" href="#">Role: {activeUserRole}</a></li>
                 <li> 
                   <a className="dropdown-item"
                     onClick={handleLogout}
