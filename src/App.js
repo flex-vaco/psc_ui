@@ -38,7 +38,7 @@ function App() {
           <Route path="/empShow/:id"  element={<EmpShow/>} />
           <Route path="/filter/:searchSkill?"  element={<EmpFilteredList/>} />
           <Route path="/home"  element={<Home/>} />
-          <Route path="/create"  element={<EmpCreate/>} />
+          <Route path="/create"   element={<EmpCreate/>} />
           <Route path="/edit/:id"  element={<EmpEdit/>} />
           <Route path="/show/:id"  element={<EmpShow/>} />
           <Route path="/projects"  element={<ProjectList/>} />

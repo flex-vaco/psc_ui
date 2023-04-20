@@ -1,9 +1,11 @@
-import React from "react";
-import { useNavigate } from "react-router-dom"
+import React,  { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"
 
 const Navbar = () => {
   const navigate = useNavigate();
   const activeUserRole = localStorage.getItem("user_role");
+  const [searchSkill, setSearchSkill] = useState('');
+
   const handleLogout = () => {
     navigate("/")
     localStorage.removeItem("jwt-access-token");
@@ -14,6 +16,12 @@ const Navbar = () => {
   const employeeValidRoles = ["supervisor", "administrator"];
   const projectValidRoles = ["supervisor", "administrator"];
   const userValidRoles = ["administrator"];
+
+  const handleSearchClick = (event) => {
+    event.preventDefault();    
+    console.log('search');
+    navigate(`/filter/`+searchSkill);
+  }
 
   return (
     <div className="container w-auto">
@@ -26,8 +34,8 @@ const Navbar = () => {
         </button>
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex nav_search">
-            <input className="form-control" type="search" placeholder="What skills are you looking to hire?" aria-label="Search" />
-            <button className="btn btn-outline-success" type="submit"><i className="bi bi-search text-gray"></i></button>
+            <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
+            <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
           </form>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
           {
@@ -37,7 +45,6 @@ const Navbar = () => {
                 Employees
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdownemp">
-                <li><a className="dropdown-item" href="/home">Search</a></li>
                 <li><a className="dropdown-item" href="/employees">List</a></li>
                 <li><a className="dropdown-item" href="/empCreate">Add Employee</a></li>
               </ul>
