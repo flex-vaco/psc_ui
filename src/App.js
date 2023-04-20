@@ -16,6 +16,10 @@ import EmpProjAlocCreate from "./pages/EmpProjAlocCreate";
 import EmpProjAlocList from "./pages/EmpProjAlocList";
 import EmpProjAlocEdit from "./pages/EmpProjAlocEdit";
 
+import EmpProjUtiliCreate from "./pages/utilization/EmpProjUtiliCreate";
+import EmpProjUtiliList from "./pages/utilization/EmpProjUtiliList";
+import EmpProjUtiliEdit from "./pages/utilization/EmpProjUtiliEdit";
+
 import EmpFilteredList from './pages/EmpFilteredList'
 import Home from './pages/Home'
 
@@ -44,6 +48,9 @@ function App() {
           <Route path="/empProjCreate"  element={<EmpProjAlocCreate/>} />
           <Route path="/empProjList"  element={<EmpProjAlocList/>} />
           <Route path="/empProjEdit/:id"  element={<EmpProjAlocEdit/>} />
+          <Route path="/empProjUtiliCreate"  element={<EmpProjUtiliCreate/>} />
+          <Route path="/empUtiliList"  element={<EmpProjUtiliList/>} />
+          <Route path="/empProjUtiliEdit/:id"  element={<EmpProjUtiliEdit/>} />
           <Route path="/userCreate"  element={<UserCreate/>} />
           <Route path="/userList"  element={<UserList/>} />
           <Route path="/userEdit/:id"  element={<UserEdit/>} />

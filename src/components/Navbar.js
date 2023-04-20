@@ -8,6 +8,8 @@ const Navbar = () => {
     navigate("/")
     localStorage.removeItem("jwt-access-token");
   }
+  
+  const utilizationValidRoles = ["supervisor", "administrator"];
   const allocationValidRoles = ["supervisor", "administrator"];
   const employeeValidRoles = ["supervisor", "administrator"];
   const projectValidRoles = ["supervisor", "administrator"];
@@ -67,6 +69,19 @@ const Navbar = () => {
                : ""
             }
             {
+              (utilizationValidRoles.includes(activeUserRole)) ? 
+                <li className="nav-item dropdown">
+                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Utilization
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdownallocation">
+                  <li><a className="dropdown-item" href="/empUtiliList">List</a></li>
+                  <li><a className="dropdown-item" href="/empProjUtiliCreate">Add Allocation</a></li>
+                </ul>
+                </li>
+                  :""
+            }
+            {   
               (userValidRoles.includes(activeUserRole)) ? 
                 <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
