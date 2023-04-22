@@ -33,6 +33,9 @@ function UserCreate() {
         }
 
     };
+    const handleCancel = () => {
+        navigate("/userList");
+    }
     const fetchRoles = () => {
         axios.post('/users/roles')
         .then(function (response) {
@@ -165,10 +168,17 @@ console.log(data)
                             </div>
                             <button 
                                 disabled={isSaving}
+                                onClick={handleCancel} 
+                                type="submit"
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </button>
+                            <button 
+                                disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3">
-                                Save Employee
+                                className="btn btn-outline-primary mt-3 me-3">
+                                Save User
                             </button>
                         </form>
                     </div>

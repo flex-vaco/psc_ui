@@ -87,6 +87,9 @@ function EmpProjUtiliCreate() {
           console.log(error);
         })
     }
+    const handleCancel = () => {
+        navigate("/empUtiliList");
+    }
     const handleSave = () => {
         Swal.showLoading();
         setIsSaving(true);
@@ -132,7 +135,6 @@ function EmpProjUtiliCreate() {
             })
             setIsSaving(false);
           });
-          navigate("/empUtiliList");
     }
   
     return (
@@ -211,6 +213,13 @@ function EmpProjUtiliCreate() {
                                     id="pto_hours_per_week"
                                     name="pto_hours_per_week"/>
                             </div>
+                            <button 
+                                disabled={isSaving}
+                                onClick={handleCancel} 
+                                type="submit"
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </button>
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 

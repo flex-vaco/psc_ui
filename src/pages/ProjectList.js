@@ -1,13 +1,18 @@
 import React,{ useState, useEffect} from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
 
 function ProjectList() {
-    const  [projectList, setProjectList] = useState([])
-  
+    const [projectList, setProjectList] = useState([])
+    const navigate = useNavigate();
+
+    const handleAddButtonClick = () => {
+      navigate("/projectCreate");
+    }
+
     useEffect(() => {
         fetchProjectList()
     }, [])
@@ -60,7 +65,21 @@ function ProjectList() {
         <div className="container-fluid">
           <div className="card w-auto">
             <div className="card-header">
-              <h4 className="text-center">Project List</h4>
+              <div className="row">
+                <div className="col">
+                </div>
+                <div className="col text-center">
+                  <h4>Project List</h4>
+                </div>
+                <div className="col">
+                  <button 
+                    type="button"
+                    onClick={handleAddButtonClick}
+                    className="btn btn-outline-primary float-end">
+                    ADD <i className="bi bi-plus-square"></i> 
+                  </button>
+                </div>
+              </div>
             </div>
             <div className="card-body table-responsive">
               <table className="table table-hover">

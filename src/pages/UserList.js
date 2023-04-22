@@ -1,9 +1,8 @@
 import React,{ useState, useEffect} from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
-import * as Utils from "../lib/Utils"
 
 function UserList() {
     const  [userList, setUserList] = useState([])
@@ -21,7 +20,10 @@ function UserList() {
           console.log(error);
         })
     }
-  
+    const navigate = useNavigate();
+    const handleAddButtonClick = () => {
+      navigate("/userCreate");
+    }
     const handleDelete = (user_id) => {
         Swal.fire({
             title: 'Are you sure?',
@@ -60,7 +62,21 @@ function UserList() {
         <div className="container-fluid">
           <div className="card w-auto">
             <div className="card-header">
-              <h4 className="text-center">User List</h4>
+            <div className="row">
+                <div className="col">
+                </div>
+                <div className="col text-center">
+                  <h4>User List</h4>
+                </div>
+                <div className="col">
+                  <button 
+                    type="button"
+                    onClick={handleAddButtonClick}
+                    className="btn btn-outline-primary float-end">
+                    ADD <i className="bi bi-plus-square"></i> 
+                  </button>
+                </div>
+            </div>
             </div>
             <div className="card-body table-responsive">
               <table className="table table-hover">

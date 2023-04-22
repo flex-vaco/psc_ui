@@ -17,7 +17,9 @@ function EmpProjAlocCreate() {
 
     const [isSaving, setIsSaving] = useState(false)
     const navigate = useNavigate();
-
+    const handleCancel = () => {
+        navigate("/empProjList");
+    }
     const  [empList, setEmpList] = useState([])
     const  [projectList, setProjectList] = useState([])
 
@@ -204,9 +206,16 @@ function EmpProjAlocCreate() {
                             </div>
                             <button 
                                 disabled={isSaving}
+                                onClick={handleCancel} 
+                                type="submit"
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </button>
+                            <button 
+                                disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3">
+                                className="btn btn-outline-primary mt-3 me-3">
                                 Save
                             </button>
                         </form>

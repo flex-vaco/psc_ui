@@ -1,5 +1,6 @@
 import React,  { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
+import * as AppFunc from "../lib/AppFunctions";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -10,12 +11,10 @@ const Navbar = () => {
     navigate("/")
     localStorage.removeItem("jwt-access-token");
   }
-  
-  const utilizationValidRoles = ["supervisor", "administrator"];
-  const allocationValidRoles = ["supervisor", "administrator"];
-  const employeeValidRoles = ["supervisor", "administrator"];
-  const projectValidRoles = ["supervisor", "administrator"];
-  const userValidRoles = ["administrator"];
+
+  const handleHomeButtonClick = () => {
+    navigate("/filter");
+  }
 
   const handleSearchClick = (event) => {
     event.preventDefault();    
@@ -28,7 +27,7 @@ const Navbar = () => {
    
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
-        <a className="navbar-brand" href="/filter"><img src="/images/Logo.png"/></a>
+        <Link to={"/filter"}><img src="/images/Logo.png"/></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -38,69 +37,19 @@ const Navbar = () => {
             <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
           </form>
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-          {
-              (employeeValidRoles.includes(activeUserRole)) ? 
+          {AppFunc.hasAdminAccess(activeUserRole) ?
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownemp" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Employees
+                Admin.
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdownemp">
-                <li><a className="dropdown-item" href="/employees">List</a></li>
-                <li><a className="dropdown-item" href="/empCreate">Add Employee</a></li>
+                {AppFunc.hasEmployeeAccess(activeUserRole) ? <li><a className="dropdown-item" href="/employees">Employees</a></li>: ""}
+                {AppFunc.hasProjectAccess(activeUserRole) ? <li><a className="dropdown-item" href="/projects">Projects</a></li>: ""}
+                {AppFunc.hasAllocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empProjList">Allocations</a></li>: ""}
+                {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
+                {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
               </ul>
-            </li> :""
-            }
-            {
-              (projectValidRoles.includes(activeUserRole)) ? 
-            <li className="nav-item dropdown">
-              <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownproject" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Projects
-              </a>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdownproject">
-                <li><a className="dropdown-item" href="/projects">List</a></li>
-                <li><a className="dropdown-item" href="projectCreate">Add Project</a></li>
-              </ul>
-            </li> : ""
-          }
-            {
-              (allocationValidRoles.includes(activeUserRole)) ? 
-                <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Allocations
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdownallocation">
-                  <li><a className="dropdown-item" href="/empProjList">List</a></li>
-                  <li><a className="dropdown-item" href="/empProjCreate">Add Allocation</a></li>
-                </ul>
-              </li>
-               : ""
-            }
-            {
-              (utilizationValidRoles.includes(activeUserRole)) ? 
-                <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Utilization
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdownallocation">
-                  <li><a className="dropdown-item" href="/empUtiliList">List</a></li>
-                  <li><a className="dropdown-item" href="/empProjUtiliCreate">Add Allocation</a></li>
-                </ul>
-                </li>
-                  :""
-            }
-            {   
-              (userValidRoles.includes(activeUserRole)) ? 
-                <li className="nav-item dropdown">
-                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownallocation" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Users
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdownallocation">
-                  <li><a className="dropdown-item" href="/userList">List</a></li>
-                  <li><a className="dropdown-item" href="/userCreate">Add User</a></li>
-                </ul>
-              </li>
-               : ""
-            }
+            </li> : ""}
             <li className="nav-item dropdown">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownuser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="/images/img_avatar1.png" alt="Avatar Logo" className="rounded-pill nav_profileimg"/>
@@ -112,11 +61,17 @@ const Navbar = () => {
                     onClick={handleLogout}
                     type="submit"
                   >
-                    Logout
+                    <i className="bi bi-box-arrow-right"> Logout</i>
                   </a>
                 </li>
               </ul>
             </li>
+            <button 
+              type="button"
+              onClick={handleHomeButtonClick}
+              className="btn btn-outline-secondary float-end">
+              <i className="bi bi-house"></i> 
+            </button>
           </ul>
         </div>
       </div>

@@ -40,6 +40,11 @@ function EmpCreate() {
     const handleEmpTypeChange = (event) => {
         setSelectedEmpType(event.target.value);
     }
+
+    const handleCancel = () => {
+        navigate("/employees");
+    }
+
     const handleSave = () => {
         setIsSaving(true);
         const config = {
@@ -337,9 +342,16 @@ function EmpCreate() {
                             </div>
                             <button 
                                 disabled={isSaving}
+                                onClick={handleCancel} 
+                                type="submit"
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </button>
+                            <button 
+                                disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3">
+                                className="btn btn-outline-primary mt-3 me-3">
                                 Save Employee
                             </button>
                         </form>

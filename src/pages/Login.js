@@ -76,8 +76,8 @@ function EmpShow() {
                         <div className="text-center">
                             <h4 className="login_header">Log in to VacoFlex</h4>
                         </div>
-                        {(errMessage)? <p className="text-danger"> {errMessage}</p> : ""}
                         <form>
+                          {(errMessage)? <p className="text-danger ms-5"> {errMessage}</p> : ""}
                           <div className="p-4 text-center">
                                 <div className="input-group mb-3">
                                     <span className="input-group-text"><i className="bi bi-person-fill text-gray"></i></span>
