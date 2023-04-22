@@ -34,7 +34,7 @@ function UserCreate() {
 
     };
     const fetchRoles = () => {
-        axios.get('/users/roles')
+        axios.post('/users/roles')
         .then(function (response) {
             console.log(response.data)
           setRoles(response.data.user_roles);
@@ -134,24 +134,14 @@ console.log(data)
                                     name="email"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="role">Role</label>
-                                <input 
-                                    onChange={(event)=>{setRole(event.target.value)}}
-                                    value={role}
-                                    type="text"
-                                    className="form-control"
-                                    id="role"
-                                    name="role"/>
-                            </div>
-                            {/* <div className="form-group">
-                                <label htmlFor="role">Employee Name</label>
+                                <label htmlFor="role">Role Name</label>
                                 <select name="role" id="role" className="form-control" onChange={handleRoleChange} > 
+                                    <option value="-select-" > -- Select a Role -- </option>
                                     {roles.map((rl, key) => {
-                                        const sel = (rl.role == role) ? true : false;
-                                        return <option key={key} value={rl.role} selected={sel}>{rl.role.toUpperCase()}</option>;
+                                        return <option key={key} value={rl.role}>{rl.role.toUpperCase()}</option>;
                                     })}
                                 </select>
-                            </div> */}
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
                                 <input 

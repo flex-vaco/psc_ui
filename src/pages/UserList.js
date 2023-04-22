@@ -91,12 +91,10 @@ function UserList() {
                           </Link>
                         </td>
                         <td>
-                          {/* <Link to={`/empShow/${empDetails.emp_id}`}> */}
                             {usersList.first_name}, {usersList.last_name}
-                          {/* </Link> */}
                         </td>
                         <td>{usersList.email}</td>
-                        <td>{usersList.role}</td>  
+                        <td>{usersList.role.toUpperCase()}</td>  
                       </tr>
                     );
                   })}

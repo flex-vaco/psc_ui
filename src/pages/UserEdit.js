@@ -3,18 +3,43 @@ import { Link, useParams } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
-import * as Utils from "../lib/Utils"
  
 function UserEdit() {
     const [user_id, setId] = useState(useParams().id)
     const [first_name, setFirstName] = useState('');
     const [last_name, setLastName] = useState('');
     const [password, setPassword] = useState('');
-    const [chkPassword, setChkPassword] = useState('');
     const [role, setRole] = useState('');
     const [email, setEmail] = useState('');
     const [isSaving, setIsSaving] = useState(false);
-    const [formErr, setFormErr] = useState("");
+    const [roles, setRoles] = useState([]);
+
+    const handleRoleChange = (e) => {
+        if(e.target.value === "-select-"){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Role Name is required!',
+                showConfirmButton: true
+            })
+        }
+        setRole(e.target.value)
+    };
+
+    const fetchRoles = () => {
+        axios.post('/users/roles')
+        .then(function (response) {
+            console.log(response.data)
+          setRoles(response.data.user_roles);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    };
+
+    useEffect(() => {
+        fetchRoles();
+    }, []);
+
 
     useEffect(() => {
         axios.get(`/users/${user_id}`)
@@ -107,41 +132,19 @@ function UserEdit() {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="role">Role</label>
-                                <input 
-                                    onChange={(event)=>{setRole(event.target.value)}}
-                                    value={role}
-                                    type="text"
-                                    className="form-control"
-                                    id="role"
-                                    name="role"/>
+                                <select name="role" id="role" className="form-control" onChange={handleRoleChange} > 
+                                    {roles.map((rl, key) => {
+                                        const sel = (rl.role == role) ? true : false;
+                                        return <option key={key} value={rl.role} selected={sel}>{rl.role.toUpperCase()}</option>;
+                                    })}
+                                </select>
                             </div>
-                            {/* <div className="form-group">
-                                <label htmlFor="password">Password</label>
-                                <input 
-                                    onChange={(event)=>{setPassword(event.target.value)}}
-                                    value={password}
-                                    type="password"
-                                    className="form-control"
-                                    id="passwordy"
-                                    name="password"/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="re_password">Re Type Password</label>
-                                {(formErr)? <p className="text-danger"> {formErr}</p> : ""}
-                                <input 
-                                    onChange={(event)=>{verifyPassword(event.target.value)}}
-                                    value={chkPassword}
-                                    type="password"
-                                    className="form-control"
-                                    id="re_password"
-                                    name="re_password"/>
-                            </div> */}
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
                                 className="btn btn-outline-primary mt-3">
-                                Updete User
+                                Update User
                             </button>
                         </form>
                     </div>
