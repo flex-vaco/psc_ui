@@ -56,24 +56,34 @@ function EmployeeProfileCard(props) {
     }
 
     return (<> {displayStatus && (
-         <div className="col-md-4 mt-4">
-            <div className="card p-4">
+        <a  href={props.employee.resume ?`${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}`:null} onClick={handleResumeClick} target="_blank" className="a_underline">
+                  
+    
+         <div className="col-12 col-lg-12 mx-0 mb-2">
+            <div className="card card_height">
         
                 <img className="card-img-top justify-content-center align-items-center"src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`} alt="Card image cap"/>
-            
-                <div className="card-body">
-                    <h4><b>{props.employee.first_name}, {props.employee.role}</b></h4>
-                        <p className="card-text m-0">Exp: {props.employee.total_work_experience_years} years</p>
-                        <p className="card-text m-0">Location: {props.employee.office_location_city} </p>
-                        <p className="card-text m-0">Rate: ${props.employee.rate_per_hour}/hour </p>
+                <div className="media">
+                    <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`}  class="mr-3"/>
+                    <div class="media-body">
+                        <h6 class="mt-2 mb-0">{props.employee.first_name} {props.employee.last_name}</h6>
+                        <div class="d-flex flex-row justify-content-between align-text-center">
+                            <small class="text-muted">{props.employee.role}</small>
+                        </div>
+                    </div>
+                </div>
+                <div className="card-body p-1 ps-3">
+                    <p className="card-text m-0">Location: {props.employee.office_location_city} </p>
+                    <p className="card-text m-0">{ availability > 0 && `Availability: ${availability *  5} Hrs/week` }</p>
+                    <p className="card-text m-0">Expirence: {props.employee.total_work_experience_years} years</p>
+                    <p className="card-text m-0 pb-1">STARTING AT: <b>${props.employee.rate_per_hour} PER HOUR </b></p>
                                  
-                        <p className="card-text m-0">{ availability > 0 && `Availability: ${availability *  5} Hrs/week` }</p>
-                        <a  href={props.employee.resume ?`${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}`:null} onClick={handleResumeClick} target="_blank" className="btn btn-outline-info btn-sm mt-3 mx-1">
-                            View Resume            
-                        </a>
+                        
+                       
                 </div>
             </div>
         </div>
+        </a>
     )
     }</>)
 }

@@ -26,26 +26,24 @@ const Menubar = () => {
   }
 
   return (
-    <div className="container w-auto">
+    <div>
    
     <nav className="navbar menubar navbar-expand-lg navbar-light" id="test">
       <div className="container-fluid">
         
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+      
+        <div className="collapse navbar-collapse" id="navbarSupportedContent2">
         
           <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
              {categoryList.map((category,key) => { 
                 return (
-                <li className="nav-item menu-item dropdown " key={key} id="test1">
-                  <a className="nav-link" href="#" id="navbarDropdownemp" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <li className="nav-item menu-item dropdown ps-2" key={key} id="test1">
+                  <a className="nav-link main_li" href="#" id="navbarDropdownemp" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {category.category_name}
                   </a>
                   <ul className="dropdown-menu">
                     {category.technologies.split(',').map((technology,key) => { return (
-                    <li><a className="dropdown-item" key={key} onClick={(event)=>handleTechClick(event,technology)} href='#'>{technology}</a></li>
+                    <li className="ps-1"><a className="dropdown-item" key={key} onClick={(event)=>handleTechClick(event,technology)} href='#'>{technology}</a></li>
                     )})}
                   </ul>
                 </li>)

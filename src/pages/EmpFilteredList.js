@@ -3,6 +3,7 @@ import { Link, useParams, useLocation } from "react-router-dom"
 import axios from 'axios'
 import Layout from "../components/Layout"
 import EmployeeProfileCard from '../components/employee/EmploeeProfileCard'
+import $ from 'jquery';
 
 
 function EmpFilteredList(props) {
@@ -16,7 +17,16 @@ function EmpFilteredList(props) {
     const [selectedSkill, setSelectedSkill] =  useState([]);
     const [techSkills, setTechSkills] = useState([]);
     const params = useParams();
-
+    $(document).ready(function () {
+        $('[data-toggle="offcanvas"]').click(function () {
+            console.log('canavas');
+          $('.row-offcanvas').addClass('active')
+        });
+        $('[data-toggle="offcanvasclose"]').click(function () {
+            console.log('canavas');
+          $('.row-offcanvas').removeClass('active')
+        });
+    });
     useEffect(() => {
         fetchEmpList();
     }, [selectedLocation, selectedExp, selectedRole, selectedSkill])
@@ -82,21 +92,17 @@ function EmpFilteredList(props) {
 
     return (
         <Layout>
-            <div className="container-fluid">
-
-                <form className="row g-3 h-100">
-
-                    <div className="col-1 h-100"></div>
-
-                    <form className="row g-3 h-100">
-                        <div className="col-1 h-100"></div>
-                        <div className="col-2 h-100">
-                            <div className="">
+            <div className="row-offcanvas row-offcanvas-right container-fluid float-left">
+            <div className="col-xs-6 col-sm-2 sidebar-offcanvas sidebar_background float-left pt-1 px-2" id="sidebar">
+            <button type="button" className="btn btn-primary btn-xs btn-close-white p-0 visible-xs" data-toggle="offcanvasclose"><i className="bi bi-chevron-left"></i></button>
+            <p className="text-center"><i className="bi bi-funnel-fill"></i> Filter</p>
+            <div className="col-12 h-100">
+                            <div className="small">
                                 Skills
                             </div>
                           
                     {techSkills.map((techSkill, key) => {
-                        return(<div className="form-check" key={key}>
+                        return(<div className="form-check pe-1" key={key}>
                                     <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
                                          {techSkill}
@@ -200,29 +206,30 @@ function EmpFilteredList(props) {
                         </div>
                     </div>
                 </div>
-            
-                <div className="col-8">
-                    <div className="card">
-                        
-                        <div className="card-body row my-3">
+</div>
+<div className="col-xs-12 col-sm-12 col-md-10 float-left">
+  <p className="pull-right visible-xs banner_background">
+    <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
+    <h3 className="banner_header">Find Your Required Talent</h3>
+  </p>
+    <div className="col-xs-12 col-lg-12 mx-1">
                 
                          
                                     {empList && empList.map((empDetails, key)=>{
                                         return (
-                                    
+                                            <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1"> 
                                            <EmployeeProfileCard availability={selectedAvailability} employee={empDetails} key={key}></EmployeeProfileCard>
+                                            </div>
                                         )
                                     
                                         })
                                     }
-                              
-                        </div>
-                    </div>
                 </div>
-                <div className="col-1 h-100"></div> 
-            </form>
-</form>
-            </div>
+    </div>
+</div>
+                        
+            
+                
 
 
 
