@@ -7,7 +7,7 @@ import * as Utils from "../lib/Utils"
 
 function EmpProjAlocList() {
     const  [empProjAlocList, setEmpProjAlocList] = useState([])
-  
+    const  [searchKeys, setSearchKeys] = useState([]);
     const navigate = useNavigate();
 
     const handleAddButtonClick = () => {
@@ -22,6 +22,8 @@ function EmpProjAlocList() {
         axios.get(`/${url}`)
         .then(function (response) {
           setEmpProjAlocList(response.data.empProjAlloc);
+          setFilteredList(response.data.empProjAlloc);
+          setSearchKeys(Object.keys(response?.data?.empProjAlloc[0]))
         })
         .catch(function (error) {
           console.log(error);
@@ -59,7 +61,31 @@ function EmpProjAlocList() {
                 });
             }
           })
-    }
+    };
+
+    const [filteredList, setFilteredList] = useState(empProjAlocList);
+    const [searchKey, setSearchKey] = useState("");
+
+    const handleSearch = (event) => {
+      event.stopPropagation();
+      const searchValue = event.target.value.toString().toLowerCase();
+      let dbVal = "";
+      const fList = empProjAlocList.filter((item) => {
+        if (searchKey.includes("date")) {
+          dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
+        } else {
+          dbVal = item[`${searchKey}`].toString().toLowerCase();
+        }
+        return dbVal.includes(searchValue);
+      });
+      setFilteredList(fList);
+    };
+
+    const handleSearchKeyChange = (event) => {
+      event.stopPropagation();
+      if (event.target.value !== "-select-") setSearchKey(event.target.value);
+    };
+    const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"]
 
     return (
       <Layout>
@@ -68,6 +94,14 @@ function EmpProjAlocList() {
             <div className="card-header">
               <div className="row">
                 <div className="col">
+                  <label htmlFor="search" className="mt-1">
+                    Search:
+                    <select  className="ms-2" name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Select Key -- </option>
+                      {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
+                    </select>
+                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Value" onChange={handleSearch} />
+                  </label>
                 </div>
                 <div className="col text-center">
                   <h4>Allocation List</h4>
@@ -98,7 +132,7 @@ function EmpProjAlocList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {empProjAlocList.map((empProjAlloc, key) => {
+                  {filteredList.map((empProjAlloc, key) => {
                     return (
                       <tr key={key}>
                         <td>

@@ -21,6 +21,7 @@ function EmpList() {
         axios.get('/employees')
         .then(function (response) {
           setEmpList(response.data.employees);
+          setFilteredList(response.data.employees);
         })
         .catch(function (error) {
           console.log(error);
@@ -58,7 +59,14 @@ function EmpList() {
                 });
             }
           })
-    }
+    };
+    const [filteredList, setFilteredList] = useState(empList);
+    const handleSearch = (event) => {
+      event.stopPropagation();
+      const searchValue = event.target.value.toLowerCase();
+      const fList = empList.filter((item) => (item.first_name.toLowerCase().includes(searchValue) || item.last_name.toLowerCase().includes(searchValue)));
+      setFilteredList(fList);
+    };
   
     return (
       <Layout>
@@ -67,6 +75,10 @@ function EmpList() {
             <div className="card-header">
               <div className="row">
                 <div className="col">
+                  <label htmlFor="search" className="mt-1">
+                    Search:
+                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Employee Name" onChange={handleSearch} />
+                  </label>
                 </div>
                 <div className="col text-center">
                   <h4>Employee List</h4>
@@ -104,7 +116,7 @@ function EmpList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {empList.map((empDetails, key) => {
+                  {filteredList.map((empDetails, key) => {
                     return (
                       <tr key={key}>
                         <td>

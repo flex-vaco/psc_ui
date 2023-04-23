@@ -3,10 +3,12 @@ import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
+import * as Utils from "../lib/Utils"
 
 function UserList() {
     const  [userList, setUserList] = useState([])
-  
+    const  [searchKeys, setSearchKeys] = useState([])
+
     useEffect(() => {
         fetchUserList()
     }, [])
@@ -15,6 +17,8 @@ function UserList() {
         axios.get('/users')
         .then(function (response) {
           setUserList(response.data.users);
+          setFilteredList(response.data.users);
+          setSearchKeys(Object.keys(response?.data?.users[0]))
         })
         .catch(function (error) {
           console.log(error);
@@ -56,7 +60,30 @@ function UserList() {
             }
           })
     }
-  
+    const [filteredList, setFilteredList] = useState(userList);
+    const [searchKey, setSearchKey] = useState("");
+
+    const handleSearch = (event) => {
+      event.stopPropagation();
+      const searchValue = event.target.value.toString().toLowerCase();
+      let dbVal = "";
+      const fList = userList.filter((item) => {
+        if (searchKey.includes("date")) {
+          dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
+        } else {
+          dbVal = item[`${searchKey}`].toString().toLowerCase();
+        }
+        return dbVal.includes(searchValue);
+      });
+      setFilteredList(fList);
+    };
+
+    const handleSearchKeyChange = (event) => {
+      event.stopPropagation();
+      if (event.target.value !== "-select-") setSearchKey(event.target.value);
+    };
+
+    const keysToIgnore = ["password","user_id"]
     return (
       <Layout>
         <div className="container-fluid">
@@ -64,6 +91,14 @@ function UserList() {
             <div className="card-header">
             <div className="row">
                 <div className="col">
+                  <label htmlFor="search" className="mt-1">
+                    Search:
+                    <select  className="ms-2" name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Select Key -- </option>
+                      {searchKeys.map((k) => (!keysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
+                    </select>
+                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Value" onChange={handleSearch} />
+                  </label>
                 </div>
                 <div className="col text-center">
                   <h4>User List</h4>
@@ -89,7 +124,7 @@ function UserList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {userList.map((usersList, key) => {
+                  {filteredList.map((usersList, key) => {
                     return (
                       <tr key={key}>
                         <td>

@@ -21,6 +21,7 @@ function ProjectList() {
         axios.get('/projects')
         .then(function (response) {
           setProjectList(response.data.projects);
+          setFilteredList(response.data.projects);
         })
         .catch(function (error) {
           console.log(error);
@@ -58,7 +59,17 @@ function ProjectList() {
                 });
             }
           })
-    }
+    };
+
+  const [filteredList, setFilteredList] = useState(projectList);
+
+  const handleSearch = (event) => {
+    event.stopPropagation();
+    const key = event.target.id; 
+    const searchValue = event.target.value.toLowerCase();
+    const fList = projectList.filter((item) => item[`${key}`].toLowerCase().includes(searchValue));
+    setFilteredList(fList);
+  };
 
     return (
       <Layout>
@@ -67,6 +78,10 @@ function ProjectList() {
             <div className="card-header">
               <div className="row">
                 <div className="col">
+                <label htmlFor="search" className="mt-1">
+                  Search:
+                  <input className="ms-2" id="client_name" type="text" placeholder="Client Name" onChange={handleSearch} />
+                </label>
                 </div>
                 <div className="col text-center">
                   <h4>Project List</h4>
@@ -100,7 +115,7 @@ function ProjectList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {projectList.map((projectDetails, key) => {
+                  {filteredList.map((projectDetails, key) => {
                     return (
                       <tr key={key}>
                         <td>
