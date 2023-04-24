@@ -167,79 +167,20 @@ label.radio_emptype {
   display: none!important;
 }
 
-@media screen and (max-width: 767px) {
-  .row-offcanvas {
-    position: relative;
-    -webkit-transition: all .25s ease-out;
-    -o-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-  }
-
-  .row-offcanvas-right {
-    right: 0;
-  }
-
-  .row-offcanvas-left {
-    left: 0;
-  }
-
-  .row-offcanvas-right .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
-    width: 50% !important;
-  }
-
-  .row-offcanvas-left .sidebar-offcanvas {
-    left: -50%; /* 6 columns */
-
-  }
-
-  /* .row-offcanvas-right.active {
-    right: 50%;
-  } */
-
-  .row-offcanvas-left.active {
-    left: 50%; /* 6 columns */
-  }
-
-  .sidebar-offcanvas {
-    position: absolute;
-    top: 0;
-    width: 50%; /* 6 columns */
-  }
-
-  .visible-xs {
-    display: block!important;
-  }
-  .row-offcanvas-right.active .sidebar-offcanvas {
-    left: 0;
-    width: 70% !important;
-    z-index: 1;
-  }
-
-  .sidebar_background {
-    background-color: #e3e3e3e3;
-  }
-
-  .container-fluid {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-
-  .menubar {
-    background-color: #fff;
-    opacity: 1;
-  }
-
-  .main_li {
-    color: #000;
-    font-weight: bold;
-  }
-  
-  .nav_search {
-    width: 75%;
-  }
+.ReactModal__Content {
+    position: absolute !important;
+    inset: 10rem 18% auto !important;
+    border: 1px solid rgb(204, 204, 204) !important;
+    background: rgb(255, 255, 255) !important;
+    overflow: auto !important;
+    border-radius: 40px !important;
+    outline: none !important;
+    padding: 20px !important;
+    transform: translate(0%, -15%) !important;
+    width: 80% !important;
+    margin-right: 15% !important;
+    height: 85vh;
 }
-
 .row .row-offcanvas .row-offcanvas-right>* {
   width: auto;
 }
@@ -353,3 +294,153 @@ input#exp {
     display: flex !important;
 }
 }
+
+.add_in_list {
+  background-color: #F27B3F !important;
+  border: 2px solid #F27B3F !important;
+}
+
+.hire {
+  background-color: transparent !important;
+  color: #F27B3F !important;
+  border: 2px solid #F27B3F !important;
+}
+
+.exitarrow {
+  background: transparent !important;
+  border: navajowhite !important;
+  color: #F27B3F !important;
+  /* font-size: 26px; */
+  padding: 0 !important;
+}
+
+.exitarrow i.bi.bi-box-arrow-left {
+  font-size: 42px;
+  font-weight: bolder;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+.adiv {
+  display: flex;
+  align-items: center;
+}
+
+#right-side a img {
+  margin-right: 10px;
+}
+
+#profilepic {
+ width: 10rem;
+ height: auto;
+  border-radius:50px;
+}
+
+.hours_size {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+@media screen and (max-width: 767px) {
+  .row-offcanvas {
+    position: relative;
+    -webkit-transition: all .25s ease-out;
+    -o-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+  }
+
+  .row-offcanvas-right {
+    right: 0;
+  }
+
+  .row-offcanvas-left {
+    left: 0;
+  }
+
+  .row-offcanvas-right .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+    width: 50% !important;
+  }
+
+  .row-offcanvas-left .sidebar-offcanvas {
+    left: -50%; /* 6 columns */
+
+  }
+
+  /* .row-offcanvas-right.active {
+    right: 50%;
+  } */
+
+  .row-offcanvas-left.active {
+    left: 50%; /* 6 columns */
+  }
+
+  .sidebar-offcanvas {
+    position: absolute;
+    top: 0;
+    width: 50%; /* 6 columns */
+  }
+
+  .visible-xs {
+    display: block!important;
+  }
+  .row-offcanvas-right.active .sidebar-offcanvas {
+    left: 0;
+    width: 70% !important;
+    z-index: 1;
+  }
+
+  .sidebar_background {
+    background-color: #e3e3e3e3;
+  }
+
+  .container-fluid {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .menubar {
+    background-color: #fff;
+    opacity: 1;
+  }
+
+  .main_li {
+    color: #000;
+    font-weight: bold;
+  }
+  
+  .nav_search {
+    width: 75%;
+  }
+
+  .ReactModal__Content {
+    position: absolute !important;
+    inset: 10rem 0 auto !important;
+    border: 1px solid rgb(204, 204, 204) !important;
+    background: rgb(255, 255, 255) !important;
+    overflow: auto !important;
+    border-radius: 4px !important;
+    outline: none !important;
+    padding: 20px !important;
+    transform: translate(0%, -15%) !important;
+    width: 100% !important;
+    height: 85vh;
+  }
+
+  .ReactModal__Overlay.ReactModal__Overlay--after-open {
+    inset: 0rem 0 auto !important;
+  }
+  #profilepic {
+    width: 7rem;
+    height: auto;
+    border-radius: 50px;
+  }
+
+  .hours_size {
+    font-size: 0.6rem;
+    font-weight: bold;
+}
+}
+

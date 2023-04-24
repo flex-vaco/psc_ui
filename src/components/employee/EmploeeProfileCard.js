@@ -56,10 +56,7 @@ function EmployeeProfileCard(props) {
     }
 
     return (<> {displayStatus && (
-        <a  href={props.employee.resume ?`${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}`:null} onClick={handleResumeClick} target="_blank" className="a_underline">
-                  
-    
-         <div className="col-12 col-lg-12 mx-0 mb-2">
+        <div className="col-12 col-lg-12 mx-0 mb-2">
             <div className="card card_height">
         
                 <img className="card-img-top justify-content-center align-items-center"src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`} alt="Card image cap"/>
@@ -83,7 +80,6 @@ function EmployeeProfileCard(props) {
                 </div>
             </div>
         </div>
-        </a>
     )
     }</>)
 }

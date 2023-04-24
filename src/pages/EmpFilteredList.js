@@ -3,6 +3,7 @@ import { Link, useParams, useLocation } from "react-router-dom"
 import axios from 'axios'
 import Layout from "../components/Layout"
 import EmployeeProfileCard from '../components/employee/EmploeeProfileCard'
+import EmployeeProfileModal from '../components/employee/EmployeeProfileModal'
 import $ from 'jquery';
 
 
@@ -16,6 +17,40 @@ function EmpFilteredList() {
     const [selectedAvailability, setSelectedAvailability] = useState('');
     const [selectedSkill, setSelectedSkill] =  useState([]);
     const [techSkills, setTechSkills] = useState([]);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [empModalDetails, setEmpModalDetails] = useState({
+        first_name: '',
+        last_name: '',
+        status: '',
+        email: '',
+        role: '',
+        primary_skills: '',
+        secondary_skills: '',
+        education: '',
+        profile_information: '',
+        total_work_experience_years: '',
+        rate_per_hour: '',
+        vaco_join_date: '',
+        home_location_city: '',
+        office_location_city: '',
+        supervisor_name: '',
+        supervisor_email: '',
+        is_onsite: '',
+        resume: '',
+        profile_picture: '',
+    })
+
+    function openModal(empId) {
+        axios.get(`/employees/${empId}`)
+            .then(function (response) {
+                setEmpModalDetails(response.data.employees[0])
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+        setIsOpen(true);
+        console.log(empId);
+      }
 
     $(document).ready(function () {
         $('[data-toggle="offcanvas"]').click(function () {
@@ -210,35 +245,27 @@ function EmpFilteredList() {
                     </div>
                 </div>
 </div>
-<div className="col-xs-12 col-sm-12 col-md-10 float-left">
-  <p className="pull-right visible-xs banner_background">
-    <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
-    <h3 className="banner_header">Find Your Required Talent</h3>
-  </p>
-    <div className="col-xs-12 col-lg-12 mx-1">
-                
-                         
-                                    {empList && empList.map((empDetails, key)=>{
-                                        return (
-                                            <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1"> 
-                                           <EmployeeProfileCard availability={selectedAvailability} employee={empDetails} key={key}></EmployeeProfileCard>
-                                            </div>
-                                        )
-                                    
-                                        })
-                                    }
-                </div>
+    <div className="col-xs-12 col-sm-12 col-md-10 float-left">
+        <p className="pull-right visible-xs banner_background">
+            <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
+            <h3 className="banner_header">Find Your Required Talent</h3>
+        </p>
+        <div className="col-xs-12 col-lg-12 mx-1">
+            {empList && empList.map((empDetails, key)=>{
+                return (
+                    <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1 cursor" onClick={() => openModal(empDetails.emp_id)}> 
+                <EmployeeProfileCard availability={selectedAvailability} employee={empDetails} key={key}></EmployeeProfileCard>
+                    </div>
+                )
+            
+                })
+            }                                            
+        </div>
+        <EmployeeProfileModal modelstatus={modalIsOpen} close={() => setIsOpen(false)} employee={empModalDetails}/>                            
     </div>
 </div>
-                        
-            
-                
-
-
-
-                  
-                    </Layout>
-                    );
+</Layout>
+);
 }
 
 export default EmpFilteredList;
