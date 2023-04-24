@@ -24,6 +24,7 @@ const projectAccessRoles = [
 const reportAccessRoles = [
   APP_CONSTANTS.USER_ROLES.SUPERVISOR,
   APP_CONSTANTS.USER_ROLES.ADMIN,
+  APP_CONSTANTS.USER_ROLES.PRODUCER
 ];
 
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMIN];

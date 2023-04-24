@@ -37,7 +37,7 @@ const Navbar = () => {
           <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
           <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
         </form>
-        <Link to={"/filter"} state={dummyState} className="d-none d-md-block"><img src="/images/Logo.png"/></Link>
+        <Link to={"/home"} state={dummyState} className="d-none d-md-block"><img src="/images/Logo.png"/></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
