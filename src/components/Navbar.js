@@ -6,6 +6,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const activeUserRole = localStorage.getItem("user_role");
   const [searchSkill, setSearchSkill] = useState('');
+  const dummyState = {categoryTech:[], technologies:''};
 
   const handleLogout = () => {
     navigate("/")
@@ -13,13 +14,18 @@ const Navbar = () => {
   }
 
   const handleHomeButtonClick = () => {
-    navigate("/filter");
+    navigate("/home");
   }
 
   const handleSearchClick = (event) => {
     event.preventDefault();    
     console.log('search');
-    navigate(`/filter/`+searchSkill);
+    navigate(`/filter`,{
+      state: {
+          categoryTech: [],
+          technologies: searchSkill,
+      },
+  });
   }
 
   return (
@@ -31,7 +37,7 @@ const Navbar = () => {
           <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
           <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
         </form>
-        <Link to={"/filter"} className="d-none d-md-block"><img src="/images/Logo.png"/></Link>
+        <Link to={"/filter"} state={dummyState} className="d-none d-md-block"><img src="/images/Logo.png"/></Link>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -52,6 +58,7 @@ const Navbar = () => {
                 {AppFunc.hasAllocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empProjList">Allocations</a></li>: ""}
                 {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
                 {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
+                {AppFunc.hasReportAccess(activeUserRole) ? <li><a className="dropdown-item" href="/forecastHours">Reports</a></li> : ""}
               </ul>
             </li> : ""}
             <li className="nav-item dropdown ms-3 me-3">

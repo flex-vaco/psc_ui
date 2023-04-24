@@ -20,6 +20,12 @@ const projectAccessRoles = [
   APP_CONSTANTS.USER_ROLES.SUPERVISOR,
   APP_CONSTANTS.USER_ROLES.ADMIN,
 ];
+
+const reportAccessRoles = [
+  APP_CONSTANTS.USER_ROLES.SUPERVISOR,
+  APP_CONSTANTS.USER_ROLES.ADMIN,
+];
+
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMIN];
 
 export const hasAdminAccess = (activeUserRole) => {
@@ -39,4 +45,7 @@ export const hasUtilizationAccess = (activeUserRole) => {
 };
 export const hasUserAccess = (activeUserRole) => {
   return userAccessRoles.includes(activeUserRole) ? true : false;
+};
+export const hasReportAccess = (activeUserRole) => {
+  return reportAccessRoles.includes(activeUserRole) ? true : false;
 };

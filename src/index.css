@@ -130,8 +130,8 @@ ul.dropdown-menu.show {
 }
 
 .menubar {
-  background-color:rgb(184, 183, 183);
-  opacity: 0.5;
+  background-color:#e3e3e3;
+  opacity: 1;
 }
 .menu-item:hover::after {
   width: 100%;
@@ -327,6 +327,7 @@ p.card-text.m-0 b {
 
 .card_height {
   min-height: 370px;
+  border: 1px solid #727272 !important;
 }
 
 i.bi.bi-chevron-left {
@@ -344,7 +345,9 @@ a.a_underline {
   text-decoration: none;
   cursor: pointer;
 }
-
+input#exp {
+  accent-color: #F27B3F;
+}
 @media (min-width: 768px) {
   .nav_search.d-md-block {
     display: flex !important;

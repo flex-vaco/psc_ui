@@ -22,7 +22,12 @@ const Menubar = () => {
 
   const handleTechClick = (event, technology) => {
     event.preventDefault();    
-    navigate(`/filter/`+technology);
+    navigate(`/filter`,{
+      state: {
+          categoryTech: [],
+          technologies: technology,
+      },
+  });
   }
 
   return (

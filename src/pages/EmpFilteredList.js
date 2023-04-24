@@ -6,17 +6,17 @@ import EmployeeProfileCard from '../components/employee/EmploeeProfileCard'
 import $ from 'jquery';
 
 
-function EmpFilteredList(props) {
+function EmpFilteredList() {
    
-
+    const {technologies, categoryTech} = useLocation().state;
+    const [searchSkill, setSearchSkill] =  useState([]);
     const [empList, setEmpList] = useState([])
-    const [selectedRole, setSelectedRole] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedExp, setSelectedExp] = useState('');
     const [selectedAvailability, setSelectedAvailability] = useState('');
     const [selectedSkill, setSelectedSkill] =  useState([]);
     const [techSkills, setTechSkills] = useState([]);
-    const params = useParams();
+
     $(document).ready(function () {
         $('[data-toggle="offcanvas"]').click(function () {
             console.log('canavas');
@@ -27,22 +27,21 @@ function EmpFilteredList(props) {
           $('.row-offcanvas').removeClass('active')
         });
     });
-    useEffect(() => {
-        fetchEmpList();
-    }, [selectedLocation, selectedExp, selectedRole, selectedSkill])
 
     useEffect(() => {
-        if (params.searchSkill) {
-             const arrSkill =  params.searchSkill.split(',').map((skill) => {return skill.trim()});
-             setSelectedSkill(arrSkill);
-        }
-    },[params])
+        setSearchSkill(technologies?.split(','));
+    },[useLocation().state.technologies])
+
+    useEffect(() => {
+        fetchEmpList();
+    }, [selectedLocation, selectedExp, selectedSkill, searchSkill])
 
     useEffect(() => {
         fetchTechSkills();
-    }, [])
+    }, [useLocation().state.categoryTech])
 
     const handleTechSkillChange = (event, selectedSkill) => {
+        setSearchSkill([]);
         setSelectedSkill((prev) => {
             if (event.target.checked) {
                 return [selectedSkill, ...prev];
@@ -57,10 +56,15 @@ function EmpFilteredList(props) {
 
 
     const fetchTechSkills = () => {
-        //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
         axios.get(`/application/getTechnologies`)
             .then(function (response) {
-                setTechSkills(response.data.technologies);
+                let techSkills = response.data.technologies;
+                if (categoryTech?.length > 0) {
+                    techSkills = techSkills.filter ((techSkill) => {
+                        return categoryTech.includes(techSkill);
+                    });
+                }
+                setTechSkills(techSkills);
             })
             .catch(function (error) {
                 console.log(error);
@@ -73,10 +77,9 @@ function EmpFilteredList(props) {
             params: {
                 skill: selectedSkill,
                 exp: selectedExp >= 0 ? selectedExp : null,
-                skill: selectedSkill,
+                skill: selectedSkill.length > 0 ? selectedSkill : categoryTech.length > 0 ? categoryTech : searchSkill,
                 exp: selectedExp >= 0 ? selectedExp : null,
-                location: selectedLocation,
-                role: selectedRole
+                location: selectedLocation            
             }
         }
         )

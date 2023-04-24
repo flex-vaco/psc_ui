@@ -41,7 +41,7 @@ function EmpShow() {
             setPassword("");
             setEmail("");
             setErrMessage("");
-            navigate("/filter");
+            navigate("/home");
             clearInterval(waitforJWT);
             window.location.reload(true);
             Swal.hideLoading();

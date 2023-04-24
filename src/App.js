@@ -27,6 +27,9 @@ import UserCreate from "./pages/UserCreate";
 import UserList from "./pages/UserList";
 import UserEdit from "./pages/UserEdit";
 
+import ForecastHours from "./pages/reports/ForecastHours";
+import AvailableHours from "./pages/reports/AvailableHours";
+
 function App() {
   return (
     <Router>
@@ -54,6 +57,8 @@ function App() {
           <Route path="/userCreate"  element={<UserCreate/>} />
           <Route path="/userList"  element={<UserList/>} />
           <Route path="/userEdit/:id"  element={<UserEdit/>} />
+          <Route path="/forecastHours"  element={<ForecastHours/>} />
+          <Route path="/availableHours"  element={<AvailableHours/>} />
       </Routes>
     </Router>
   );
