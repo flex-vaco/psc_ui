@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios'
-
+import Menu from "./Menu";
 const Menubar = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
@@ -38,7 +38,9 @@ const Menubar = () => {
         
       
         <div className="collapse navbar-collapse" id="navbarSupportedContent2">
-        
+          <div className="d-block d-md-none mobile_menu">
+            <Menu />
+          </div>
           <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
              {categoryList.map((category,key) => { 
                 return (

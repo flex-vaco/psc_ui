@@ -56,6 +56,7 @@ function EmployeeProfileCard(props) {
     }
 
     return (<> {displayStatus && (
+        <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1 cursor" onClick={(e) => props.handleProfileClick(props.employee.emp_id)}> 
         <div className="col-12 col-lg-12 mx-0 mb-2">
             <div className="card card_height">
         
@@ -79,6 +80,7 @@ function EmployeeProfileCard(props) {
                        
                 </div>
             </div>
+        </div>
         </div>
     )
     }</>)

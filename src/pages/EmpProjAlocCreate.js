@@ -141,7 +141,7 @@ function EmpProjAlocCreate() {
                                 <label htmlFor="project">Project</label>
                                 <select name="project" id="project" className="form-control" onChange={handleProjectChange}> 
                                     <option value="-select-" > -- Select Project -- </option>
-                                    {projectList.map((prj) => <option value={prj.project_id}>{prj.client_name}, {prj.client_location}</option>)}
+                                    {projectList.map((prj) => <option value={prj.project_id}>{prj.project_name}, {prj.project_location}</option>)}
                                 </select>
                             </div>
                             <div className="form-group">

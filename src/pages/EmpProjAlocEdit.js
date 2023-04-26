@@ -149,7 +149,7 @@ function EmpProjAlocEdit() {
                                 <select name="project" id="project" className="form-control" onChange={handleProjectChange} > 
                                     {projectList.map((prj, key) => {
                                         const sel = (prj.project_id == project_id) ? true : false;
-                                        return <option key={key} value={prj.project_id} selected={sel}>{prj.client_name}, {prj.client_location}</option>;
+                                        return <option key={key} value={prj.project_id} selected={sel}>{prj.project_name}, {prj.project_location}</option>;
                                     })}
                                 </select>
                             </div>

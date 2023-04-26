@@ -8,6 +8,7 @@ import * as Utils from "../lib/Utils"
 function EmpProjAlocList() {
     const  [empProjAlocList, setEmpProjAlocList] = useState([])
     const  [searchKeys, setSearchKeys] = useState([]);
+    const [inputType, setInputType] = useState("text");
     const navigate = useNavigate();
 
     const handleAddButtonClick = () => {
@@ -68,22 +69,43 @@ function EmpProjAlocList() {
 
     const handleSearch = (event) => {
       event.stopPropagation();
-      const searchValue = event.target.value.toString().toLowerCase();
-      let dbVal = "";
-      const fList = empProjAlocList.filter((item) => {
-        if (searchKey.includes("date")) {
-          dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
-        } else {
-          dbVal = item[`${searchKey}`].toString().toLowerCase();
-        }
-        return dbVal.includes(searchValue);
-      });
-      setFilteredList(fList);
+     if (!searchKey || searchKey == "-select-") {
+        Swal.fire({
+          title: 'Select Search Key ',
+          text: "Please select a key to search!",
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
+      } else {
+        const searchValue = event.target.value?.toString().toLowerCase();
+        let dbVal = "";
+        const fList = empProjAlocList.filter((item) => {
+          if (searchKey.includes("date")) {
+            dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
+          } else {
+            dbVal = item[`${searchKey}`]?.toString().toLowerCase();
+          }
+          return dbVal?.includes(searchValue);
+        });
+        setFilteredList(fList);
+      }
     };
 
     const handleSearchKeyChange = (event) => {
       event.stopPropagation();
-      if (event.target.value !== "-select-") setSearchKey(event.target.value);
+      if (event.target.value == "-select-"){
+        document.getElementById("search-value").value = "";
+      } else {
+        setSearchKey(event.target.value);
+      }
+      
+      (event.target.value.includes("date")) ? setInputType("date") : setInputType("text");
+    };
+
+    const handleSearchRefreshClick = () => {
+      window.location.reload(true);
     };
     const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"]
 
@@ -93,15 +115,18 @@ function EmpProjAlocList() {
           <div className="card w-auto">
             <div className="card-header">
               <div className="row">
-                <div className="col">
-                  <label htmlFor="search" className="mt-1">
-                    Search:
-                    <select  className="ms-2" name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
+                <div className="col input-group">
+                  <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
+                    <select name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
                       <option value="-select-"> -- Select Key -- </option>
                       {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
                     </select>
-                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Value" onChange={handleSearch} />
-                  </label>
+                    <input className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                    <span 
+                    onClick={handleSearchRefreshClick}
+                    className="btn btn-outline-primary btn-small">
+                    <i className="bi bi-arrow-counterclockwise"></i>
+                  </span>
                 </div>
                 <div className="col text-center">
                   <h4>Allocation List</h4>
@@ -153,7 +178,7 @@ function EmpProjAlocList() {
                           <Link
                             to={`/projectShow/${empProjAlloc.projectDetails.project_id}`}
                           >
-                            {empProjAlloc.projectDetails.client_name}
+                            {empProjAlloc.projectDetails.project_name}
                           </Link>
                         </td>
                         <td>

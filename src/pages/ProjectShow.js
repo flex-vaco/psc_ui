@@ -6,8 +6,8 @@ import Layout from "../components/Layout"
 function ProjectShow() {
     const [project_id, setId] = useState(useParams().id)
     const [projectDetails, setProjectDetails] = useState({
-        client_name: '',
-        client_location: '',
+        project_name: '',
+        project_location: '',
         contact_person: '',
         contact_email: '',
         contact_phone: '',
@@ -38,8 +38,8 @@ function ProjectShow() {
                         <h4 className="text-center">Project Details</h4>
                     </div>
                     <div className="card-body">
-                        <p><b className="text-muted">Client Name: </b>{projectDetails.client_name}, {projectDetails.last_name}</p>
-                        <p><b className="text-muted">Location: </b>{projectDetails.client_location}</p>
+                        <p><b className="text-muted">Project Name: </b>{projectDetails.project_name}, {projectDetails.last_name}</p>
+                        <p><b className="text-muted">Location: </b>{projectDetails.project_location}</p>
                         <p><b className="text-muted">Contact Person: </b>{projectDetails.contact_person}</p>
                         <p><b className="text-muted">Contact Person Email: </b>{projectDetails.contact_email}</p>
                         <p><b className="text-muted">Contact Person Phone: </b>{projectDetails.contact_phone}</p>

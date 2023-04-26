@@ -8,6 +8,10 @@ import * as Utils from "../lib/Utils"
 function EmpList() {
     const [empList, setEmpList] = useState([]);
     const navigate = useNavigate();
+    const [inputType, setInputType] = useState("text");
+    const [filteredList, setFilteredList] = useState(empList);
+    const [searchKey, setSearchKey] = useState("");
+    const  [searchKeys, setSearchKeys] = useState([]);
 
     const handleAddButtonClick = () => {
       navigate("/empCreate");
@@ -22,6 +26,7 @@ function EmpList() {
         .then(function (response) {
           setEmpList(response.data.employees);
           setFilteredList(response.data.employees);
+          setSearchKeys(Object.keys(response?.data?.employees[0]))
         })
         .catch(function (error) {
           console.log(error);
@@ -60,25 +65,68 @@ function EmpList() {
             }
           })
     };
-    const [filteredList, setFilteredList] = useState(empList);
+
     const handleSearch = (event) => {
       event.stopPropagation();
-      const searchValue = event.target.value.toLowerCase();
-      const fList = empList.filter((item) => (item.first_name.toLowerCase().includes(searchValue) || item.last_name.toLowerCase().includes(searchValue)));
-      setFilteredList(fList);
+     if (!searchKey || searchKey == "-select-") {
+        Swal.fire({
+          title: 'Select Search Key ',
+          text: "Please select a key to search!",
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'OK'
+        });
+      } else {
+        const searchValue = event.target.value?.toString().toLowerCase();
+        let dbVal = "";
+        const fList = empList.filter((item) => {
+          if (searchKey.includes("date")) {
+            dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
+          } else {
+            dbVal = item[`${searchKey}`]?.toString().toLowerCase();
+          }
+          return dbVal?.includes(searchValue);
+        });
+        setFilteredList(fList);
+      }
+    };
+
+    const handleSearchKeyChange = (event) => {
+      event.stopPropagation();
+      if (event.target.value == "-select-"){
+        document.getElementById("search-value").value = "";
+      } else {
+        setSearchKey(event.target.value);
+      }
+      
+      (event.target.value.includes("date")) ? setInputType("date") : setInputType("text");
+    };
+
+    const handleSearchRefreshClick = () => {
+      window.location.reload(true);
     };
   
+    const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"]
+
     return (
       <Layout>
         <div className="container-fluid">
           <div className="card w-auto">
             <div className="card-header">
               <div className="row">
-                <div className="col">
-                  <label htmlFor="search" className="mt-1">
-                    Search:
-                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Employee Name" onChange={handleSearch} />
-                  </label>
+                <div className="col input-group">
+                  <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
+                    <select style = {{width:"40%"}}name="searchKey" id="searchKey"  onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Select Key -- </option>
+                      {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
+                    </select>
+                    <input className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                      <span 
+                      onClick={handleSearchRefreshClick}
+                      className="btn btn-outline-primary btn-small">
+                      <i className="bi bi-arrow-counterclockwise"></i>
+                    </span>
                 </div>
                 <div className="col text-center">
                   <h4>Employee List</h4>

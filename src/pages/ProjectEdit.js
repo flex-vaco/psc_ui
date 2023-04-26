@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -7,8 +7,8 @@ import * as Utils from "../lib/Utils"
  
 function ProjectEdit() {
     const [project_id, setId] = useState(useParams().id)
-    const [client_name, setClientName] = useState('');
-    const [client_location, setClientLocation] = useState('');
+    const [project_name, setProjectName] = useState('');
+    const [project_location, setProjectLocation] = useState('');
     const [contact_person, setContactPerson] = useState('');
     const [contact_email, setContactEmail] = useState('');
     const [contact_phone, setContactPhone] = useState('');
@@ -19,14 +19,43 @@ function ProjectEdit() {
     const [status, setStatus] = useState('');
     const [description, setDescription] = useState('');
     const [head_count, setHeadCount] = useState('');
-    const [isSaving, setIsSaving] = useState(false)
+    const [isSaving, setIsSaving] = useState(false);
+    const navigate = useNavigate();
+    const [client_id, setClientId] = useState('');
+    const  [clientList, setClientList] = useState([]);
+
+    useEffect(() => {
+        fetchClientList();
+    }, [])
+
+    const fetchClientList = () => {
+        axios.get('/clients')
+        .then(function (response) {
+          setClientList(response.data.clients);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+
+    const handleClientChange = (e) => {
+        if(e.target.value === "-select-"){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Client Name is required!',
+                showConfirmButton: true
+            })
+        }
+        setClientId(e.target.value);
+    }
 
     useEffect(() => {
         axios.get(`/projects/${project_id}`)
         .then(function (response) {
             let projectDetails = response.data.projects[0];
-            setClientName(projectDetails.client_name);
-            setClientLocation(projectDetails.client_location);
+            setClientId(projectDetails.client_id);
+            setProjectName(projectDetails.project_name);
+            setProjectLocation(projectDetails.project_location);
             setContactPerson(projectDetails.contact_person);
             setContactEmail(projectDetails.contact_email);
             setContactPhone(projectDetails.contact_phone);
@@ -53,8 +82,9 @@ function ProjectEdit() {
     const handleSave = () => {
         setIsSaving(true);
         axios.post(`/projects/update/${project_id}`, {
-            client_name: client_name,
-            client_location: client_location,
+            client_id: client_id,
+            project_name: project_name,
+            project_location: project_location,
             contact_person: contact_person,
             contact_email: contact_email,
             contact_phone: contact_phone,
@@ -74,6 +104,7 @@ function ProjectEdit() {
                 timer: 1500
             })
             setIsSaving(false);
+            navigate("/projects");
         })
         .catch(function (error) {
             Swal.fire({
@@ -95,25 +126,34 @@ function ProjectEdit() {
                     </div>
                     <div className="card-body">
                     <form>
+                        <div className="form-group">
+                            <label htmlFor="project">Client</label>
+                            <select name="client" id="client" className="form-control" onChange={handleClientChange}> 
+                                {clientList.map((client, key) => {
+                                    const sel = (client.client_id == client_id) ? true : false;
+                                    return <option key={key} value={client.client_id} selected={sel}>{client.name}, {client.location}</option>;
+                                })}
+                            </select>
+                        </div>
                             <div className="form-group">
-                                <label htmlFor="client_name">Client Name</label>
+                                <label htmlFor="project_name">Project Name</label>
                                 <input 
-                                    onChange={(event)=>{setClientName(event.target.value)}}
-                                    value={client_name}
+                                    onChange={(event)=>{setProjectName(event.target.value)}}
+                                    value={project_name}
                                     type="text"
                                     className="form-control"
-                                    id="client_name"
-                                    name="client_name"/>
+                                    id="project_name"
+                                    name="project_name"/>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="client_location">Client Location</label>
+                                <label htmlFor="project_location">Project Location</label>
                                 <input 
-                                    onChange={(event)=>{setClientLocation(event.target.value)}}
-                                    value={client_location}
+                                    onChange={(event)=>{setProjectLocation(event.target.value)}}
+                                    value={project_location}
                                     type="text"
                                     className="form-control"
-                                    id="client_location"
-                                    name="client_location"/>
+                                    id="project_location"
+                                    name="project_location"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="contact_person">Contact Person Name</label>

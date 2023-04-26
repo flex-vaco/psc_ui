@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -6,8 +6,8 @@ import Layout from "../components/Layout"
  
  
 function ProjectCreate() {
-    const [client_name, setClientName] = useState('');
-    const [client_location, setClientLocation] = useState('');
+    const [project_name, setProjectName] = useState('');
+    const [project_location, setProjectLocation] = useState('');
     const [contact_person, setContactPerson] = useState('');
     const [contact_email, setContactEmail] = useState('');
     const [contact_phone, setContactPhone] = useState('');
@@ -20,9 +20,36 @@ function ProjectCreate() {
     const [head_count, setHeadCount] = useState('');
     const [isSaving, setIsSaving] = useState(false)
     const navigate = useNavigate();
+    const  [clientList, setClientList] = useState([]);
+    const [client_id, setClientId] = useState('');
 
     const handleCancel = () => {
         navigate("/projects");
+    }
+
+    useEffect(() => {
+        fetchClientList();
+    }, [])
+
+    const fetchClientList = () => {
+        axios.get('/clients')
+        .then(function (response) {
+          setClientList(response.data.clients);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+
+    const handleClientChange = (e) => {
+        if(e.target.value === "-select-"){
+            Swal.fire({
+                icon: 'warning',
+                title: 'Client Name is required!',
+                showConfirmButton: true
+            })
+        }
+        setClientId(e.target.value);
     }
 
     const handleSave = () => {
@@ -35,8 +62,9 @@ function ProjectCreate() {
           responseType: "text",
         };
         const data = {
-          client_name: client_name,
-          client_location: client_location,
+          client_id: client_id,
+          project_name: project_name,
+          project_location: project_location,
           contact_person: contact_person,
           contact_email: contact_email,
           contact_phone: contact_phone,
@@ -58,8 +86,8 @@ function ProjectCreate() {
             })
             navigate("/projects");
             setIsSaving(false);
-            setClientName('');
-            setClientLocation('');
+            setProjectName('');
+            setProjectLocation('');
             setContactPerson('');
             setContactEmail('');
             setContactPhone('');
@@ -92,24 +120,31 @@ function ProjectCreate() {
                     <div className="card-body">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="client_name">Client Name</label>
-                                <input 
-                                    onChange={(event)=>{setClientName(event.target.value)}}
-                                    value={client_name}
-                                    type="text"
-                                    className="form-control"
-                                    id="client_name"
-                                    name="client_name"/>
+                                <label htmlFor="client">Client</label>
+                                <select name="client" id="client" className="form-control" onChange={handleClientChange}> 
+                                    <option value="-select-" > -- Select client -- </option>
+                                    {clientList.map((client) => <option value={client.client_id}>{client.name}, {client.location}</option>)}
+                                </select>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="client_location">Client Location</label>
+                                <label htmlFor="project_name">Project Name</label>
                                 <input 
-                                    onChange={(event)=>{setClientLocation(event.target.value)}}
-                                    value={client_location}
+                                    onChange={(event)=>{setProjectName(event.target.value)}}
+                                    value={project_name}
                                     type="text"
                                     className="form-control"
-                                    id="client_location"
-                                    name="client_location"/>
+                                    id="project_name"
+                                    name="project_name"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="project_location">Project Location</label>
+                                <input 
+                                    onChange={(event)=>{setProjectLocation(event.target.value)}}
+                                    value={project_location}
+                                    type="text"
+                                    className="form-control"
+                                    id="project_location"
+                                    name="project_location"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="contact_person">Contact Person Name</label>

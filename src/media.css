@@ -5,7 +5,15 @@
   and (min-device-width: 320px) 
   and (max-device-width: 480px)
   and (-webkit-min-device-pixel-ratio: 2) {
-
+    .search_container form {
+      width: 100%;
+    }
+    .card.text-center.min_height {
+      min-height: 180px;
+    } 
+    .height_min {
+      min-height: 180px;
+    }
 }
 
 /* Portrait */
@@ -34,7 +42,12 @@
   and (min-device-width: 320px) 
   and (max-device-width: 568px)
   and (-webkit-min-device-pixel-ratio: 2) {
-
+    .card.text-center.min_height {
+      min-height: 180px;
+    } 
+    .height_min {
+      min-height: 180px;
+    }
 }
 
 /* Portrait */
@@ -63,7 +76,12 @@
   and (min-device-width: 375px) 
   and (max-device-width: 667px) 
   and (-webkit-min-device-pixel-ratio: 2) { 
-
+    .card.text-center.min_height {
+      min-height: 190px;
+    } 
+    .height_min {
+      min-height: 190px;
+    }
 }
 
 /* Portrait */

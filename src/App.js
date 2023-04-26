@@ -30,6 +30,12 @@ import UserEdit from "./pages/UserEdit";
 import ForecastHours from "./pages/reports/ForecastHours";
 import AvailableHours from "./pages/reports/AvailableHours";
 
+import ClientList from "./pages/clients/ClientList"
+import ClientCreate from "./pages/clients/ClientCreate"
+import ClientEdit from "./pages/clients/ClientEdit"
+import ClientShow from "./pages/clients/ClientShow"
+import  InteliChat from "./pages/aiChat/InteliChat";
+
 function App() {
   return (
     <Router>
@@ -59,6 +65,11 @@ function App() {
           <Route path="/userEdit/:id"  element={<UserEdit/>} />
           <Route path="/forecastHours"  element={<ForecastHours/>} />
           <Route path="/availableHours"  element={<AvailableHours/>} />
+          <Route path="/clients"  element={<ClientList/>} />
+          <Route path="/clientCreate"  element={<ClientCreate/>} />
+          <Route path="/clientEdit/:id"  element={<ClientEdit/>} />
+          <Route path="/clientShow/:id"  element={<ClientShow/>} />
+          <Route path="/ichat"  element={<InteliChat/>} />
       </Routes>
     </Router>
   );

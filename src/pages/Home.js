@@ -1,16 +1,34 @@
 import React, { useEffect, useState } from "react";
 
 import {useNavigate} from 'react-router-dom';
-import axios from 'axios'
-
-import Layout from "../components/Layout"
+import axios from 'axios';
+import Modal from 'react-modal';
+import HomePageLayout from "../components/HomePageLayout"
  
 function Home() {
     const  [searchSkill, setSearchSkill] = useState('')
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [empModalDetails, setCatModalDetails] = useState([]);
   
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState({});
 
+    function openModal(empId) {
+        axios.get(`/employees/${empId}`)
+            .then(function (response) {
+                setCatModalDetails(response.data.employees[0])
+            })
+            .catch(function (error) {
+              console.log(error);
+            })
+        setIsOpen(true);
+        console.log(empId);
+    }
+
+    function closeModal() {
+        setIsOpen(false);
+    }
 
     const navigateToEmployeeFilter = () => {
       // 👇️ navigate to /contacts
@@ -37,74 +55,94 @@ function Home() {
       }
 
       const handleClickCategory = (e, category) => {
-            console.log(category);
-            let arrTech = category.technologies.split(',').map((skill) => {
-                                    return skill.trim().replace(/(^\w|\s\w)/g, m => m.toUpperCase()); 
-                                    });
-            navigate(`/filter`,{
-                state: {
-                    categoryTech: arrTech,
-                    technologies: null
-                },
-            });
+        setSelectedCategory(category);
+        setIsOpen(true);
+      }
+
+      const handleTechClick = (event, technology) => {
+        event.preventDefault();    
+        navigate(`/filter`,{
+          state: {
+              categoryTech: [],
+              technologies: technology,
+          },
+      });
       }
     
   
     return (
-        <Layout>
-           <div className="container">
-        
-                <div className="card mb-3">
-                   
-                    <div className="card-body">
-                       <p>Hello,</p>
-                       <p>What skills are you looking to hire?</p>
-                       <input placeholder='Python, NetSuite, etc..'
-                            onChange={(event)=>{setSearchSkill(event.target.value)}}
-                            type="text"
-                            className="form-control"
-                            id="skill"
-                            name="skill"/>
-    
-                            <div className='justify-content-center'>
-                            <button   disabled={searchSkill.length < 3} onClick={navigateToEmployeeFilter} className="btn btn-outline-primary mt-3">Search</button>
+        <HomePageLayout>
+            <div className="container text-center mt-5">
+                <h4>Hello! <small>What skills are you looking to hire?</small></h4>
+            </div>
+           <div className="container search_container mt-3">
 
-                            </div>
-                    </div>
-                </div>
+                <form className="d-flex ms-3 me-3">
+                    
+                    <input className="form-control homepage_search_input" 
+                        onChange={(event)=>{setSearchSkill(event.target.value)}}
+                        type="text"
+                        placeholder="Java, Python, Netsuit etc..." aria-label="Search" 
+                    />
+                    <button disabled={searchSkill.length < 3} className="btn btn-outline-success homepage_search_btn"  onClick={navigateToEmployeeFilter}>Search</button>
+                </form>
             </div>
 
-            <div className="container">
-            <div class="card-deck">
-                <div class="row">
+            <div className="container-fluid mt-5 float-left">
+            <div className="col-xs-12 col-lg-12 mx-1">
                 {categoryList.map((category) => {
                     return (
-                        <div class="col-lg-3 mb-4">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-light  mx-0 h-100 w-100" value={category.id} onClick={(e) => {handleClickCategory(e,category)}}>
-                                        <img className='h-80' src={`/images/` + category.image_name}/><br></br>
-                                        <span>{category.category_name}</span>
-                                    </button>
-                               </div>
+                        <div className="col-6 col-lg-2 float-left my-1 ps-1 pe-1 cursor" onClick={(e) => {handleClickCategory(e,category)}}>
+                            <div className="col-12 col-lg-10 mx-0 mb-2 height_min">
+                                <div class="card text-center min_height">
+                                    <img class="cat_images mx-auto d-block" src={`/images/` + category.image_name} alt={category.category_name} />
+                                    <div class="card-block">
+                                        <p class="card-text">{category.category_name}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )
                 })}
-                
-
-               
-
-              
-
-               
-            
-        </div>
- 
-</div>
-     
             </div>
-        </Layout>
+            <div className="homepagemodal">
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={closeModal}
+                    ariaHideApp={false}
+                    className={
+                        "catmodalpop"}
+                >   
+                    <div className="col-12 col-lg-4 float-left right-border">
+                            <button onClick={closeModal} className="btn btn-primary btn-xs exitarrow"><i class="bi bi-box-arrow-left"></i></button>
+                    </div>
+                    <div className="col-12 float-left">
+                        <div className="col-12 col-lg-5 float-left right-border text-center">
+                            <div id="photo2" >
+                                <img  src={`/images/` + selectedCategory?.image_name} alt=""/>
+                                <span></span>
+                            </div>  
+                        </div>
+                        <div className="col-12 col-lg-7 float-left">
+                            {selectedCategory?.technologies?.split(',').map((tech, key) => {
+                                return (
+                                <div id="photo"  onClick={(event)=>handleTechClick(event,tech)} key={key}>
+                                    <img  src="/images/crm.png" alt=""/>
+                                    <span>{tech}</span>
+                                </div>
+                            )
+                            })}
+                           
+                        </div>
+                    </div>
+            
+                </Modal>
+            </div>
+            </div>
+            
+            
+  
+        </HomePageLayout>
     );
 }
   

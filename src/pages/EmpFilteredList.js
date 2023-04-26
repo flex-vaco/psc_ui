@@ -9,13 +9,13 @@ import $ from 'jquery';
 
 function EmpFilteredList() {
    
-    const {technologies, categoryTech} = useLocation().state;
-    const [searchSkill, setSearchSkill] =  useState([]);
+    const {technologies} = useLocation().state;
+    const [selectedSecondarySkill, setSelectedSecondarySkill] = useState([]);
     const [empList, setEmpList] = useState([])
+    const [empFilteredList, setEmpFilteredList] = useState([]);
     const [selectedLocation, setSelectedLocation] = useState('');
     const [selectedExp, setSelectedExp] = useState('');
     const [selectedAvailability, setSelectedAvailability] = useState('');
-    const [selectedSkill, setSelectedSkill] =  useState([]);
     const [techSkills, setTechSkills] = useState([]);
     const [modalIsOpen, setIsOpen] = useState(false);
     const [empModalDetails, setEmpModalDetails] = useState({
@@ -64,20 +64,39 @@ function EmpFilteredList() {
     });
 
     useEffect(() => {
-        setSearchSkill(technologies?.split(','));
-    },[useLocation().state.technologies])
-
-    useEffect(() => {
         fetchEmpList();
-    }, [selectedLocation, selectedExp, selectedSkill, searchSkill])
+    }, [selectedLocation, selectedExp, technologies])
 
     useEffect(() => {
         fetchTechSkills();
     }, [useLocation().state.categoryTech])
 
+    useEffect(() => {
+        filterBySecondarySkill(empList);
+    },[selectedSecondarySkill])
+
+    const filterBySecondarySkill = (empList) => {
+        let empFilteredList = empList;
+            console.log(empList);
+            if (selectedSecondarySkill.length > 0) {
+                empFilteredList = empList.filter((emp) => {
+                    let found = false;
+
+                    selectedSecondarySkill.forEach((secondarySkill) => {
+                        if (emp.secondary_skills.trim().toLowerCase().indexOf(secondarySkill.trim().toLowerCase()) >= 0) {
+                            found = true;
+                            return;    
+                        }
+                    }) 
+                    return found;     
+                });
+            }
+            setEmpFilteredList(empFilteredList);
+            console.log(empFilteredList);
+    }
+
     const handleTechSkillChange = (event, selectedSkill) => {
-        setSearchSkill([]);
-        setSelectedSkill((prev) => {
+        setSelectedSecondarySkill((prev) => {
             if (event.target.checked) {
                 return [selectedSkill, ...prev];
             }
@@ -93,13 +112,7 @@ function EmpFilteredList() {
     const fetchTechSkills = () => {
         axios.get(`/application/getTechnologies`)
             .then(function (response) {
-                let techSkills = response.data.technologies;
-                if (categoryTech?.length > 0) {
-                    techSkills = techSkills.filter ((techSkill) => {
-                        return categoryTech.includes(techSkill);
-                    });
-                }
-                setTechSkills(techSkills);
+                setTechSkills(response.data.technologies);
             })
             .catch(function (error) {
                 console.log(error);
@@ -107,19 +120,19 @@ function EmpFilteredList() {
     }
 
     const fetchEmpList = () => {
-        //axios.get(`employees/filter/${skill}/${selectedLocation}/${selectedExp}`
+        console.log(technologies);
         axios.get(`employees/filter`, {
             params: {
-                skill: selectedSkill,
-                exp: selectedExp >= 0 ? selectedExp : null,
-                skill: selectedSkill.length > 0 ? selectedSkill : categoryTech.length > 0 ? categoryTech : searchSkill,
+                skill: technologies?.split(','),
                 exp: selectedExp >= 0 ? selectedExp : null,
                 location: selectedLocation            
             }
         }
         )
             .then(function (response) {
+            console.log(response.data.employees);
                 setEmpList(response.data.employees);
+            filterBySecondarySkill(response.data.employees);
             })
             .catch(function (error) {
                 console.log(error);
@@ -251,11 +264,9 @@ function EmpFilteredList() {
             <h3 className="banner_header">Find Your Required Talent</h3>
         </p>
         <div className="col-xs-12 col-lg-12 mx-1">
-            {empList && empList.map((empDetails, key)=>{
+            {empFilteredList && empFilteredList.map((empDetails, key)=>{
                 return (
-                    <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1 cursor" onClick={() => openModal(empDetails.emp_id)}> 
-                <EmployeeProfileCard availability={selectedAvailability} employee={empDetails} key={key}></EmployeeProfileCard>
-                    </div>
+                    <EmployeeProfileCard availability={selectedAvailability} handleProfileClick={openModal} employee={empDetails} key={key}></EmployeeProfileCard>
                 )
             
                 })

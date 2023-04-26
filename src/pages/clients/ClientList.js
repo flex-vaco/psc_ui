@@ -2,33 +2,32 @@ import React,{ useState, useEffect} from 'react'
 import { Link, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import Layout from "../components/Layout"
-import * as Utils from "../lib/Utils"
+import Layout from "../../components/Layout"
 
-function ProjectList() {
-    const [projectList, setProjectList] = useState([])
+function ClientList() {
+    const [clientList, setClientList] = useState([])
     const navigate = useNavigate();
 
     const handleAddButtonClick = () => {
-      navigate("/projectCreate");
+      navigate("/clientCreate");
     }
 
     useEffect(() => {
-        fetchProjectList()
+        fetchClientList()
     }, [])
   
-    const fetchProjectList = () => {
-        axios.get('/projects')
+    const fetchClientList = () => {
+        axios.get('/clients')
         .then(function (response) {
-          setProjectList(response.data.projects);
-          setFilteredList(response.data.projects);
+          setClientList(response.data.clients);
+          setFilteredList(response.data.clients);
         })
         .catch(function (error) {
           console.log(error);
         })
     }
 
-    const handleDelete = (project_id) => {
+    const handleDelete = (client_id) => {
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -39,15 +38,15 @@ function ProjectList() {
             confirmButtonText: 'Yes, delete it!'
           }).then((result) => {
             if (result.isConfirmed) {
-                axios.get(`/projects/delete/${project_id}`)
+                axios.get(`/clients/delete/${client_id}`)
                 .then(function (response) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Project deleted successfully!',
+                        title: 'Client deleted successfully!',
                         showConfirmButton: false,
                         timer: 1500
                     })
-                    fetchProjectList()
+                    fetchClientList()
                 })
                 .catch(function (error) {
                     Swal.fire({
@@ -61,13 +60,13 @@ function ProjectList() {
           })
     };
 
-  const [filteredList, setFilteredList] = useState(projectList);
+  const [filteredList, setFilteredList] = useState(clientList);
 
   const handleSearch = (event) => {
     event.stopPropagation();
     const key = event.target.id; 
     const searchValue = event.target.value.toLowerCase();
-    const fList = projectList.filter((item) => item[`${key}`].toLowerCase().includes(searchValue));
+    const fList = clientList.filter((item) => item[`${key}`].toLowerCase().includes(searchValue));
     setFilteredList(fList);
   };
 
@@ -80,11 +79,11 @@ function ProjectList() {
                 <div className="col">
                 <label htmlFor="search" className="mt-1">
                   Search:
-                  <input className="ms-2" id="project_name" type="text" placeholder="Project Name" onChange={handleSearch} />
+                  <input className="ms-2" id="client_name" type="text" placeholder="Client Name" onChange={handleSearch} />
                 </label>
                 </div>
                 <div className="col text-center">
-                  <h4>Project List</h4>
+                  <h4>Client List</h4>
                 </div>
                 <div className="col">
                   <button 
@@ -102,64 +101,44 @@ function ProjectList() {
                   <tr>
                     <th>Action</th>
                     <th>Client Name</th>
-                    <th>Project Name</th>
-                    <th>Project Location</th>
+                    <th>Client Location</th>
                     <th>Contact Person</th>
                     <th>Contact Email</th>
                     <th>Contact Phone</th>
-                    <th>Start Date</th>
-                    <th>Expected End Date</th>
-                    <th>Actual End Date</th>
-                    <th>Project Status</th>
-                    <th>Technologies Involved</th>
-                    <th>Head Count</th>
+                    <th>Client Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredList.map((projectDetails, key) => {
+                  {filteredList.map((clientDetails, key) => {
                     return (
                       <tr key={key}>
                         <td>
                           <button
-                            onClick={() => handleDelete(projectDetails.project_id)}
+                            onClick={() => handleDelete(clientDetails.client_id)}
                             className="btn btn-outline-danger mx-1"
                           >
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
                             className="btn btn-outline-success mx-1"
-                            to={`/projectEdit/${projectDetails.project_id}`}
+                            to={`/clientEdit/${clientDetails.client_id}`}
                           >
                             <i className="bi bi-pencil"></i>
                           </Link>
                         </td>
                         <td>
                           <Link
-                            to={`/clientShow/${projectDetails.clientDetails.client_id}`}
+                            to={`/projectShow/${clientDetails.client_id}`}
                           >
-                            {projectDetails.clientDetails.name}
+                            {clientDetails.name}
                           </Link>
                         </td>
-                        <td>
-                          <Link
-                            to={`/projectShow/${projectDetails.project_id}`}
-                          >
-                            {projectDetails.project_name}
-                          </Link>
-                        </td>
-                        
-                        <td>{projectDetails.project_location}</td>
+                        <td>{clientDetails.location}</td>
 
-                        <td>{projectDetails.contact_person}</td>
-                        <td>{projectDetails.contact_email}</td>
-                        <td>{projectDetails.contact_phone}</td>
-                        <td>{Utils.formatDateYYYYMMDD(projectDetails.start_date)}</td>
-                        <td>{Utils.formatDateYYYYMMDD(projectDetails.expected_end_date)}</td>
-                        <td>{Utils.formatDateYYYYMMDD(projectDetails.actual_end_date)}</td>
-                        <td>{projectDetails.status}</td>
-                        <td>{projectDetails.technologies_required}</td>
-                        <td>{projectDetails.head_count}</td>
-
+                        <td>{clientDetails.client_contact_person}</td>
+                        <td>{clientDetails.client_contact_email}</td>
+                        <td>{clientDetails.client_contact_phone}</td>
+                        <td>{clientDetails.status}</td>
                       </tr>
                     );
                   })}
@@ -172,4 +151,4 @@ function ProjectList() {
     );
 }
   
-export default ProjectList;
+export default ClientList;

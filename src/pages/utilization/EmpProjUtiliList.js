@@ -118,7 +118,7 @@ function EmpProjUtiliList() {
                           <Link
                             to={`/projectShow/${empProjUtili.projectDetails.project_id}`}
                           >
-                            {empProjUtili.projectDetails.client_name}
+                            {empProjUtili.projectDetails.project_name}
                           </Link>
                         </td>
                         <td>
