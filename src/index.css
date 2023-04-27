@@ -580,14 +580,7 @@ h4.text-center.report_title {
   color: #fff !important;
   border: #f47b34 !important;
 }
-.btn-outline-success:hover {
-  background: #0e4372 !important;
-  border: #0e4372 !important;
-  color: #fff !important;
-}
-.btn-outline-success:hover {
-  background: #0e4372 ;
-}
+
 .css-ubpweo-MuiPaper-root-MuiPopover-paper {
   width: 40% !important;
 }
