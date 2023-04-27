@@ -35,9 +35,23 @@ function ProjectShow() {
            <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Project Details</h4>
+                        <div className="row">
+                            <div className="col">
+                            </div>
+                            <div className="col text-center">
+                                <h4>Project Details</h4>
+                            </div>
+                            <div className="col">
+                            <Link 
+                                to="/projects"
+                                type="button"
+                                className="btn btn-outline-secondary float-end">
+                                Back to List
+                            </Link>
+                            </div>
+                        </div>
                     </div>
-                    <div className="card-body">
+                    <div className="card-body fw-bold">
                         <p><b className="text-muted">Project Name: </b>{projectDetails.project_name}, {projectDetails.last_name}</p>
                         <p><b className="text-muted">Location: </b>{projectDetails.project_location}</p>
                         <p><b className="text-muted">Contact Person: </b>{projectDetails.contact_person}</p>

@@ -105,6 +105,7 @@ function ProjectEdit() {
             })
             setIsSaving(false);
             navigate("/projects");
+            window.location.reload(true);
         })
         .catch(function (error) {
             Swal.fire({
@@ -255,6 +256,12 @@ function ProjectEdit() {
                                     id="head_count"
                                     name="head_count"/>
                             </div>
+                            <Link 
+                                to="/projects"
+                                disabled={isSaving}
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </Link>
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 

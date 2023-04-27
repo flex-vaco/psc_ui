@@ -20,7 +20,6 @@ function ClientList() {
         axios.get('/clients')
         .then(function (response) {
           setClientList(response.data.clients);
-          setFilteredList(response.data.clients);
         })
         .catch(function (error) {
           console.log(error);
@@ -60,16 +59,6 @@ function ClientList() {
           })
     };
 
-  const [filteredList, setFilteredList] = useState(clientList);
-
-  const handleSearch = (event) => {
-    event.stopPropagation();
-    const key = event.target.id; 
-    const searchValue = event.target.value.toLowerCase();
-    const fList = clientList.filter((item) => item[`${key}`].toLowerCase().includes(searchValue));
-    setFilteredList(fList);
-  };
-
     return (
       <Layout>
         <div className="container-fluid">
@@ -77,10 +66,6 @@ function ClientList() {
             <div className="card-header">
               <div className="row">
                 <div className="col">
-                <label htmlFor="search" className="mt-1">
-                  Search:
-                  <input className="ms-2" id="client_name" type="text" placeholder="Client Name" onChange={handleSearch} />
-                </label>
                 </div>
                 <div className="col text-center">
                   <h4>Client List</h4>
@@ -109,7 +94,7 @@ function ClientList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredList.map((clientDetails, key) => {
+                  {clientList.map((clientDetails, key) => {
                     return (
                       <tr key={key}>
                         <td>

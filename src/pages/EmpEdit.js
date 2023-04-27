@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -26,7 +26,7 @@ function EmpEdit() {
     const [is_onsite, setIsOnsite] = useState(false);
     const [employment_type, setSelectedEmpType] = useState('Full-time');
     const [isSaving, setIsSaving] = useState(false);
-    
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`/employees/${emp_id}`)
@@ -104,6 +104,8 @@ function EmpEdit() {
                 timer: 1500
             })
             setIsSaving(false);
+            navigate("/employees");
+            window.location.reload(true);
         })
         .catch(function (error) {
             Swal.fire({
@@ -320,6 +322,12 @@ function EmpEdit() {
                                     onChange={()=>{setIsOnsite(!is_onsite)}}
                                     />
                             </div>
+                            <Link 
+                                to="/employees"
+                                disabled={isSaving}
+                                className="btn btn-outline-secondary mt-3 me-3">
+                                Cancel
+                            </Link>
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 

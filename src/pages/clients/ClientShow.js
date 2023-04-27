@@ -28,10 +28,24 @@ function ClientShow() {
         <Layout>
            <div className="container">
                 <div className="card">
-                    <div className="card-header">
-                        <h4 className="text-center">Client Details</h4>
+                <div className="card-header">
+                <div className="row">
+                    <div className="col">
                     </div>
-                    <div className="card-body">
+                    <div className="col text-center">
+                        <h4>Client Details</h4>
+                    </div>
+                    <div className="col">
+                    <Link 
+                        to="/clients"
+                        type="button"
+                        className="btn btn-outline-secondary float-end">
+                        Back to List
+                    </Link>
+                </div>
+                </div>
+                </div>
+                    <div className="card-body fw-bold">
                         <p><b className="text-muted">Client Name: </b>{clientDetails.name}</p>
                         <p><b className="text-muted">Location: </b>{clientDetails.location}</p>
                         <p><b className="text-muted">Contact Person: </b>{clientDetails.client_contact_person}</p>

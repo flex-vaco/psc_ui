@@ -30,6 +30,7 @@ const reportAccessRoles = [
 
 const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMIN];
+const clientAccessRoles = projectAccessRoles;
 
 export const hasMenuAccess = (activeUserRole) => {
   return menuAccessRoles.includes(activeUserRole) ? true : false;
@@ -54,4 +55,7 @@ export const hasReportAccess = (activeUserRole) => {
 };
 export const hasAIChatAccess = (activeUserRole) => {
   return aiChatAccessRoles.includes(activeUserRole) ? true : false;
+};
+export const hasClientAccess = (activeUserRole) => {
+  return clientAccessRoles.includes(activeUserRole) ? true : false;
 };

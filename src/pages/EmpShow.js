@@ -41,10 +41,26 @@ function EmpShow() {
         <Layout>
            <div className="container">
                 <div className="card">
-                    <div className="card-header">
-                        <h4 className="text-center">Employee Details</h4>
+                <div className="card-header">
+                <div className="row">
+                    <div className="col">
                     </div>
+                    <div className="col text-center">
+                        <h4>Employee Details</h4>
+                    </div>
+                    <div className="col">
+                    <Link 
+                        to="/employees"
+                        type="button"
+                        className="btn btn-outline-secondary float-end">
+                        Back to List
+                    </Link>
+                </div>
+                </div>
+              </div>
                     <div className="card-body">
+                    <div className="row">
+                    <div className="col fw-bold">
                         <p><b className="text-muted">Name: </b>{empDetails.first_name}, {empDetails.last_name}</p>
                         <p><b className="text-muted">Role: </b>{empDetails.role}</p>
                         <p><b className="text-muted">Email: </b>{empDetails.email}</p>
@@ -67,12 +83,16 @@ function EmpShow() {
                               <i className="bi bi-person-lines-fill"></i>
                             </a>
                         </p>
-                        <p><b className="text-muted">Profile Picture: </b>
-                            <img className="rounded-pill profile_pictureempdetails" 
-                            src = {(empDetails.profile_picture) ? 
-                                `${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${empDetails.profile_picture}` : null} 
+                        </div>
+                        <div className="col">
+                        <p> <img className="rounded-pill profile_pictureempdetails" 
+                            src = {(empDetails.profile_picture) ?
+                                `${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${empDetails.profile_picture}` : 
+                                `${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/profile_picture-default.png`} 
                             />
                         </p>
+                        </div>
+                        </div>
                     </div>
                 </div>
             </div>
