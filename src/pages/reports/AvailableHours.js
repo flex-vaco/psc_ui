@@ -31,12 +31,26 @@ function AvailableHours() {
     useEffect(() => {
         fetchAvailHours()
     }, [])
+
+    const today = new Date();
+        const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        let filterStartDate = startDate.getFullYear() + "-" + (startDate.getMonth()+1) + "-" + startDate.getDate();
+
+        const futureMonth = today.getMonth() + 2;
+        const endDate = new Date(today.getFullYear(), futureMonth + 1, 0);
+        let filterEndDate = endDate.getFullYear() + "-" + (endDate.getMonth()+1) + "-" + endDate.getDate();
+        const  [filterStart , setFilterStart] = useState(Utils.formatDateYYYYMMDD(filterStartDate));
+        const  [filterEnd , setFilterEnd] = useState(Utils.formatDateYYYYMMDD(filterEndDate));
     
     const url = "reports/availableHours";
     
     const fetchAvailHours = () => {
-        axios.get(`/${url}`)
+        axios.post(`/${url}`, {
+          startDateFilter : filterStart,
+          endDateFilter: filterEnd
+        })
         .then(function (response) {
+          
           var mondays = getMondays(new Date(response.data.finalDates[0]['startDate']), new Date(response.data.finalDates[0]['endDate']));
           let columnsConfigs = [
             { name: 'Client',
@@ -64,7 +78,7 @@ function AvailableHours() {
             }},
           ];
           mondays.forEach((monday, index, array) => { 
-            const obj ={ name: Utils.formatDateDDMM(monday),
+            const obj ={ name: Utils.formatDateDDMMNAME(monday),
             options: {
               filter: false,
             } };
@@ -74,40 +88,48 @@ function AvailableHours() {
           setColumnsConfigs(columnsConfigs);
           
           var forecastDetails = response.data.empForecastResults;
-          const data = [];
+          
+          if(forecastDetails.length > 0) {
+            console.log(forecastDetails);
+            const data = [];
+            forecastDetails.forEach((forecastDetail, idx) => {
+              const weeks = forecastDetail.weeksStarting.split(",");
+              const projHoursPerWeek = forecastDetail.proj_hours_per_week.split(",");
+              const allWorkHoursPerWeek = forecastDetail.allc_work_hours_per_week.split(",");
+              const ptoHoursPerWeek = forecastDetail.pto_hours_per_week.split(",");
+              // our object array
+              let obj3 = [];
+              
+              let my_object =[]; 
+              my_object.push(forecastDetail.clientDetails.name) ;
+              my_object.push(forecastDetail.projectDetails.project_name) ;
+              my_object.push(forecastDetail.empDetails.primary_skills);
+              my_object.push(forecastDetail.empDetails.first_name+','+forecastDetail.empDetails.last_name);
 
-          forecastDetails.forEach((forecastDetail, idx) => {
-            const weeks = forecastDetail.weeksStarting.split(",");
-            const projHoursPerWeek = forecastDetail.proj_hours_per_week.split(",");
-            const allWorkHoursPerWeek = forecastDetail.allc_work_hours_per_week.split(",");
-            const ptoHoursPerWeek = forecastDetail.pto_hours_per_week.split(",");
-            // our object array
-            let obj3 = [];
-            
-            let my_object =[]; 
-            my_object.push(forecastDetail.clientDetails.name) ;
-            my_object.push(forecastDetail.projectDetails.project_name) ;
-            my_object.push(forecastDetail.empDetails.first_name+','+forecastDetail.empDetails.last_name);
-            my_object.push(forecastDetail.empDetails.primary_skills);
-            console.log(weeks);
-            mondays.forEach((monday, index, array) => { 
-
-              if(weeks.indexOf(monday) !== -1)  
-              {  
-                var indexvalue = weeks.indexOf(monday);
-                var availableHourPercentage = (1 - (projHoursPerWeek[indexvalue] / (allWorkHoursPerWeek[indexvalue] - ptoHoursPerWeek[indexvalue])))*100;
-                var finalPercentage = availableHourPercentage.toFixed(2);              
-                my_object.push(finalPercentage+'%')
-              }   
-              else  
-              {  
-                my_object.push('-')
-              }  
-            })
-            obj3.push(my_object);
-            data.push(obj3[0]);
-          });
-          setColumnsData(data);
+              mondays.forEach((monday, index, array) => { 
+  
+                if(weeks.indexOf(monday) !== -1)  
+                {  
+                  var indexvalue = weeks.indexOf(monday);
+                  var availableHourPercentage = (1 - (projHoursPerWeek[indexvalue] / (allWorkHoursPerWeek[indexvalue] - ptoHoursPerWeek[indexvalue])))*100;
+                  var finalPercentage = availableHourPercentage.toFixed(2);              
+                  my_object.push(finalPercentage+'%')
+                }   
+                else  
+                {  
+                  my_object.push('-')
+                }  
+              })
+              obj3.push(my_object);
+              data.push(obj3[0]);
+              setColumnsData(data);
+            });
+          } else{
+            const data = [];
+            setColumnsData(data);
+          }
+          
+          
         })
         .catch(function (error) {
           console.log(error);
@@ -134,11 +156,35 @@ function AvailableHours() {
       print: false
     };
 
+    
+
     return (
       <Layout>
         <div className="container-fluid">
-            <h4 class="text-center">Employee Available Hours</h4>
-            <div className="card-body">
+        <h4 class="text-center report_title mt-3 mb-3">Employee Available Hours</h4>
+        <div className="col-12 col-lg-12 position_filter float-left mt-3 mb-3">
+              <div className='col-4 col-lg-4 float-left pe-3'>
+                <label>Start Date</label><input type="date" id="start"  className="form-control" name="trip-start" onChange={(event)=>{setFilterStart(event.target.value)}} value={filterStart} / >
+              
+              </div>
+              <div className='col-4 col-lg-4 float-left pe-3'>
+              <label>End Date</label><input type="date" id="end" name="trip-end"  className="form-control" onChange={(event)=>{setFilterEnd(event.target.value)}} value={filterEnd} / >
+           
+              </div>
+              <div className='col-4 col-lg-4 float-left report_button'>
+              <button 
+                                onClick={fetchAvailHours} 
+                                type="submit"
+                                className="btn btn-outline-primary mt-3 me-3">
+                               Get Report
+                            </button> 
+              </div>
+               
+            </div>
+            
+              
+
+            <div className="card-body report_body">
               
               <MUIDataTable data={data} columns={columns} options={options} />
 

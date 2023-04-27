@@ -33,9 +33,22 @@ function ForecastHours() {
     }, [])
     
     const url = "reports/forecastHours";
+
+    const today = new Date();
+        const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        let filterStartDate = startDate.getFullYear() + "-" + (startDate.getMonth()+1) + "-" + startDate.getDate();
+
+        const futureMonth = today.getMonth() + 2;
+        const endDate = new Date(today.getFullYear(), futureMonth + 1, 0);
+        let filterEndDate = endDate.getFullYear() + "-" + (endDate.getMonth()+1) + "-" + endDate.getDate();
+        const  [filterStart , setFilterStart] = useState(Utils.formatDateYYYYMMDD(filterStartDate));
+        const  [filterEnd , setFilterEnd] = useState(Utils.formatDateYYYYMMDD(filterEndDate));
     
     const fetchforecastHours = () => {
-        axios.get(`/${url}`)
+        axios.post(`/${url}`, {
+          startDateFilter : filterStart,
+          endDateFilter: filterEnd
+        })
         .then(function (response) {
           var mondays = getMondays(new Date(response.data.finalDates[0]['startDate']), new Date(response.data.finalDates[0]['endDate']));
           let columnsConfigs = [
@@ -64,7 +77,7 @@ function ForecastHours() {
             }},
           ];
           mondays.forEach((monday, index, array) => { 
-            const obj ={ name: Utils.formatDateDDMM(monday),
+            const obj ={ name: Utils.formatDateDDMMNAME(monday),
             options: {
               filter: false,
             } };
@@ -74,6 +87,7 @@ function ForecastHours() {
           setColumnsConfigs(columnsConfigs);
           
           var forecastDetails = response.data.empForecastResults;
+          if(forecastDetails.length > 0) {
           const data = [];
 
           forecastDetails.forEach((forecastDetail, idx) => {
@@ -85,8 +99,9 @@ function ForecastHours() {
             let my_object = [];
             my_object.push(forecastDetail.clientDetails.name) ;
             my_object.push(forecastDetail.projectDetails.project_name) ;
-            my_object.push(forecastDetail.empDetails.first_name+','+forecastDetail.empDetails.last_name);
             my_object.push(forecastDetail.empDetails.primary_skills);
+            my_object.push(forecastDetail.empDetails.first_name+','+forecastDetail.empDetails.last_name);
+            
 
             mondays.forEach((monday, index, array) => { 
 
@@ -105,6 +120,11 @@ function ForecastHours() {
             data.push(obj3[0]);
           });
           setColumnsData(data);
+        } else{
+          const data = [];
+          setColumnsData(data);
+        }
+          
         })
         .catch(function (error) {
           console.log(error);
@@ -133,13 +153,33 @@ function ForecastHours() {
     return (
       <Layout>
         <div className="container-fluid">
-          <div className="card w-auto">
-            <div className="card-header">
-              <h4 className="text-center">Forecasted Hours</h4>
+        <h4 class="text-center report_title mt-3 mb-3">Forecast Hours</h4>
+        <div className="col-12 col-lg-12 position_filter float-left mt-3 mb-3">
+              <div className='col-4 col-lg-4 float-left pe-3'>
+                <label>Start Date</label><input type="date" id="start"  className="form-control" name="trip-start" onChange={(event)=>{setFilterStart(event.target.value)}} value={filterStart} / >
+              
+              </div>
+              <div className='col-4 col-lg-4 float-left pe-3'>
+              <label>End Date</label><input type="date" id="end" name="trip-end"  className="form-control" onChange={(event)=>{setFilterEnd(event.target.value)}} value={filterEnd} / >
+           
+              </div>
+              <div className='col-4 col-lg-4 float-left report_button'>
+              <button 
+                                onClick={fetchforecastHours} 
+                                type="submit"
+                                className="btn btn-outline-primary mt-3 me-3">
+                               Get Report
+                            </button> 
+              </div>
+               
             </div>
-            <div className="card-body">
+            
+              
+
+            <div className="card-body report_body">
+              
               <MUIDataTable data={data} columns={columns} options={options} />
-            </div>
+
           </div>
         </div>
       </Layout>

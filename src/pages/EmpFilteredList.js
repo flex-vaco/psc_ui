@@ -121,6 +121,7 @@ function EmpFilteredList() {
 
     const fetchEmpList = () => {
         console.log(technologies);
+
         axios.get(`employees/filter`, {
             params: {
                 skill: technologies?.split(','),
@@ -151,7 +152,7 @@ function EmpFilteredList() {
                             <div className="small">
                                 Skills
                             </div>
-                          
+                            <div className="col-12 skill_height">
                     {techSkills.map((techSkill, key) => {
                         return(<div className="form-check pe-1" key={key}>
                                     <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
@@ -161,6 +162,7 @@ function EmpFilteredList() {
                                 </div>)
                     })
                     }
+                    </div>
                     <hr className="style12 mb-3"></hr>
                     <div className="form-group">
                         <label htmlFor="location">Location</label>
@@ -258,7 +260,7 @@ function EmpFilteredList() {
                     </div>
                 </div>
 </div>
-    <div className="col-xs-12 col-sm-12 col-md-10 float-left">
+    <div className="col-xs-12 col-sm-12 col-md-10 float-left col-12">
         <p className="pull-right visible-xs banner_background">
             <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
             <h3 className="banner_header">Find Your Required Talent</h3>

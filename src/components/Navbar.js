@@ -38,15 +38,29 @@ const Navbar = () => {
           <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
           <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
         </form>
+        
         <Link to={"/home"} state={dummyState} className="d-none d-md-block logo"><img className="img-fluid" src="/images/Logo.png"/></Link>
+        <button 
+              type="button"
+              onClick={handleHomeButtonClick}
+              className="btn btn-outline-secondary ms-3 me-3 d-block d-md-none home_button">
+              <i className="bi bi-house"></i> 
+            </button>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
         </button>
+       
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <form className="d-flex nav_search ms-3 me-3 d-none d-md-block">
             <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
             <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
           </form>
+          <button 
+              type="button"
+              onClick={handleHomeButtonClick}
+              className="btn btn-outline-secondary ms-3 me-3 float-end d-none d-md-block">
+              <i className="bi bi-house"></i> 
+            </button>
           <Menu />
         </div>
       </div>

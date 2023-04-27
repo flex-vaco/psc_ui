@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"
 import axios from 'axios'
 import Menu from "./Menu";
+
 const Menubar = () => {
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
@@ -21,6 +22,7 @@ const Menubar = () => {
   }
 
   const handleTechClick = (event, technology) => {
+    document.getElementById('navbarSupportedContent2').classList.remove('show');
     event.preventDefault();    
     navigate(`/filter`,{
       state: {
