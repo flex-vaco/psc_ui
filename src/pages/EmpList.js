@@ -175,7 +175,7 @@ function EmpList() {
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
-                            className="btn btn-outline-success"
+                            className="btn btn-outline-success edit_icon"
                             to={`/empEdit/${empDetails.emp_id}`}
                           >
                             <i className="bi bi-pencil" font-size="2rem;"></i>

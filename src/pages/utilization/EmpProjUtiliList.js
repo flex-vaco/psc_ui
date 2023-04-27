@@ -108,7 +108,7 @@ function EmpProjUtiliList() {
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
-                            className="btn btn-outline-success mx-1"
+                            className="btn btn-outline-success mx-1 edit_icon"
                             to={`/empProjUtiliEdit/${empProjUtili.emp_proj_utili_id}`}
                           >
                             <i className="bi bi-pencil"></i>

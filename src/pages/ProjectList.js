@@ -127,7 +127,7 @@ function ProjectList() {
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
-                            className="btn btn-outline-success mx-1"
+                            className="btn btn-outline-success mx-1 edit_icon"
                             to={`/projectEdit/${projectDetails.project_id}`}
                           >
                             <i className="bi bi-pencil"></i>

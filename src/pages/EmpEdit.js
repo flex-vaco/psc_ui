@@ -325,14 +325,14 @@ function EmpEdit() {
                             <Link 
                                 to="/employees"
                                 disabled={isSaving}
-                                className="btn btn-outline-secondary mt-3 me-3">
+                                className="btn btn-outline-light mt-3 me-3">
                                 Cancel
                             </Link>
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="button"
-                                className="btn btn-outline-success mt-3">
+                                className="btn btn-outline-info mt-3">
                                 Update Employee
                             </button>
                         </form>

@@ -141,7 +141,7 @@ function ClientEdit() {
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="button"
-                                className="btn btn-outline-success mt-3">
+                                className="btn btn-outline-info mt-3">
                                 Update Client
                             </button>
                         </form>

@@ -259,7 +259,7 @@ function ProjectEdit() {
                             <Link 
                                 to="/projects"
                                 disabled={isSaving}
-                                className="btn btn-outline-secondary mt-3 me-3">
+                                className="btn btn-outline-light mt-3 me-3">
                                 Cancel
                             </Link>
                             <button 

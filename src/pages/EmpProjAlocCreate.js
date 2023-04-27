@@ -208,14 +208,14 @@ function EmpProjAlocCreate() {
                                 disabled={isSaving}
                                 onClick={handleCancel} 
                                 type="submit"
-                                className="btn btn-outline-secondary mt-3 me-3">
+                                className="btn btn-outline-light mt-3 me-3">
                                 Cancel
                             </button>
                             <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3 me-3">
+                                className="btn btn-outline-info mt-3 me-3">
                                 Save
                             </button>
                         </form>

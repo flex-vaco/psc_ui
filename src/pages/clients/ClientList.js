@@ -105,7 +105,7 @@ function ClientList() {
                             <i className="bi bi-trash"></i>
                           </button>
                           <Link
-                            className="btn btn-outline-success mx-1"
+                            className="btn btn-outline-success mx-1 edit_icon"
                             to={`/clientEdit/${clientDetails.client_id}`}
                           >
                             <i className="bi bi-pencil"></i>

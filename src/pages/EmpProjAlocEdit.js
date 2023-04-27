@@ -217,7 +217,7 @@ function EmpProjAlocEdit() {
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3">
+                                className="btn btn-outline-info mt-3">
                                 Update
                             </button>
                         </form>
