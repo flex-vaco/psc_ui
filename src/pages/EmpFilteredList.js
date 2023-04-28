@@ -49,7 +49,6 @@ function EmpFilteredList() {
               console.log(error);
             })
         setIsOpen(true);
-        console.log(empId);
       }
 
     $(document).ready(function () {
@@ -64,20 +63,26 @@ function EmpFilteredList() {
     });
 
     useEffect(() => {
-        fetchEmpList();
-    }, [selectedLocation, selectedExp, technologies])
-
-    useEffect(() => {
+        resetSecondarySkillUI();
+        setSelectedSecondarySkill([]);
         fetchTechSkills();
-    }, [useLocation().state.categoryTech])
+        fetchEmpList();
+    }, [technologies])
 
     useEffect(() => {
-        filterBySecondarySkill(empList);
-    },[selectedSecondarySkill])
+        fetchEmpList();
+    }, [selectedLocation, selectedExp, selectedSecondarySkill])
+
+    const resetSecondarySkillUI = () => {
+
+        let secondarySkillCheckboxes = document.querySelectorAll('input[type=checkbox]');
+        for(var i = 0; i < secondarySkillCheckboxes.length; i++) {
+            secondarySkillCheckboxes[i].checked = false;   
+        }
+    }
 
     const filterBySecondarySkill = (empList) => {
         let empFilteredList = empList;
-            console.log(empList);
             if (selectedSecondarySkill.length > 0) {
                 empFilteredList = empList.filter((emp) => {
                     let found = false;
@@ -92,17 +97,16 @@ function EmpFilteredList() {
                 });
             }
             setEmpFilteredList(empFilteredList);
-            console.log(empFilteredList);
     }
 
-    const handleTechSkillChange = (event, selectedSkill) => {
+    const handleTechSkillChange = (event) => {
         setSelectedSecondarySkill((prev) => {
             if (event.target.checked) {
-                return [selectedSkill, ...prev];
+                return [event.target.value, ...prev];
             }
             else {
                 return prev.filter((skill) => {
-                    return skill !== selectedSkill
+                    return skill !== event.target.value
                 });
             }
         });
@@ -110,7 +114,11 @@ function EmpFilteredList() {
 
 
     const fetchTechSkills = () => {
-        axios.get(`/application/getTechnologies`)
+        axios.get(`/application/getTechnologies`, {
+            params: {
+                skill: technologies ? technologies?.split(',') : null,
+            }
+            })
             .then(function (response) {
                 setTechSkills(response.data.technologies);
             })
@@ -120,18 +128,16 @@ function EmpFilteredList() {
     }
 
     const fetchEmpList = () => {
-        console.log(technologies);
 
         axios.get(`employees/filter`, {
             params: {
-                skill: technologies?.split(','),
+                skill: technologies ? technologies?.split(',') : null,
                 exp: selectedExp >= 0 ? selectedExp : null,
                 location: selectedLocation            
             }
         }
         )
             .then(function (response) {
-            console.log(response.data.employees);
                 setEmpList(response.data.employees);
             filterBySecondarySkill(response.data.employees);
             })
@@ -153,9 +159,9 @@ function EmpFilteredList() {
                                 Skills
                             </div>
                             <div className="col-12 skill_height">
-                    {techSkills.map((techSkill, key) => {
-                        return(<div className="form-check pe-1" key={key}>
-                                    <input className="form-check-input" type="checkbox"  onChange={(event)=>{handleTechSkillChange(event,techSkill)}} value="" id="flexCheckDefault"/>
+                    {techSkills.map((techSkill,key) => {
+                        return(<div className="form-check pe-1" >
+                                    <input className="form-check-input" type="checkbox" key={key}    onChange={handleTechSkillChange} value={techSkill} id="flexCheckDefault"/>
                                     <label className="form-check-label" htmlFor="flexCheckDefault">
                                          {techSkill}
                                     </label>

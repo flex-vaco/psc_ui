@@ -34,7 +34,7 @@ function EmployeeProfileCard(props) {
           }).reduce((value, aloc) => {
             return value = value + aloc.hours_per_day
           },0);
-          let availlableTime = 9 - totalAllocation;
+          let availlableTime = 8 - totalAllocation;
           setDisplayStatus((availlableTime) >= props.availability);
           if (availlableTime > 0) {
             setAvailability(availlableTime);
