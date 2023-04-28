@@ -117,11 +117,11 @@ function EmpProjAlocList() {
               <div className="row">
                 <div className="col input-group">
                   <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
-                    <select name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
+                    <select style={{width:"35%"}} name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
                       <option value="-select-"> -- Select Key -- </option>
                       {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
                     </select>
-                    <input className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                    <input style={{width:"35%"}} className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
                     <span 
                     onClick={handleSearchRefreshClick}
                     className="btn btn-outline-primary btn-small">

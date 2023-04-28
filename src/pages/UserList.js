@@ -8,6 +8,7 @@ import * as Utils from "../lib/Utils"
 function UserList() {
     const  [userList, setUserList] = useState([])
     const  [searchKeys, setSearchKeys] = useState([])
+    const  [inputType, setInputType] = useState("text");
 
     useEffect(() => {
         fetchUserList()
@@ -80,25 +81,40 @@ function UserList() {
 
     const handleSearchKeyChange = (event) => {
       event.stopPropagation();
-      if (event.target.value !== "-select-") setSearchKey(event.target.value);
+      if (event.target.value == "-select-"){
+        document.getElementById("search-value").value = "";
+      } else {
+        setSearchKey(event.target.value);
+      }
+      
+      (event.target.value.includes("date")) ? setInputType("date") : setInputType("text");
     };
 
-    const keysToIgnore = ["password","user_id"]
+
+    const handleSearchRefreshClick = () => {
+      window.location.reload(true);
+    };
+
+    const searchKeysToIgnore = ["password","user_id"];
+    
     return (
       <Layout>
         <div className="container-fluid">
           <div className="card w-auto">
             <div className="card-header">
             <div className="row">
-                <div className="col">
-                  <label htmlFor="search" className="mt-1">
-                    Search:
-                    <select  className="ms-2" name="searchKey" id="searchKey" onChange={handleSearchKeyChange}> 
-                      <option value="-select-"> -- Select Key -- </option>
-                      {searchKeys.map((k) => (!keysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
+                <div className="col input-group">
+                  <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
+                    <select style={{width:"35%"}} name="searchKey" id="search-key"  onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Search Key -- </option>
+                      {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
                     </select>
-                    <input className="ms-2" id="emp_name_search" type="text" placeholder="Value" onChange={handleSearch} />
-                  </label>
+                    <input style={{width:"35%"}} className="ms-1" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                      <span 
+                      onClick={handleSearchRefreshClick}
+                      className="btn btn-outline-primary btn-small">
+                      <i className="bi bi-arrow-counterclockwise"></i>
+                    </span>
                 </div>
                 <div className="col text-center">
                   <h4>User List</h4>

@@ -71,7 +71,7 @@ function EmpList() {
      if (!searchKey || searchKey == "-select-") {
         Swal.fire({
           title: 'Select Search Key ',
-          text: "Please select a key to search!",
+          text: "Please select a key and then type value!",
           icon: 'warning',
           showCancelButton: false,
           confirmButtonColor: '#3085d6',
@@ -107,7 +107,20 @@ function EmpList() {
       window.location.reload(true);
     };
   
-    const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"]
+    const searchKeysToIgnore = [
+      "emp_id",
+      "project_id",
+      "emp_proj_aloc_id",
+      "empDetails",
+      "projectDetails", 
+      "profile_picture",
+      "resume",
+      "employment_type",
+      "profile_information",
+      "resume",
+      "education",
+      "supervisor_email"
+    ]
 
     return (
       <Layout>
@@ -117,11 +130,11 @@ function EmpList() {
               <div className="row">
                 <div className="col input-group">
                   <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
-                    <select style = {{width:"40%"}}name="searchKey" id="searchKey"  onChange={handleSearchKeyChange}> 
-                      <option value="-select-"> -- Select Key -- </option>
+                    <select style={{width:"35%"}} name="searchKey" id="search-key"  onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Search Key -- </option>
                       {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
                     </select>
-                    <input className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                    <input style={{width:"35%"}} className="ms-1" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
                       <span 
                       onClick={handleSearchRefreshClick}
                       className="btn btn-outline-primary btn-small">

@@ -22,6 +22,8 @@ function ProjectList() {
         .then(function (response) {
           setProjectList(response.data.projects);
           setFilteredList(response.data.projects);
+          setSearchKeys(Object.keys(response?.data?.projects[0]))
+
         })
         .catch(function (error) {
           console.log(error);
@@ -62,14 +64,41 @@ function ProjectList() {
     };
 
   const [filteredList, setFilteredList] = useState(projectList);
+  const [searchKey, setSearchKey] = useState("");
+  const  [inputType, setInputType] = useState("text");
+  const  [searchKeys, setSearchKeys] = useState([])
 
   const handleSearch = (event) => {
     event.stopPropagation();
-    const key = event.target.id; 
-    const searchValue = event.target.value.toLowerCase();
-    const fList = projectList.filter((item) => item[`${key}`].toLowerCase().includes(searchValue));
+    const searchValue = event.target.value.toString().toLowerCase();
+    let dbVal = "";
+    const fList = projectList.filter((item) => {
+      if (searchKey.includes("date")) {
+        dbVal = Utils.formatDateYYYYMMDD(item[`${searchKey}`]).toString();
+      } else {
+        dbVal = item[`${searchKey}`].toString().toLowerCase();
+      }
+      return dbVal.includes(searchValue);
+    });
     setFilteredList(fList);
   };
+
+  const handleSearchKeyChange = (event) => {
+    event.stopPropagation();
+    if (event.target.value == "-select-"){
+      document.getElementById("search-value").value = "";
+    } else {
+      setSearchKey(event.target.value);
+    }
+    (event.target.value.includes("date")) ? setInputType("date") : setInputType("text");
+  };
+
+
+  const handleSearchRefreshClick = () => {
+    window.location.reload(true);
+  };
+
+  const searchKeysToIgnore = ["project_id", "client_id","clientDetails"];
 
     return (
       <Layout>
@@ -77,11 +106,18 @@ function ProjectList() {
           <div className="card w-auto">
             <div className="card-header">
               <div className="row">
-                <div className="col">
-                <label htmlFor="search" className="mt-1">
-                  Search:
-                  <input className="ms-2" id="project_name" type="text" placeholder="Project Name" onChange={handleSearch} />
-                </label>
+              <div className="col input-group">
+                  <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
+                    <select style={{width:"35%"}} name="searchKey" id="search-key"  onChange={handleSearchKeyChange}> 
+                      <option value="-select-"> -- Search Key -- </option>
+                      {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
+                    </select>
+                    <input style={{width:"35%"}} className="ms-1" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
+                      <span 
+                      onClick={handleSearchRefreshClick}
+                      className="btn btn-outline-primary btn-small">
+                      <i className="bi bi-arrow-counterclockwise"></i>
+                    </span>
                 </div>
                 <div className="col text-center">
                   <h4>Project List</h4>
