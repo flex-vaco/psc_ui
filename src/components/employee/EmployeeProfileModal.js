@@ -24,14 +24,20 @@ const [modalIsOpen, setIsOpen] = React.useState(props.modalIsOpen);
   >
     <div>
         <div className="col-12 float-left">
-            <div className="col-6 col-lg-8 float-left">
+            <div className="col-3 col-lg-8 float-left">
                 <button onClick={props.close} className="btn btn-primary btn-xs exitarrow"><i class="bi bi-box-arrow-left"></i></button>
             </div>
-            <div className="col-6 col-lg-4 float-left">
-                <div className="col-8 col-lg-4 float-left">
+            <div className="col-9 col-lg-4 float-left">
+                <div className="col-5 col-lg-4 float-left">
                     <button className="btn btn-primary btn-xs add_in_list">Add In List</button>
                 </div>
-                <div className="col-4 col-lg-4 float-left">
+                <div className="col-3 col-lg-4 float-left">
+                    <a href={(props.employee.resume) ? 
+                              `${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}` : null} 
+                              target="_blank"className="btn btn-primary btn-xs add_in_list">Resume</a>
+                </div>
+                
+                <div className="col-3 col-lg-4 float-right">
                 <button className="btn btn-primary btn-xs hire">Hire</button>
                 </div>
             </div>

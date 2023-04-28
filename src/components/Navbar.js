@@ -34,20 +34,17 @@ const Navbar = () => {
    
     <nav className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
-      <form className="d-flex nav_search ms-3 me-3 d-block d-md-none">
-          <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
-          <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
-        </form>
+      
         
-        <Link to={"/home"} state={dummyState} className="d-none d-md-block logo"><img className="img-fluid" src="/images/Logo.png"/></Link>
+        <Link to={"/home"} state={dummyState} className="logo"><img className="img-fluid" src="/images/Logo.png"/></Link>
         <button 
               type="button"
               onClick={handleHomeButtonClick}
-              className="btn btn-outline-secondary ms-3 me-3 d-block d-md-none home_button">
+              className="btn btn-outline-secondary ms-3 me-1 d-block d-md-none home_button">
               <i className="bi bi-house"></i> 
             </button>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
+        <button className="navbar-toggler btn btn-outline-secondary ms-1 me-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-grid-3x3-gap-fill"></i>
         </button>
        
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -64,6 +61,10 @@ const Navbar = () => {
           <Menu />
         </div>
       </div>
+      <form className="d-flex nav_search ms-3 me-1 d-block d-md-none">
+          <input className="form-control" type="search" onChange={(event)=>{setSearchSkill(event.target.value)}} placeholder="What skills are you looking to hire?" aria-label="Search" />
+          <button className="btn btn-outline-success"  onClick={(event) => handleSearchClick(event)}><i className="bi bi-search text-gray"></i></button>
+        </form>
     </nav>
   </div>
   

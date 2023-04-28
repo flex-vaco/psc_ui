@@ -265,6 +265,8 @@ i.bi.bi-sliders {
   display: flex;
   -ms-flex-align: start;
   align-items: flex-start;
+  margin-top: 6px;
+  margin-left: 6px;
 }
 
 .media-body {
@@ -406,8 +408,9 @@ input#exp {
 
 #profilepic {
  width: 10rem;
- height: auto;
+ height: 10rem;
   border-radius:50px;
+  margin-right: 10px;
 }
 
 .hours_size {
@@ -531,9 +534,7 @@ input.form-control.homepage_search_input {
 /* Reports */
 
 .tss-1akey0g-MUIDataTableHeadCell-data {
-  font-weight: bold !important;
   font-size: 12px;
-  color: #000 !important;
 }
 
 .css-1ygcj2i-MuiTableCell-root {
@@ -614,7 +615,9 @@ h4.text-center.report_title {
   padding-bottom: 5px;
 }
 .MuiTable-root th div {
-  text-decoration: underline;
+  color: #fff;
+  text-transform: uppercase;
+  text-align: center;
 }
 .MuiPaper-root {
   padding: 1rem;
@@ -645,6 +648,16 @@ h4.text-center.report_title {
   border: 1px solid #0e4372 !important;
   color: #0e4372 !important;
 }
+
+button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
+  padding: 6px 0 !important;
+  color: #fff;
+}
+.navbar-toggler i.bi.bi-grid-3x3-gap-fill{
+  font-size: 24px;
+  padding: 6px 10px;
+}
+
   @media screen and (max-width: 767px) {
     .tss-1ej321f-MUIDataTableBodyCell-cellHide {
       display: none !important;
@@ -720,7 +733,7 @@ h4.text-center.report_title {
     }
     
     .nav_search {
-      width: 65%;
+      width: 100%;
     }
   
     .ReactModal__Content {
@@ -772,13 +785,14 @@ h4.text-center.report_title {
     background: #fff;
     position: absolute;
     width: 80%;
-    top: 0;
+    top: -3.2rem;
     z-index: 999;
     float: right;
     right: 0;
 }
+
   .homepage .navbar-collapse {
-    top: 2.2rem;
+    top: 4rem;
   } 
   div#navbarSupportedContent {
     display: none;
@@ -790,11 +804,9 @@ h4.text-center.report_title {
     width: 100%;
     background-color: #fff !important;
   }
-  .homepage button.navbar-toggler {
-    width: 100%;
-    text-align: right;
-    border: none;
-  }
+  .logo {
+    width: 50%;
+}
   
   .homepage .navbar-toggler-icon {
       border: 1px solid #ccc;
@@ -817,4 +829,13 @@ h4.text-center.report_title {
     position: absolute;
     right: 3rem;
   }
+  .card_height {
+    min-height: 40vh;
+    max-height: 40vh;
+    border: 1px solid #727272 !important;
   }
+  .card_height .card-img-top {
+    max-height: 20vh !important;
+    min-height: 20vh !important;
+}
+}
