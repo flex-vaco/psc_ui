@@ -43,7 +43,7 @@ const Menubar = () => {
           <div className="d-block d-md-none mobile_menu">
             <Menu />
           </div>
-          <ul className="navbar-nav  me-auto mb-2 mb-lg-0">
+          <ul className="navbar-nav  cat_menubar me-auto mb-2 mb-lg-0">
              {categoryList.map((category,key) => { 
                 return (
                 <li className="nav-item menu-item dropdown ps-2" key={key} id="test1">

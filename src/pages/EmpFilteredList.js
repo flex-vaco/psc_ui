@@ -161,8 +161,8 @@ function EmpFilteredList() {
                             <div className="col-12 skill_height">
                     {techSkills.map((techSkill,key) => {
                         return(<div className="form-check pe-1" >
-                                    <input className="form-check-input" type="checkbox" key={key}    onChange={handleTechSkillChange} value={techSkill} id="flexCheckDefault"/>
-                                    <label className="form-check-label" htmlFor="flexCheckDefault">
+                                    <input className="form-check-input" type="checkbox" key={key}    onChange={handleTechSkillChange} value={techSkill} id={`flexCheckDefault-${key}`}/>
+                                    <label className="form-check-label" htmlFor={`flexCheckDefault-${key}`}>
                                          {techSkill}
                                     </label>
                                 </div>)
@@ -185,23 +185,23 @@ function EmpFilteredList() {
                         
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 0} onChange={(event)=>{setSelectedExp(0)}} name="flexRadioDefault" id="flexRadioDefault1"/>
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedExp === 0} onChange={(event)=>{setSelectedExp(0)}} name="flexRadioDefault" id="flexRadioDefault1"/>
                                     Fresher
                                 </label>
                             </div>
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 2} onChange={(event)=>{setSelectedExp(2)}} name="flexRadioDefault" />
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedExp === 2} onChange={(event)=>{setSelectedExp(2)}} name="flexRadioDefault" />
                                     2 years
                                 </label>
                                 </div>
                             <div>
                             
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 4} onChange={(event)=>{setSelectedExp(4)}} name="flexRadioDefault" />
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedExp === 4} onChange={(event)=>{setSelectedExp(4)}} name="flexRadioDefault" />
                                     4 years
                                 </label>
                                 </div>
@@ -228,23 +228,23 @@ function EmpFilteredList() {
                         
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 1} onChange={(event)=>{setSelectedAvailability(1)}} name="radioAvailability" />
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 1} onChange={(event)=>{setSelectedAvailability(1)}} name="radioAvailability" />
                                     1 Hour
                                 </label>
                             </div>
 
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 2} onChange={(event)=>{setSelectedAvailability(2)}} name="radioAvailability" />
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 2} onChange={(event)=>{setSelectedAvailability(2)}} name="radioAvailability" />
                                     2 Hour
                                 </label>
                                 </div>
                             <div>
                             
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 8} onChange={(event)=>{setSelectedAvailability(8)}} name="radioAvailability" />
                                 <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 8} onChange={(event)=>{setSelectedAvailability(8)}} name="radioAvailability" />
                                     8 Hour
                                 </label>
                                 </div>
@@ -266,7 +266,7 @@ function EmpFilteredList() {
                     </div>
                 </div>
 </div>
-    <div className="col-xs-12 col-sm-12 col-md-10 float-left col-12">
+    <div className="col-xs-12 search_results col-sm-12 col-md-10 float-left col-12">
         <p className="pull-right visible-xs banner_background">
             <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
             <h3 className="banner_header">Find Your Required Talent</h3>

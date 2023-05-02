@@ -25,13 +25,21 @@ function EmpEdit() {
     const [email, setEmail] = useState('');
     const [is_onsite, setIsOnsite] = useState(false);
     const [employment_type, setSelectedEmpType] = useState('Full-time');
+    const [resumeFileName, setResumeFileName] = useState('');
+    const [profilePicFileName, setProfilePicFileName] = useState('');
+    const [selected_resume, setSelectedResume] = useState(null);
+    const [profile_picture, setSelectedProfilePicture] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const navigate = useNavigate();
-
+    const httpConfig = {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      };
     useEffect(() => {
         axios.get(`/employees/${emp_id}`)
         .then(function (response) {
-            let empDetails = response.data.employees[0]
+            let empDetails = response.data.employees[0];
             setFirstName(empDetails.first_name);
             setLastName(empDetails.last_name);
             setPrimarySkills(empDetails.primary_skills);
@@ -50,6 +58,8 @@ function EmpEdit() {
             setEmail(empDetails.email);
             setIsOnsite(empDetails.is_onsite);
             setSelectedEmpType(empDetails.employment_type);
+            setResumeFileName(empDetails.resume);
+            setProfilePicFileName(empDetails.profile_picture)
         })
         .catch(function (error) {
             Swal.fire({
@@ -73,29 +83,53 @@ function EmpEdit() {
             statusOptions = statusOptions+`<option value=${s}>${s}</option> `
         });
     }
+
+    const handleResumeChange = (e) => {
+        if (Utils.validateUploadFile(e.target.files[0], "resume")) {
+            setSelectedResume(e.target.files[0]);
+        } else {
+            document.getElementById("resume").value = null;
+        }
+    };
+    
+    const handleProfileChange = (e) => {
+        if (Utils.validateUploadFile(e.target.files[0], "image")) {
+            setSelectedProfilePicture(e.target.files[0]);
+        } else {
+            document.getElementById("profile_picture").value = null;
+        }    
+    };
+
     getStatusOptions();
     const handleSave = () => {
         setIsSaving(true);
-        axios.post(`/employees/update/${emp_id}`, {
-            first_name: first_name,
-            last_name: last_name,
-            status: status,
-            email: email,
-            role: role,
-            primary_skills: primary_skills,
-            secondary_skills: secondary_skills,
-            education: education,
-            profile_information: profile_information,
-            total_work_experience_years: total_work_experience_years,
-            rate_per_hour: rate_per_hour,
-            vaco_join_date: vaco_join_date,
-            home_location_city: home_location_city,
-            office_location_city: office_location_city,
-            supervisor_name: supervisor_name,
-            supervisor_email: supervisor_email,
-            employment_type: employment_type,
-            is_onsite: is_onsite,
-        })
+        var onSite = Number(is_onsite);
+        const data = new FormData();
+        data.append('first_name', first_name);
+        data.append('last_name', last_name);
+        data.append('status', status);
+        data.append('email', email);
+        data.append('role', role);
+        data.append('primary_skills', primary_skills);
+        data.append('secondary_skills', secondary_skills);
+        data.append('education', education);
+        data.append('profile_information', profile_information);
+        data.append('total_work_experience_years', total_work_experience_years);
+        data.append('rate_per_hour', rate_per_hour);
+        data.append('vaco_join_date', vaco_join_date);
+        data.append('home_location_city', home_location_city);
+        data.append('office_location_city', office_location_city);
+        data.append('supervisor_name', supervisor_name);
+        data.append('supervisor_email', supervisor_email);
+        data.append('is_onsite', onSite);
+        data.append('employment_type', employment_type);
+        data.append('profile_pic_file_name', profilePicFileName);
+        data.append('resume_file_name', resumeFileName);
+        if(selected_resume) data.append('resume', selected_resume);
+        if(profile_picture) data.append('profile_picture', profile_picture);
+
+
+        axios.post(`/employees/update/${emp_id}`, data, {config:httpConfig})
         .then(function (response) {
             Swal.fire({
                 icon: 'success',
@@ -310,6 +344,33 @@ function EmpEdit() {
                                     className="form-control"
                                     id="supervisor_email"
                                     name="supervisor_email"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="resume">Resume</label>
+                                <div className="input-group">
+                                <span style={{width:"35%"}} className="input-group-text fw-bold">{resumeFileName}</span>
+
+                                    <input
+                                    id="resume"
+                                    type="file"
+                                    name="resume"
+                                    className="form-control"
+                                    onChange={handleResumeChange}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="profile_picture">Profile Picture</label>
+                                <div className="input-group">
+                                <span style={{width:"35%"}} className="input-group-text fw-bold">{profilePicFileName}</span>
+                                    <input
+                                    id="profile_picture"
+                                    type="file"
+                                    name="profile_picture"
+                                    className="form-control"
+                                    onChange={handleProfileChange}
+                                    />
+                                </div>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="is_onsite">Is working On site?</label>

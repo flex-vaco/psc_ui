@@ -167,7 +167,7 @@ ul.dropdown-menu.show {
 }
 
 .menubar {
-  background-color:#e3e3e3;
+  background-color:#e3e3e34f;
   opacity: 1;
 }
 .menu-item:hover::after {
@@ -313,7 +313,7 @@ p.card-text.m-0 b {
 }
 
 .card_height {
-  min-height: 65vh;
+  min-height: 52vh;
   max-width: 65vh;
   border: 1px solid #727272 !important;
 }
@@ -360,6 +360,18 @@ input#exp {
   .homepage div#navbarSupportedContent {
     display: block !important;
 }
+ .search_results {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 1rem;
+    min-height: 100vh;
+ }
+ .cat_menubar {
+    width: 100%;
+    /* text-align: center; */
+    display: flex;
+    justify-content: center;
+ }
 }
 
 .mobile_menu .float-right {
@@ -597,8 +609,8 @@ h4.text-center.report_title {
 }
 
 .card_height .card-img-top {
-  max-height: 40vh !important;
-  min-height: 40vh !important;
+  max-height: 30vh !important;
+  min-height: 30vh !important;
 }
 
 .MuiTable-root th {
