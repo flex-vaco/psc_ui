@@ -57,9 +57,8 @@ function EmployeeProfileCard(props) {
 
     return (<> {displayStatus && (
         <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1 cursor" onClick={(e) => props.handleProfileClick(props.employee.emp_id)}> 
-        <div className="col-12 col-lg-12 mx-0 mb-2">
+        <div className="col-12 col-lg-12 mx-0 mb-2 card_spacing">
             <div className="card card_height">
-        
                 <img className="card-img-top justify-content-center align-items-center"src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`} alt="Card image cap"/>
                 <div className="media">
                     <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`}  class="mr-3 rounded-pill"/>
@@ -74,10 +73,7 @@ function EmployeeProfileCard(props) {
                     <p className="card-text m-0">Location: {props.employee.office_location_city} </p>
                     <p className="card-text m-0">{ availability > 0 && `Availability: ${availability *  5} Hrs/week` }</p>
                     <p className="card-text m-0">Expirence: {props.employee.total_work_experience_years} years</p>
-                    <p className="card-text m-0 pb-1">STARTING AT: <b>${props.employee.rate_per_hour} PER HOUR </b></p>
-                                 
-                        
-                       
+                    <p className="card-text m-0">STARTING AT: <b>${props.employee.rate_per_hour} PER HOUR </b></p> 
                 </div>
             </div>
         </div>

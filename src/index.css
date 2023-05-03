@@ -315,7 +315,7 @@ p.card-text.m-0 b {
 .card_height {
   min-height: 52vh;
   max-width: 65vh;
-  border: 1px solid #727272 !important;
+  border: 1px solid #e3e3e3 !important;
 }
 
 i.bi.bi-chevron-left {
@@ -347,6 +347,9 @@ input#exp {
 }
 
 @media (min-width: 992px ) {
+  .card_spacing {
+    padding-right: 1rem;
+  }
   .nav_search.d-md-block {
     display: flex !important;
   }
@@ -359,12 +362,13 @@ input#exp {
   }
   .homepage div#navbarSupportedContent {
     display: block !important;
-}
+  }
  .search_results {
     padding: 1rem;
     border: 1px solid #ccc;
     border-radius: 1rem;
     min-height: 100vh;
+    padding-right: 0.5rem;
  }
  .cat_menubar {
     width: 100%;

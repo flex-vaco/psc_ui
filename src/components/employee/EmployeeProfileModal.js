@@ -10,6 +10,8 @@ let subtitle;
   
 // Modal.setAppElement('banner_background');
 const [modalIsOpen, setIsOpen] = React.useState(props.modalIsOpen);
+const [hideAddInListBtn, setHideAddInListBtn] = React.useState(props.hideAddInListBtn || false);
+const [hideHireBtn, setHideHireBtn] = React.useState(props.hideHireBtn || false);
 
 
   function closeModal() {
@@ -28,7 +30,7 @@ const [modalIsOpen, setIsOpen] = React.useState(props.modalIsOpen);
                 <button onClick={props.close} className="btn btn-primary btn-xs exitarrow"><i class="bi bi-box-arrow-left"></i></button>
             </div>
             <div className="col-9 col-lg-4 float-left">
-                <div className="col-5 col-lg-4 float-left">
+                <div className="col-5 col-lg-4 float-left" hidden={hideAddInListBtn}>
                     <button className="btn btn-primary btn-xs add_in_list">Add In List</button>
                 </div>
                 <div className="col-3 col-lg-4 float-left">
@@ -37,8 +39,8 @@ const [modalIsOpen, setIsOpen] = React.useState(props.modalIsOpen);
                               target="_blank"className="btn btn-primary btn-xs add_in_list">Resume</a>
                 </div>
                 
-                <div className="col-3 col-lg-4 float-right">
-                <button className="btn btn-primary btn-xs hire">Hire</button>
+                <div className="col-3 col-lg-4 float-right" hidden={hideHireBtn}>
+                    <button className="btn btn-primary btn-xs hire">Hire</button>
                 </div>
             </div>
         </div>

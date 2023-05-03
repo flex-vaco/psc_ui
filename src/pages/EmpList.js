@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
+import EmployeeProfileModal from '../components/employee/EmployeeProfileModal'
 
 function EmpList() {
     const [empList, setEmpList] = useState([]);
@@ -11,7 +12,9 @@ function EmpList() {
     const [inputType, setInputType] = useState("text");
     const [filteredList, setFilteredList] = useState(empList);
     const [searchKey, setSearchKey] = useState("");
-    const  [searchKeys, setSearchKeys] = useState([]);
+    const [searchKeys, setSearchKeys] = useState([]);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [empModalDetails, setEmpModalDetails] = useState({})
 
     const handleAddButtonClick = () => {
       navigate("/empCreate");
@@ -20,7 +23,18 @@ function EmpList() {
     useEffect(() => {
         fetchEmpList()
     }, [])
-  
+
+  const openModal = (empId) => {
+    axios.get(`/employees/${empId}`)
+      .then((response) => {
+        setEmpModalDetails(response.data.employees[0])
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    setIsOpen(true);
+  }
+
     const fetchEmpList = () => {
         axios.get('/employees')
         .then(function (response) {
@@ -129,27 +143,50 @@ function EmpList() {
             <div className="card-header">
               <div className="row">
                 <div className="col input-group">
-                  <span className="input-group-text"><i className="bi bi-search text-gray"></i></span>
-                    <select style={{width:"35%"}} name="searchKey" id="search-key"  onChange={handleSearchKeyChange}> 
-                      <option value="-select-"> -- Search Key -- </option>
-                      {searchKeys.map((k) => (!searchKeysToIgnore.includes(k)) ? <option value={k}>{k.toLocaleUpperCase()}</option> : "")}
-                    </select>
-                    <input style={{width:"35%"}} className="ms-1" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
-                      <span 
-                      onClick={handleSearchRefreshClick}
-                      className="btn btn-outline-primary btn-small">
-                      <i className="bi bi-arrow-counterclockwise"></i>
-                    </span>
+                  <span className="input-group-text">
+                    <i className="bi bi-search text-gray"></i>
+                  </span>
+                  <select
+                    style={{ width: "35%" }}
+                    name="searchKey"
+                    id="search-key"
+                    onChange={handleSearchKeyChange}
+                  >
+                    <option value="-select-"> -- Search Key -- </option>
+                    {searchKeys.map((k) =>
+                      !searchKeysToIgnore.includes(k) ? (
+                        <option value={k}>{k.toLocaleUpperCase()}</option>
+                      ) : (
+                        ""
+                      )
+                    )}
+                  </select>
+                  <input
+                    style={{ width: "35%" }}
+                    className="ms-1"
+                    id="search-value"
+                    type={inputType}
+                    placeholder=" Type a value"
+                    onChange={handleSearch}
+                  />
+                  <span
+                    onClick={handleSearchRefreshClick}
+                    hidden={modalIsOpen}
+                    className="btn btn-outline-primary btn-small"
+                  >
+                    <i className="bi bi-arrow-counterclockwise"></i>
+                  </span>
                 </div>
                 <div className="col text-center">
                   <h4>Employee List</h4>
                 </div>
                 <div className="col">
-                  <button 
+                  <button
                     type="button"
                     onClick={handleAddButtonClick}
-                    className="btn btn-outline-primary float-end">
-                    ADD <i className="bi bi-plus-square"></i> 
+                    className="btn btn-outline-primary float-end"
+                  >
+                    ADD <i className="bi bi-plus-square"></i>
                   </button>
                 </div>
               </div>
@@ -179,7 +216,10 @@ function EmpList() {
                 <tbody>
                   {filteredList.map((empDetails, key) => {
                     return (
-                      <tr key={key}>
+                      <tr
+                        key={key}
+                        onClick={(e) => openModal(empDetails.emp_id)}
+                      >
                         <td>
                           <button
                             onClick={() => handleDelete(empDetails.emp_id)}
@@ -195,9 +235,7 @@ function EmpList() {
                           </Link>
                         </td>
                         <td>
-                          <Link to={`/empShow/${empDetails.emp_id}`}>
-                            {empDetails.first_name}, {empDetails.last_name}
-                          </Link>
+                          {empDetails.first_name}, {empDetails.last_name}
                         </td>
                         <td>{empDetails.email}</td>
                         <td>{empDetails.role}</td>
@@ -206,7 +244,9 @@ function EmpList() {
                         <td>{empDetails.status}</td>
                         <td>{empDetails.total_work_experience_years}</td>
                         <td>{empDetails.rate_per_hour}</td>
-                        <td>{Utils.formatDateYYYYMMDD(empDetails.vaco_join_date)}</td>
+                        <td>
+                          {Utils.formatDateYYYYMMDD(empDetails.vaco_join_date)}
+                        </td>
                         <td>{empDetails.home_location_city}</td>
                         <td>{empDetails.office_location_city}</td>
                         <td>{empDetails.supervisor_name}</td>
@@ -229,6 +269,13 @@ function EmpList() {
                   })}
                 </tbody>
               </table>
+              <EmployeeProfileModal
+                modelstatus={modalIsOpen}
+                close={() => setIsOpen(false)}
+                employee={empModalDetails}
+                hideAddInListBtn={true}
+                hideHireBtn={true}
+              />
             </div>
           </div>
         </div>
