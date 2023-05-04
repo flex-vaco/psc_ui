@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from 'axios'
-import moment from 'moment';
 import Swal from "sweetalert2";
 
-
 function EmployeeProfileCard(props) {
-
-    const [employeeAllocations, setEmployeeAllocations] = useState([]);
     const [displayStatus, setDisplayStatus] = useState(true);
     const [availability, setAvailability] = useState(0);
-
-
     const handleResumeClick = () => {
         if (!props.employee.resume) {
             Swal.fire({
@@ -24,31 +18,17 @@ function EmployeeProfileCard(props) {
 
     useEffect(()=> {
         fetchEmpAllocation();
-    },[])
+    },[props.employee.emp_id])
 
     useEffect(()=> {
-          let totalAllocation = employeeAllocations.filter((aloc) => {
-            let endDate = moment(aloc.end_date);
-            let currDate = moment();
-            return endDate >= currDate;
-          }).reduce((value, aloc) => {
-            return value = value + aloc.hours_per_day
-          },0);
-          let availlableTime = 8 - totalAllocation;
-          setDisplayStatus((availlableTime) >= props.availability);
-          if (availlableTime > 0) {
-            setAvailability(availlableTime);
-          }
+        setDisplayStatus(availability >= props.availability);
     },[props.availability])
-    
+
     const fetchEmpAllocation = () => {
-        axios.get(`/empPrjAloc/empallocation`, {
-            params: {
-                empid: props.employee.emp_id
-            }
-        })
+        axios.post(`/empPrjAloc/empPrjAlcToday`, {empId: props.employee.emp_id})
         .then(function (response) {
-            setEmployeeAllocations(response.data.employee_allocation);
+            const empProjAlcToday = (response.data.empProjAllocToday[0] ? response.data.empProjAllocToday[0] : {alc_per_week: 0, emp_id: props.employee.emp_id});
+            setAvailability((40 - empProjAlcToday.alc_per_week)) 
         })
         .catch(function (error) {
             console.log(error);
@@ -71,7 +51,7 @@ function EmployeeProfileCard(props) {
                 </div>
                 <div className="card-body p-1 ps-3">
                     <p className="card-text m-0">Location: {props.employee.office_location_city} </p>
-                    <p className="card-text m-0">{ availability > 0 && `Availability: ${availability *  5} Hrs/week` }</p>
+                    <p className="card-text m-0">Availability: <span className={availability > 0 ? 'text-success fw-bold': 'text-danger'}>{availability}  Hrs./week</span></p>
                     <p className="card-text m-0">Expirence: {props.employee.total_work_experience_years} years</p>
                     <p className="card-text m-0">STARTING AT: <b>${props.employee.rate_per_hour} PER HOUR </b></p> 
                 </div>

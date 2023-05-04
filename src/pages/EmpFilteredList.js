@@ -225,27 +225,32 @@ function EmpFilteredList() {
                     <hr className="style12 mb-3"></hr>
                     <div className="form-group"> 
                             <label htmlFor="exp">Availability</label>
-                        
-
                             <div className="form-check">
                                 <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 1} onChange={(event)=>{setSelectedAvailability(1)}} name="radioAvailability" />
-                                    1 Hour
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === -99} onChange={(event)=>{setSelectedAvailability(-99)}} name="radioAvailability" />
+                                    Show All
                                 </label>
                             </div>
 
                             <div className="form-check">
                                 <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 2} onChange={(event)=>{setSelectedAvailability(2)}} name="radioAvailability" />
-                                    2 Hour
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 10} onChange={(event)=>{setSelectedAvailability(10)}} name="radioAvailability" />
+                                    10 Hours/Week
+                                </label>
+                            </div>
+
+                            <div className="form-check">
+                                <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 20} onChange={(event)=>{setSelectedAvailability(20)}} name="radioAvailability" />
+                                    20 Hours/Week
                                 </label>
                                 </div>
                             <div>
                             
                             <div className="form-check">
                                 <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedAvailability === 8} onChange={(event)=>{setSelectedAvailability(8)}} name="radioAvailability" />
-                                    8 Hour
+                                <input className="form-check-input" type="radio" checked={selectedAvailability === 40} onChange={(event)=>{setSelectedAvailability(40)}} name="radioAvailability" />
+                                    40 Hours/Week
                                 </label>
                                 </div>
                             <div></div>
@@ -255,12 +260,12 @@ function EmpFilteredList() {
                                 className='multi-range'
                                 value={selectedAvailability ? selectedAvailability : 0}
                                 min="0" 
-                                max="8" 
+                                max="40" 
                                 onChange={(event)=>{setSelectedAvailability(event.target.value)}}
                                 id="exp"
                              />
                         <div className='text-left'>
-                            {selectedAvailability > 0 &&  (<label>{selectedAvailability} Hour</label>)}
+                            {selectedAvailability > 0 &&  (<label>{selectedAvailability} Hours</label>)}
                         </div>
                         </div>
                     </div>
