@@ -4,7 +4,8 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
- 
+import * as AppFunc from "../lib/AppFunctions";
+
 function EmpEdit() {
     const [emp_id, setId] = useState(useParams().id)
     const [first_name, setFirstName] = useState('');
@@ -85,7 +86,7 @@ function EmpEdit() {
     }
 
     const handleResumeChange = (e) => {
-        if (Utils.validateUploadFile(e.target.files[0], "resume")) {
+        if (AppFunc.validateUploadFile(e.target.files[0], "resume")) {
             setSelectedResume(e.target.files[0]);
         } else {
             document.getElementById("resume").value = null;
@@ -93,7 +94,7 @@ function EmpEdit() {
     };
     
     const handleProfileChange = (e) => {
-        if (Utils.validateUploadFile(e.target.files[0], "image")) {
+        if (AppFunc.validateUploadFile(e.target.files[0], "image")) {
             setSelectedProfilePicture(e.target.files[0]);
         } else {
             document.getElementById("profile_picture").value = null;

@@ -94,10 +94,10 @@ function Home() {
                     return (
                         <div className="col-6 col-lg-2 float-left my-1 ps-1 pe-1 cursor" onClick={(e) => {handleClickCategory(e,category)}}>
                             <div className="col-12 col-lg-10 mx-0 mb-2 height_min">
-                                <div class="card text-center min_height">
-                                    <img class="cat_images mx-auto d-block" src={`/images/` + category.image_name} alt={category.category_name} />
-                                    <div class="card-block">
-                                        <p class="card-text">{category.category_name}</p>
+                                <div className="card text-center min_height">
+                                    <img className="cat_images mx-auto d-block" src={`/images/` + category.image_name} alt={category.category_name} />
+                                    <div className="card-block">
+                                        <p className="card-text">{category.category_name}</p>
                                     </div>
                                 </div>
                             </div>
@@ -114,7 +114,7 @@ function Home() {
                         "catmodalpop"}
                 >   
                     <div className="col-12 col-lg-4 float-left right-border">
-                            <button onClick={closeModal} className="btn btn-primary btn-xs exitarrow"><i class="bi bi-box-arrow-left"></i></button>
+                            <button onClick={closeModal} className="btn btn-primary btn-xs exitarrow"><i className="bi bi-box-arrow-left"></i></button>
                     </div>
                     <div className="col-12 float-left">
                         <div className="col-12 col-lg-5 float-left right-border text-center">

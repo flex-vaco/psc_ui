@@ -44,7 +44,7 @@ const Navbar = () => {
               <i className="bi bi-house"></i> 
             </button>
         <button className="navbar-toggler btn btn-outline-secondary ms-1 me-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent, #navbarSupportedContent2" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <i class="bi bi-grid-3x3-gap-fill"></i>
+        <i className="bi bi-grid-3x3-gap-fill"></i>
         </button>
        
         <div className="collapse navbar-collapse" id="navbarSupportedContent">

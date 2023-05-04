@@ -161,7 +161,7 @@ function AvailableHours() {
     return (
       <Layout>
         <div className="container-fluid">
-        <h4 class="text-center report_title mt-3 mb-3">Employee Available Hours</h4>
+        <h4 className="text-center report_title mt-3 mb-3">Employee Available Hours</h4>
         <div className="col-12 col-lg-12 position_filter float-left mt-3 mb-3">
               <div className='col-4 col-lg-2 float-left pe-3'>
                 <label>Start Date</label><input type="date" id="start"  className="form-control" name="trip-start" onChange={(event)=>{setFilterStart(event.target.value)}} value={filterStart} / >

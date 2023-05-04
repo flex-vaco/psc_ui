@@ -61,11 +61,11 @@ function EmployeeProfileCard(props) {
             <div className="card card_height">
                 <img className="card-img-top justify-content-center align-items-center"src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`} alt="Card image cap"/>
                 <div className="media">
-                    <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`}  class="mr-3 rounded-pill"/>
-                    <div class="media-body">
-                        <h6 class="mt-2 mb-0">{props.employee.first_name} {props.employee.last_name}</h6>
-                        <div class="d-flex flex-row justify-content-between align-text-center">
-                            <small class="text-muted">{props.employee.role}</small>
+                    <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/profile_picture/${props.employee.profile_picture ? props.employee.profile_picture : 'profile_picture-default.png'}`}  className="mr-3 rounded-pill"/>
+                    <div className="media-body">
+                        <h6 className="mt-2 mb-0">{props.employee.first_name} {props.employee.last_name}</h6>
+                        <div className="d-flex flex-row justify-content-between align-text-center">
+                            <small className="text-muted">{props.employee.role}</small>
                         </div>
                     </div>
                 </div>

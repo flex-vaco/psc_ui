@@ -32,9 +32,9 @@ return(
                 {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
                 {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
                 {AppFunc.hasReportAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Reports</a>
-                <ul class="dropdown-submenu">
-                            <li><a class="dropdown-item" href="/forecastHours">Forecast Hours</a></li>
-                            <li><a class="dropdown-item" href="/availableHours">Available Percentage</a></li>
+                <ul className="dropdown-submenu">
+                            <li><a className="dropdown-item" href="/forecastHours">Forecast Hours</a></li>
+                            <li><a className="dropdown-item" href="/availableHours">Available Percentage</a></li>
                         </ul>
                   
                 </li> : ""}
