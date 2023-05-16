@@ -62,7 +62,7 @@ function EmpList() {
                 .then(function (response) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Employee deleted successfully!',
+                        title: 'Resource deleted successfully!',
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -178,7 +178,7 @@ function EmpList() {
                   </span>
                 </div>
                 <div className="col text-center">
-                  <h4>Employee List</h4>
+                  <h4>Resource List</h4>
                 </div>
                 <div className="col">
                   <button

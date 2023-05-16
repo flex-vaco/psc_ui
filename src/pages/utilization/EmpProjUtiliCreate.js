@@ -57,7 +57,7 @@ function EmpProjUtiliCreate() {
         if(e.target.value === "-select-"){
             Swal.fire({
                 icon: 'warning',
-                title: 'Employee Name is required!',
+                title: 'Resource Name is required!',
                 showConfirmButton: true
             })
         }
@@ -142,7 +142,7 @@ function EmpProjUtiliCreate() {
             <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Utilization Employee to Project</h4>
+                        <h4 className="text-center">Utilization Resource to Project</h4>
                     </div>
                     <div className="card-body">
                         <form>
@@ -154,9 +154,9 @@ function EmpProjUtiliCreate() {
                                 </select>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="employee">Employee Name</label>
+                                <label htmlFor="employee">Resource Name</label>
                                 <select name="employee" id="employee" className="form-control" onChange={handleEmpChange}> 
-                                    <option value="-select-"> -- Select Employee -- </option>
+                                    <option value="-select-"> -- Select Resource -- </option>
                                     {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
                                 </select>
                             </div>

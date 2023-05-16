@@ -89,7 +89,7 @@ function EmpCreate() {
           .then((response)=>{
             Swal.fire({
                 icon: 'success',
-                title: 'Employee Details saved successfully!',
+                title: 'Resource Details saved successfully!',
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -132,7 +132,7 @@ function EmpCreate() {
             <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Add Employee Details</h4>
+                        <h4 className="text-center">Add Resource Details</h4>
                     </div>
                     <div className="card-body">
                         <form className="row g-3 align-items-center">
@@ -379,7 +379,7 @@ function EmpCreate() {
                                 onClick={handleSave} 
                                 type="submit"
                                 className="btn btn-outline-info mt-3 me-3">
-                                Save Employee
+                                Save Resource
                             </button>
                             </div>
                         </form>

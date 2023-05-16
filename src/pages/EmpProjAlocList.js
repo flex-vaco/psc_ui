@@ -147,7 +147,7 @@ function EmpProjAlocList() {
                   <tr>
                     <th>Action</th>
                     <th>Project Name</th>
-                    <th>Employee Name</th>
+                    <th>Resource Name</th>
                     <th>Start Date</th>
                     <th>End Date</th>
                     <th>Work Location</th>

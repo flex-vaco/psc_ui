@@ -158,7 +158,7 @@ function EmpEdit() {
             <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Edit Employee Details</h4>
+                        <h4 className="text-center">Edit Resource Details</h4>
                     </div>
                     <div className="card-body">
                         <form>
@@ -395,7 +395,7 @@ function EmpEdit() {
                                 onClick={handleSave} 
                                 type="button"
                                 className="btn btn-outline-info mt-3">
-                                Update Employee
+                                Update Resource
                             </button>
                         </form>
                     </div>

@@ -70,7 +70,7 @@ function EmpProjUtiliList() {
                 <div className="col">
                 </div>
                 <div className="col text-center">
-                  <h4>Employee Utilization List</h4>
+                  <h4>Resource Utilization List</h4>
                 </div>
                 <div className="col">
                   <button 
@@ -88,7 +88,7 @@ function EmpProjUtiliList() {
                   <tr>
                     <th>Action</th>
                     <th>Project Name</th>
-                    <th>Employee Name</th>
+                    <th>Resource Name</th>
                     <th>Week Start Date</th>
                     <th>Project Hours per Week</th>
                     <th>Allocation Hours per Week</th>

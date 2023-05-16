@@ -46,7 +46,7 @@ function EmpShow() {
                     <div className="col">
                     </div>
                     <div className="col text-center">
-                        <h4>Employee Details</h4>
+                        <h4>Resource Details</h4>
                     </div>
                     <div className="col">
                     <Link 

@@ -44,7 +44,7 @@ function UserList() {
                 .then(function (response) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Employee deleted successfully!',
+                        title: 'User deleted successfully!',
                         showConfirmButton: false,
                         timer: 1500
                     })

@@ -76,7 +76,7 @@ function EmpProjAlocEdit() {
         if(e.target.value === "-select-"){
             Swal.fire({
                 icon: 'warning',
-                title: 'Employee Name is required!',
+                title: 'Resource Name is required!',
                 showConfirmButton: true
             })
         }
@@ -136,7 +136,7 @@ function EmpProjAlocEdit() {
                     <div className="card-body">
                     <form>
                             <div className="form-group">
-                                <label htmlFor="employee">Employee Name</label>
+                                <label htmlFor="employee">Resource Name</label>
                                 <select name="employee" id="employee" className="form-control" onChange={handleEmpChange} > 
                                     {empList.map((emp, key) => {
                                         const sel = (emp.emp_id == emp_id) ? true : false;
