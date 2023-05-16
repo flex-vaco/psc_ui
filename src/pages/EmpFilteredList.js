@@ -180,31 +180,29 @@ function EmpFilteredList() {
                                         name="location"/>
                     </div>
                     <hr className="style12 mb-3"></hr>
-                        <div className="form-group"> 
+                    <div className="form-group"> 
                             <label htmlFor="exp">Experience</label>
-                        
-
                             <div className="form-check">
                                 <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 0} onChange={(event)=>{setSelectedExp(0)}} name="flexRadioDefault" id="flexRadioDefault1"/>
-                                    Fresher
-                                </label>
-                            </div>
-
-                            <div className="form-check">
-                                <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 2} onChange={(event)=>{setSelectedExp(2)}} name="flexRadioDefault" />
-                                    2 years
+                                <input className="form-check-input" type="radio" checked={selectedExp === 5} onChange={(event)=>{setSelectedExp(5)}} name="flexRadioDefault" />
+                                    upto 5 years
                                 </label>
                                 </div>
                             <div>
                             
                             <div className="form-check">
                                 <label className="form-check-label">
-                                <input className="form-check-input" type="radio" checked={selectedExp === 4} onChange={(event)=>{setSelectedExp(4)}} name="flexRadioDefault" />
-                                    4 years
+                                <input className="form-check-input" type="radio" checked={selectedExp === 10} onChange={(event)=>{setSelectedExp(10)}} name="flexRadioDefault" />
+                                    upto 10 years
                                 </label>
-                                </div>
+                            </div>
+                                                        
+                            <div className="form-check">
+                                <label className="form-check-label">
+                                <input className="form-check-input" type="radio" checked={selectedExp === 30} onChange={(event)=>{setSelectedExp(30)}} name="flexRadioDefault" />
+                                    more than 10
+                                </label>
+                            </div>
                             <div></div>
 
                             
