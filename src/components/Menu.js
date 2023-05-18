@@ -25,7 +25,7 @@ return(
                 Menu
               </a>
               <ul className="dropdown-menu" aria-labelledby="navbarDropdownemp">
-                {AppFunc.hasEmployeeAccess(activeUserRole) ? <li><a className="dropdown-item" href="/employees">Resources</a></li>: ""}
+                {AppFunc.hasEmployeeAccess(activeUserRole) ? <li><a className="dropdown-item" href="/employees">Resource List</a></li>: ""}
                 {AppFunc.hasProjectAccess(activeUserRole) ? <li><a className="dropdown-item" href="/projects">Projects</a></li>: ""}
                 {AppFunc.hasClientAccess(activeUserRole) ? <li><a className="dropdown-item" href="/clients">Clients</a></li>: ""}
                 {AppFunc.hasAllocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empProjList">Allocations</a></li>: ""}

@@ -1,5 +1,5 @@
 const USER_ROLES = {
-    ADMIN: "administrator",
+    ADMINISTRATOR: "administrator",
     SUPERVISOR: "supervisor",
     EMPLOYEE: "employee",
     PROJECT_MANAGER: "project_manager",

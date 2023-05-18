@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 import Layout from "../components/Layout"
  
@@ -19,7 +19,7 @@ function ProjectShow() {
         status: '',
         head_count: '',
     })
- 
+    const navigate = useNavigate();
     useEffect(() => {
         axios.get(`/projects/${project_id}`)
         .then(function (response) {
@@ -29,7 +29,9 @@ function ProjectShow() {
           console.log(error);
         })
     }, [])
-  
+    const goBack = () => {
+		navigate(-1);
+	}
     return (
         <Layout>
            <div className="container">
@@ -42,12 +44,12 @@ function ProjectShow() {
                                 <h4>Project Details</h4>
                             </div>
                             <div className="col">
-                            <Link 
-                                to="/projects"
+                            <button 
+                                onClick={goBack}
                                 type="button"
                                 className="btn btn-outline-secondary float-end">
                                 Back to List
-                            </Link>
+                            </button>
                             </div>
                         </div>
                     </div>

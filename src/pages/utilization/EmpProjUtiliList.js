@@ -4,9 +4,16 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../../components/Layout"
 import * as Utils from "../../lib/Utils"
+import EmployeeProfileModal from '../../components/employee/EmployeeProfileModal'
+import * as AppFunc from "../../lib/AppFunctions";
+import APP_CONSTANTS from "../../appConstants";
 
 function EmpProjUtiliList() {
-    const  [empProjUtiliList, setEmpProjUtiliList] = useState([])
+    const  [empProjUtiliList, setEmpProjUtiliList] = useState([]);
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [empModalDetails, setEmpModalDetails] = useState({});
+    const [hasReadOnlyAccess, setHasReadOnlyAccess] = useState(AppFunc.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
+
     const navigate = useNavigate();
 
     const handleAddButtonClick = () => {
@@ -52,6 +59,7 @@ function EmpProjUtiliList() {
                     Swal.fire({
                          icon: 'error',
                         title: 'An Error Occured!',
+                        text: error,
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -59,6 +67,17 @@ function EmpProjUtiliList() {
             }
           })
           navigate("/empUtiliList");
+    }
+
+    const openEmpDetailsModal = (empId) => {
+      axios.get(`/employees/${empId}`)
+        .then((response) => {
+          setEmpModalDetails(response.data.employees[0])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setIsOpen(true);
     }
 
     return (
@@ -75,6 +94,7 @@ function EmpProjUtiliList() {
                 <div className="col">
                   <button 
                     type="button"
+                    hidden={hasReadOnlyAccess}
                     onClick={handleAddButtonClick}
                     className="btn btn-outline-primary float-end">
                     ADD <i className="bi bi-plus-square"></i> 
@@ -86,7 +106,7 @@ function EmpProjUtiliList() {
               <table className="table table-hover">
                 <thead className="bg-light">
                   <tr>
-                    <th>Action</th>
+                    <th hidden={hasReadOnlyAccess}>Action</th>
                     <th>Project Name</th>
                     <th>Resource Name</th>
                     <th>Week Start Date</th>
@@ -100,7 +120,7 @@ function EmpProjUtiliList() {
                   {empProjUtiliList.map((empProjUtili, key) => {
                     return (
                       <tr key={key}>
-                        <td>
+                        <td hidden={hasReadOnlyAccess}>
                           <button
                             onClick={() => handleDelete(empProjUtili.emp_proj_utili_id)}
                             className="btn btn-outline-danger mx-1"
@@ -122,12 +142,10 @@ function EmpProjUtiliList() {
                           </Link>
                         </td>
                         <td>
-                          <Link
-                            to={`/empShow/${empProjUtili.empDetails.emp_id}`}
-                          >
-                            {empProjUtili.empDetails.first_name}, 
-                            {empProjUtili.empDetails.last_name}
-                          </Link>
+                            <a href='#' id={key} key={key}  onClick={(e) => openEmpDetailsModal(empProjUtili.empDetails.emp_id)}>
+                              {empProjUtili.empDetails.first_name}, 
+                              {empProjUtili.empDetails.last_name}
+                            </a>
                         </td>
                         <td>{Utils.formatDateYYYYMMDD(empProjUtili.week_starting)}</td>
                         <td>{empProjUtili.proj_hours_per_week}</td>
@@ -139,6 +157,13 @@ function EmpProjUtiliList() {
                   })}
                 </tbody>
               </table>
+              <EmployeeProfileModal
+                modelstatus={modalIsOpen}
+                close={() => setIsOpen(false)}
+                employee={empModalDetails}
+                hideAddInListBtn={true}
+                hideHireBtn={true}
+              />
             </div>
           </div>
         </div>

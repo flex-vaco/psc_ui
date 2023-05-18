@@ -27,22 +27,22 @@ function EmpProjUtiliEdit() {
     useEffect(() => {
         axios.get(`/empPrjUtili/${emp_proj_utili_id}`)
         .then(function (response) {
-            setEmpId(response.data?.empProjUtili?.empDetails.emp_id);
-            setProjectId(response.data?.empProjUtili?.projectDetails.project_id);
+            setEmpId(response.data?.empProjUtili?.empDetails?.emp_id);
+            setProjectId(response.data?.empProjUtili?.projectDetails?.project_id);
             setWeekStart(Utils.formatDateYYYYMMDD(response.data?.empProjUtili?.week_starting));
             setProjPerWeek(response.data?.empProjUtili?.proj_hours_per_week);
             setAllcPerWeek(response.data?.empProjUtili?.allc_work_hours_per_week);
             setForecastPerWeek(response.data?.empProjUtili?.forecast_hours_per_week);
             setPtoPerWeek(response.data?.empProjUtili?.pto_hours_per_week);
-            fetchEmpList(response.data?.empProjUtili?.projectDetails.project_id);
+            fetchEmpList(response.data?.empProjUtili?.projectDetails?.project_id);
             
-            fetchEmpProjAloc(response.data?.empProjUtili?.empDetails.emp_id, response.data?.empProjUtili?.projectDetails.project_id);
+            fetchEmpProjAloc(response.data?.empProjUtili?.empDetails?.emp_id, response.data?.empProjUtili?.projectDetails?.project_id);
         })
         .catch(function (error) {
-            console.log("RR", error)
             Swal.fire({
-                 icon: 'error',
+                icon: 'error',
                 title: 'An Error Occured!',
+                text: error,
                 showConfirmButton: false,
                 timer: 1500
             })
@@ -66,7 +66,6 @@ function EmpProjUtiliEdit() {
         .catch(function (error) {
           console.log(error);
         })
-        console.log('hi');
     }
 
     const fetchEmpList = (projectId) => {

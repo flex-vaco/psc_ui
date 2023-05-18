@@ -4,12 +4,18 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
+import EmployeeProfileModal from '../components/employee/EmployeeProfileModal'
+import * as AppFunc from "../lib/AppFunctions";
+import APP_CONSTANTS from "../appConstants";
 
 function EmpProjAlocList() {
     const  [empProjAlocList, setEmpProjAlocList] = useState([])
     const  [searchKeys, setSearchKeys] = useState([]);
     const [inputType, setInputType] = useState("text");
-    const navigate = useNavigate();
+    const [modalIsOpen, setIsOpen] = useState(false);
+    const [empModalDetails, setEmpModalDetails] = useState({});
+    const [hasReadOnlyAccess, setHasReadOnlyAccess] = useState(AppFunc.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
+    const navigate = useNavigate(); 
 
     const handleAddButtonClick = () => {
       navigate("/empProjCreate");
@@ -56,6 +62,7 @@ function EmpProjAlocList() {
                     Swal.fire({
                          icon: 'error',
                         title: 'An Error Occured!',
+                        text: error,
                         showConfirmButton: false,
                         timer: 1500
                     })
@@ -107,8 +114,19 @@ function EmpProjAlocList() {
     const handleSearchRefreshClick = () => {
       window.location.reload(true);
     };
-    const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"]
+    const searchKeysToIgnore = ["emp_id","project_id","emp_proj_aloc_id","empDetails", "projectDetails"];
 
+    const openEmpDetailsModal = (empId) => {
+      axios.get(`/employees/${empId}`)
+        .then((response) => {
+          setEmpModalDetails(response.data.employees[0])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setIsOpen(true);
+    }
+    
     return (
       <Layout>
         <div className="container-fluid">
@@ -124,6 +142,7 @@ function EmpProjAlocList() {
                     <input style={{width:"35%"}} className="ms-2" id="search-value" type={inputType} placeholder=" Type a value" onChange={handleSearch} />
                     <span 
                     onClick={handleSearchRefreshClick}
+                    hidden={modalIsOpen}
                     className="btn btn-outline-primary btn-small">
                     <i className="bi bi-arrow-counterclockwise"></i>
                   </span>
@@ -134,6 +153,7 @@ function EmpProjAlocList() {
                 <div className="col">
                   <button 
                     type="button"
+                    hidden={hasReadOnlyAccess}
                     onClick={handleAddButtonClick}
                     className="btn btn-outline-primary float-end">
                     ADD <i className="bi bi-plus-square"></i> 
@@ -145,7 +165,7 @@ function EmpProjAlocList() {
               <table className="table table-hover">
                 <thead className="bg-light">
                   <tr>
-                    <th>Action</th>
+                    <th hidden={hasReadOnlyAccess}>Action</th>
                     <th>Project Name</th>
                     <th>Resource Name</th>
                     <th>Start Date</th>
@@ -160,7 +180,7 @@ function EmpProjAlocList() {
                   {filteredList.map((empProjAlloc, key) => {
                     return (
                       <tr key={key}>
-                        <td>
+                        <td hidden={hasReadOnlyAccess}>
                           <button
                             onClick={() => handleDelete(empProjAlloc.emp_proj_aloc_id)}
                             className="btn btn-outline-danger mx-1"
@@ -182,12 +202,10 @@ function EmpProjAlocList() {
                           </Link>
                         </td>
                         <td>
-                          <Link
-                            to={`/empShow/${empProjAlloc.empDetails.emp_id}`}
-                          >
+                          <a href='#' id={key} key={key}  onClick={(e) => openEmpDetailsModal(empProjAlloc.empDetails.emp_id)}>
                             {empProjAlloc.empDetails.first_name}, 
                             {empProjAlloc.empDetails.last_name}
-                          </Link>
+                          </a>
                         </td>
                         <td>{Utils.formatDateYYYYMMDD(empProjAlloc.start_date)}</td>
                         <td>{Utils.formatDateYYYYMMDD(empProjAlloc.end_date)}</td>
@@ -200,6 +218,13 @@ function EmpProjAlocList() {
                   })}
                 </tbody>
               </table>
+              <EmployeeProfileModal
+                modelstatus={modalIsOpen}
+                close={() => setIsOpen(false)}
+                employee={empModalDetails}
+                hideAddInListBtn={true}
+                hideHireBtn={true}
+              />
             </div>
           </div>
         </div>

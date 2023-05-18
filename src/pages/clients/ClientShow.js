@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from 'axios';
 import Layout from "../../components/Layout"
  
@@ -12,7 +12,8 @@ function ClientShow() {
         client_contact_email: '',
         client_contact_phone: '',
         status: '',
-    })
+    });
+    const navigate = useNavigate();
  
     useEffect(() => {
         axios.get(`/clients/${client_id}`)
@@ -23,7 +24,9 @@ function ClientShow() {
           console.log(error);
         })
     }, [])
-  
+    const goBack = () => {
+		navigate(-1);
+	}
     return (
         <Layout>
            <div className="container">
@@ -36,12 +39,12 @@ function ClientShow() {
                         <h4>Client Details</h4>
                     </div>
                     <div className="col">
-                    <Link 
-                        to="/clients"
+                    <button 
+                        onClick={goBack}
                         type="button"
                         className="btn btn-outline-secondary float-end">
                         Back to List
-                    </Link>
+                    </button>
                 </div>
                 </div>
                 </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
@@ -20,12 +20,13 @@ function EmpProjAlocEdit() {
 
     const  [empList, setEmpList] = useState([])
     const  [projectList, setProjectList] = useState([])
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(`/empPrjAloc/${emp_proj_aloc_id}`)
         .then(function (response) {
-            setEmpId(response.data?.empProjAlloc?.empDetails.emp_id);
-            setProjectId(response.data?.empProjAlloc?.projectDetails.project_id);
+            setEmpId(response.data?.empProjAlloc?.empDetails?.emp_id);
+            setProjectId(response.data?.empProjAlloc?.projectDetails?.project_id);
             setStartDate(Utils.formatDateYYYYMMDD(response.data?.empProjAlloc?.start_date));
             setEndDate(Utils.formatDateYYYYMMDD(response.data?.empProjAlloc?.end_date));
             setWorkLocation(response.data?.empProjAlloc?.work_location);
@@ -34,7 +35,6 @@ function EmpProjAlocEdit() {
             setShiftEndTime(response.data?.empProjAlloc?.shift_end_time);
         })
         .catch(function (error) {
-            console.log("RR", error)
             Swal.fire({
                  icon: 'error',
                 title: 'An Error Occured!',
@@ -43,20 +43,16 @@ function EmpProjAlocEdit() {
             })
         })
           
-    }, [])
+    })
     useEffect(() => {
         fetchEmpList();
-    }, [])
-
-    useEffect(() => {
         fetchProjList();
-    }, [])
+    })
   
     const fetchEmpList = () => {
         axios.get('/employees')
         .then(function (response) {
           setEmpList(response.data.employees);
-        console.log("EMP", response.data.employees);
         })
         .catch(function (error) {
           console.log(error);
@@ -66,7 +62,6 @@ function EmpProjAlocEdit() {
         axios.get('/projects')
         .then(function (response) {
           setProjectList(response.data.projects);
-        console.log("PRJ", response.data.projects);
         })
         .catch(function (error) {
           console.log(error);
@@ -114,6 +109,8 @@ function EmpProjAlocEdit() {
                 timer: 1500
             })
             setIsSaving(false);
+            navigate("/empProjList");
+            window.location.reload(true);
         })
         .catch(function (error) {
             Swal.fire({
@@ -139,7 +136,7 @@ function EmpProjAlocEdit() {
                                 <label htmlFor="employee">Resource Name</label>
                                 <select name="employee" id="employee" className="form-control" onChange={handleEmpChange} > 
                                     {empList.map((emp, key) => {
-                                        const sel = (emp.emp_id == emp_id) ? true : false;
+                                        const sel = (emp.emp_id === emp_id) ? true : false;
                                         return <option key={key} value={emp.emp_id} selected={sel}>{emp.first_name}, {emp.last_name}</option>;
                                     })}
                                 </select>
@@ -148,7 +145,7 @@ function EmpProjAlocEdit() {
                                 <label htmlFor="project">Project</label>
                                 <select name="project" id="project" className="form-control" onChange={handleProjectChange} > 
                                     {projectList.map((prj, key) => {
-                                        const sel = (prj.project_id == project_id) ? true : false;
+                                        const sel = (prj.project_id === project_id) ? true : false;
                                         return <option key={key} value={prj.project_id} selected={sel}>{prj.project_name}, {prj.project_location}</option>;
                                     })}
                                 </select>

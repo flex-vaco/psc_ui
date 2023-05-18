@@ -4,9 +4,13 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import * as Utils from "../lib/Utils"
+import * as AppFunc from "../lib/AppFunctions";
+import APP_CONSTANTS from "../appConstants";
 
 function ProjectList() {
-    const [projectList, setProjectList] = useState([])
+    const [projectList, setProjectList] = useState([]);
+    const [hasReadOnlyAccess, setHasReadOnlyAccess] = useState(AppFunc.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
+
     const navigate = useNavigate();
 
     const handleAddButtonClick = () => {
@@ -125,6 +129,7 @@ function ProjectList() {
                 <div className="col">
                   <button 
                     type="button"
+                    hidden={hasReadOnlyAccess}
                     onClick={handleAddButtonClick}
                     className="btn btn-outline-primary float-end">
                     ADD <i className="bi bi-plus-square"></i> 
@@ -136,7 +141,7 @@ function ProjectList() {
               <table className="table table-hover">
                 <thead className="bg-light">
                   <tr>
-                    <th>Action</th>
+                    <th hidden={hasReadOnlyAccess}>Action</th>
                     <th>Client Name</th>
                     <th>Project Name</th>
                     <th>Project Location</th>
@@ -155,7 +160,7 @@ function ProjectList() {
                   {filteredList.map((projectDetails, key) => {
                     return (
                       <tr key={key}>
-                        <td>
+                        <td hidden={hasReadOnlyAccess}>
                           <button
                             onClick={() => handleDelete(projectDetails.project_id)}
                             className="btn btn-outline-danger mx-1"
