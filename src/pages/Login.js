@@ -29,6 +29,8 @@ function EmpShow() {
       .then(function (response) {
         localStorage.setItem("jwt-access-token", response.data?.token);
         localStorage.setItem("user_role", response.data?.user?.role);
+        localStorage.setItem("user", response.data?.user);
+
         Swal.fire({
           icon: "success",
           title: `Welcome ${response.data?.user?.first_name}! Logged in as ${response.data?.user?.role}`,
@@ -50,6 +52,8 @@ function EmpShow() {
       })
       .catch(function (error) {
         const errMsg = error?.response?.data?.message;
+        localStorage.removeItem("user");
+        localStorage.removeItem("user_role");
         setErrMessage(errMsg);
         Swal.fire({
           icon: "error",

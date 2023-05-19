@@ -37,39 +37,40 @@ import ClientShow from "./pages/clients/ClientShow"
 import  InteliChat from "./pages/aiChat/InteliChat";
 
 function App() {
+  const isLoggedIn= (localStorage.getItem("user") !== null);
   return (
     <Router>
       <Routes>
           <Route exact path="/"  element={<Login/>} />
-          <Route path="/employees"  element={<EmpList/>} />
-          <Route path="/empCreate"  element={<EmpCreate/>} />
-          <Route path="/empEdit/:id"  element={<EmpEdit/>} />
-          <Route path="/empShow/:id"  element={<EmpShow/>} />
-          <Route path="/filter/:searchSkill?"  element={<EmpFilteredList/>} />
-          <Route path="/home"  element={<Home/>} />
-          <Route path="/create"   element={<EmpCreate/>} />
-          <Route path="/edit/:id"  element={<EmpEdit/>} />
-          <Route path="/show/:id"  element={<EmpShow/>} />
-          <Route path="/projects"  element={<ProjectList/>} />
-          <Route path="/projectCreate"  element={<ProjectCreate/>} />
-          <Route path="/projectEdit/:id"  element={<ProjectEdit/>} />
-          <Route path="/projectShow/:id"  element={<ProjectShow/>} />
-          <Route path="/empProjCreate"  element={<EmpProjAlocCreate/>} />
-          <Route path="/empProjList"  element={<EmpProjAlocList/>} />
-          <Route path="/empProjEdit/:id"  element={<EmpProjAlocEdit/>} />
-          <Route path="/empProjUtiliCreate"  element={<EmpProjUtiliCreate/>} />
-          <Route path="/empUtiliList"  element={<EmpProjUtiliList/>} />
-          <Route path="/empProjUtiliEdit/:id"  element={<EmpProjUtiliEdit/>} />
-          <Route path="/userCreate"  element={<UserCreate/>} />
-          <Route path="/userList"  element={<UserList/>} />
-          <Route path="/userEdit/:id"  element={<UserEdit/>} />
-          <Route path="/forecastHours"  element={<ForecastHours/>} />
-          <Route path="/availableHours"  element={<AvailableHours/>} />
-          <Route path="/clients"  element={<ClientList/>} />
-          <Route path="/clientCreate"  element={<ClientCreate/>} />
-          <Route path="/clientEdit/:id"  element={<ClientEdit/>} />
-          <Route path="/clientShow/:id"  element={<ClientShow/>} />
-          <Route path="/ichat"  element={<InteliChat/>} />
+          <Route path="/employees"  element={isLoggedIn ? <EmpList/> : <Login/>} />
+          <Route path="/empCreate"  element={isLoggedIn ? <EmpCreate/> : <Login/>} />
+          <Route path="/empEdit/:id"  element={isLoggedIn ? <EmpEdit/> : <Login/>} />
+          <Route path="/empShow/:id"  element={isLoggedIn ? <EmpShow/> : <Login/>} />
+          <Route path="/filter/:searchSkill?"  element={isLoggedIn ? <EmpFilteredList/> : <Login/>} />
+          <Route path="/home"  element={isLoggedIn ? <Home/> : <Login/>} />
+          <Route path="/create"   element={isLoggedIn ? <EmpCreate/> : <Login/>} />
+          <Route path="/edit/:id"  element={isLoggedIn ? <EmpEdit/> : <Login/>} />
+          <Route path="/show/:id"  element={isLoggedIn ? <EmpShow/> : <Login/>} />
+          <Route path="/projects"  element={isLoggedIn ? <ProjectList/> : <Login/>} />
+          <Route path="/projectCreate"  element={isLoggedIn ? <ProjectCreate/> : <Login/>} />
+          <Route path="/projectEdit/:id"  element={isLoggedIn ? <ProjectEdit/> : <Login/>} />
+          <Route path="/projectShow/:id"  element={isLoggedIn ? <ProjectShow/> : <Login/>} />
+          <Route path="/empProjCreate"  element={isLoggedIn ? <EmpProjAlocCreate/> : <Login/>} />
+          <Route path="/empProjList"  element={isLoggedIn ? <EmpProjAlocList/> : <Login/>} />
+          <Route path="/empProjEdit/:id"  element={isLoggedIn ? <EmpProjAlocEdit/> : <Login/>} />
+          <Route path="/empProjUtiliCreate"  element={isLoggedIn ? <EmpProjUtiliCreate/> : <Login/>} />
+          <Route path="/empUtiliList"  element={isLoggedIn ? <EmpProjUtiliList/> : <Login/>} />
+          <Route path="/empProjUtiliEdit/:id"  element={isLoggedIn ? <EmpProjUtiliEdit/> : <Login/>} />
+          <Route path="/userCreate"  element={isLoggedIn ? <UserCreate/> : <Login/>} />
+          <Route path="/userList"  element={isLoggedIn ? <UserList/> : <Login/>} />
+          <Route path="/userEdit/:id"  element={isLoggedIn ? <UserEdit/> : <Login/>} />
+          <Route path="/forecastHours"  element={isLoggedIn ? <ForecastHours/> : <Login/>} />
+          <Route path="/availableHours"  element={isLoggedIn ? <AvailableHours/> : <Login/>} />
+          <Route path="/clients"  element={isLoggedIn ? <ClientList/> : <Login/>} />
+          <Route path="/clientCreate"  element={isLoggedIn ? <ClientCreate/> : <Login/>} />
+          <Route path="/clientEdit/:id"  element={isLoggedIn ? <ClientEdit/> : <Login/>} />
+          <Route path="/clientShow/:id"  element={isLoggedIn ? <ClientShow/> : <Login/>} />
+          <Route path="/ichat"  element={isLoggedIn ? <InteliChat/> : <Login/>} />
       </Routes>
     </Router>
   );

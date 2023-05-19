@@ -11,6 +11,7 @@ import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
 import '@popperjs/core';
 import "bootstrap";
+import Swal from "sweetalert2";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
@@ -23,8 +24,49 @@ axios.interceptors.request.use(
       return config;
     },
     error => {
+      localStorage.removeItem("jwt-access-token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_role");
       return Promise.reject(error);
     }
+);
+
+// Response interceptor for API calls
+axios.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  async (error) => {
+    let errTitle = '';
+    let errText = '';
+
+    if (error.code === "ERR_NETWORK") {
+      errTitle = 'Network Error';
+      errText = 'Check connection to Server!';
+    } else if (error.code === "ERR_BAD_RESPONSE" && !error.response?.data?.auth) {
+      errTitle = 'Session Expired!';
+      errText = `${error.response?.data?.message} Please Login again.`;
+    } else {
+      errTitle = 'Axios Error';
+      errText = 'Unknown Error';
+    }
+
+    const { value: isConfirmed } = await Swal.fire({
+      icon: "error",
+      title: errTitle,
+      text: errText,
+      confirmButtonColor: "#0e4372",
+      showConfirmButton: true
+    });
+    if (isConfirmed) {
+      localStorage.removeItem("jwt-access-token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_role");
+      window.location.reload(true);
+    };
+
+    return Promise.reject(error);
+  }
 );
 
 root.render(

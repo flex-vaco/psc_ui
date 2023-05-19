@@ -1,5 +1,5 @@
 import React,  { useState } from "react";
-import { Link, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import * as AppFunc from "../lib/AppFunctions";
 
 const Menu = () => { 
@@ -11,10 +11,8 @@ const Menu = () => {
     const handleLogout = () => {
       navigate("/")
       localStorage.removeItem("jwt-access-token");
-    }
-  
-    const handleHomeButtonClick = () => {
-      navigate("/home");
+      localStorage.removeItem("user");
+      localStorage.removeItem("user_role");
     }
 
 return(
