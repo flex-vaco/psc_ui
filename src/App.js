@@ -38,7 +38,7 @@ import  InteliChat from "./pages/aiChat/InteliChat";
 import  ResetPassword from "./pages/ResetPassword";
 
 function App() {
-  const needsPasswordReset = JSON.parse(localStorage.getItem("user")).needsPasswordReset;
+  const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
   const isLoggedIn= ((localStorage.getItem("user") !== null) && (needsPasswordReset !== 1));
 
   return (
