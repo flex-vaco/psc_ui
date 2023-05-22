@@ -4,6 +4,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import APP_CONSTANTS from "../appConstants";
+import * as Utils from "../lib/Utils";
 
 function UserEdit() {
     const [user_id, setId] = useState(useParams().id)
@@ -47,7 +48,6 @@ function UserEdit() {
     const fetchRoles = () => {
         axios.post('/users/roles')
         .then(function (response) {
-            console.log(response.data)
           setRoles(response.data.user_roles);
         })
         .catch(function (error) {
@@ -239,33 +239,33 @@ function UserEdit() {
     }
   
     const handlePasswordReset = () => {
-        const tempPswd = 'change_M3';
-        
-            setIsSaving(true);
-            axios.post(`/users/resetPassword/${user_id}`, {
-                email: email,
-                password: tempPswd,
-                needsPasswordReset: true
+        const tempPswd = Utils.generateRandomString(8);
+
+        setIsSaving(true);
+        axios.post(`/users/resetPassword/${user_id}`, {
+            email: email,
+            password: tempPswd,
+            needsPasswordReset: true
+        })
+        .then(function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: `Reset successfull!`,
+                text: `New Password: ${tempPswd}`,
+                showConfirmButton: true
             })
-            .then(function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: `Reset successfull!`,
-                    text: `New Password: ${tempPswd}`,
-                    showConfirmButton: true
-                })
-                setIsSaving(false);
+            setIsSaving(false);
+        })
+        .catch(function (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'An Error Occured!',
+                text: error.data,
+                showConfirmButton: false,
+                timer: 1500
             })
-            .catch(function (error) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'An Error Occured!',
-                    text: error.data,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                setIsSaving(false)
-            });
+            setIsSaving(false)
+        });
     }
 
     return (
