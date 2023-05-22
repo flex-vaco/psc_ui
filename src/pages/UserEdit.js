@@ -195,7 +195,7 @@ function UserEdit() {
         validateRoleDependencies();
     }, [role])
 
-    const handleSave = async () => {
+    const handleSave = () => {
         if(validateRoleDependencies()) {
             setIsSaving(true);
             axios.post(`/users/update/${user_id}`, {
@@ -228,16 +228,46 @@ function UserEdit() {
                 setIsSaving(false)
             });
         } else {
-            const r = Swal.fire({
+            Swal.fire({
                 icon: 'info',
-               title: errMsg,
-               showConfirmButton: true
+                title: errMsg,
+                showConfirmButton: true
+           }).then(()=>{
+            return
            })
-           return r
         }
-       
     }
   
+    const handlePasswordReset = () => {
+        const tempPswd = 'change_M3';
+        
+            setIsSaving(true);
+            axios.post(`/users/resetPassword/${user_id}`, {
+                email: email,
+                password: tempPswd,
+                needsPasswordReset: true
+            })
+            .then(function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: `Reset successfull!`,
+                    text: `New Password: ${tempPswd}`,
+                    showConfirmButton: true
+                })
+                setIsSaving(false);
+            })
+            .catch(function (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'An Error Occured!',
+                    text: error.data,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setIsSaving(false)
+            });
+    }
+
     return (
         <Layout>
             <div className="container">
@@ -327,6 +357,13 @@ function UserEdit() {
                                 Update User
                             </button>
                         </form>
+                        <button 
+                                disabled={isSaving}
+                                onClick={handlePasswordReset} 
+                                type="submit"
+                                className="btn btn-outline-danger mt-3 float-end">
+                                RESET PASSWORD
+                        </button>
                     </div>
                 </div>
             </div>

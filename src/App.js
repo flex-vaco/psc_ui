@@ -35,9 +35,12 @@ import ClientCreate from "./pages/clients/ClientCreate"
 import ClientEdit from "./pages/clients/ClientEdit"
 import ClientShow from "./pages/clients/ClientShow"
 import  InteliChat from "./pages/aiChat/InteliChat";
+import  ResetPassword from "./pages/ResetPassword";
 
 function App() {
-  const isLoggedIn= (localStorage.getItem("user") !== null);
+  const needsPasswordReset = JSON.parse(localStorage.getItem("user")).needsPasswordReset;
+  const isLoggedIn= ((localStorage.getItem("user") !== null) && (needsPasswordReset !== 1));
+
   return (
     <Router>
       <Routes>
@@ -71,6 +74,7 @@ function App() {
           <Route path="/clientEdit/:id"  element={isLoggedIn ? <ClientEdit/> : <Login/>} />
           <Route path="/clientShow/:id"  element={isLoggedIn ? <ClientShow/> : <Login/>} />
           <Route path="/ichat"  element={isLoggedIn ? <InteliChat/> : <Login/>} />
+          <Route path="/resetPassword"  element={(needsPasswordReset === 1) ? <ResetPassword/> : <Login/>} />
       </Routes>
     </Router>
   );

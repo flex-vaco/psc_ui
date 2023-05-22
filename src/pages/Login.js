@@ -29,7 +29,7 @@ function EmpShow() {
       .then(function (response) {
         localStorage.setItem("jwt-access-token", response.data?.token);
         localStorage.setItem("user_role", response.data?.user?.role);
-        localStorage.setItem("user", response.data?.user);
+        localStorage.setItem("user", JSON.stringify(response.data?.user));
 
         Swal.fire({
           icon: "success",
@@ -43,7 +43,11 @@ function EmpShow() {
             setPassword("");
             setEmail("");
             setErrMessage("");
-            navigate("/home");
+            if (response.data?.user?.needsPasswordReset) {
+              navigate("/resetPassword", {state:{user: response.data?.user}});
+            } else {
+              navigate("/home");
+            }
             clearInterval(waitforJWT);
             window.location.reload(true);
             Swal.hideLoading();

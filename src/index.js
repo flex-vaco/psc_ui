@@ -66,42 +66,6 @@ axios.interceptors.response.use(
   }
 );
 
-// // Response interceptor for API calls
-// axios.interceptors.response.use(
-//   (response) => {
-//     return response
-//   },
-//   (error) => {
-//     if (error.code === "ERR_NETWORK") {
-//       Swal.fire({
-//         icon: "error",
-//         title: 'Network Error',
-//         text: 'Check connection to Server!',
-//         confirmButtonColor: "#0e4372",
-//         showConfirmButton: true
-//       }).then(() => {
-//           localStorage.removeItem("jwt-access-token");
-//           localStorage.removeItem("user");
-//           localStorage.removeItem("user_role");
-//           window.location.reload(true);
-//         });
-//     } else if (error.code === "ERR_BAD_RESPONSE" && !error.response?.data?.auth) {
-//       Swal.fire({
-//         icon: "error",
-//         title: 'Session Expired!',
-//         text: `${error.response?.data?.message} Please Login again.`,
-//         confirmButtonColor: "#0e4372",
-//         showConfirmButton: true
-//       }).then(() => {
-//           localStorage.removeItem("jwt-access-token");
-//           localStorage.removeItem("user");
-//           localStorage.removeItem("user_role");
-//           window.location.reload(true);
-//         });
-//     }
-//     return Promise.reject(error);
-//   }
-// );
 root.render(
   <React.StrictMode>
     <App />
