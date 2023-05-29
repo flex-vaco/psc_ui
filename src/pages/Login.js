@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import Footer from "../components/Footer";
+import APP_CONSTANTS from "../appConstants";
 
 function EmpShow() {
   const [tryingLogin, setTryingLogin] = useState(false);
@@ -46,7 +47,11 @@ function EmpShow() {
             if (response.data?.user?.needsPasswordReset) {
               navigate("/resetPassword", {state:{user: response.data?.user}});
             } else {
-              navigate("/home");
+              if (response.data?.user?.role === APP_CONSTANTS.USER_ROLES.EMPLOYEE) {
+                navigate("/timesheet");
+              } else {
+                navigate("/home");
+              }
             }
             clearInterval(waitforJWT);
             window.location.reload(true);

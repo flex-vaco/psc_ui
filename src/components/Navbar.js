@@ -28,6 +28,21 @@ const Navbar = () => {
       },
   });
   }
+  if (AppFunc.userIsEmployee()) {
+    return (
+      <div>
+        <nav className="navbar navbar-expand-lg navbar-light">
+          <div className="container-fluid">
+            <span className="logo">
+              <img className="img-fluid" src="/images/Logo.png" />
+            </span>
+            <div className="float-end me-5"><Menu /></div>
+          </div>
+        </nav>
+      </div>
+    );
+  }
+
 
   return (
     <div>

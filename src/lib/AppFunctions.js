@@ -39,6 +39,10 @@ const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
 export const activeUserRole = localStorage.getItem("user_role");
 
+export const userIsEmployee = () => {
+  return (activeUserRole === APP_CONSTANTS.USER_ROLES.EMPLOYEE) ? true : false;
+};
+
 export const hasMenuAccess = (activeUserRole) => {
   return menuAccessRoles.includes(activeUserRole) ? true : false;
 };
