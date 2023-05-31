@@ -66,8 +66,9 @@ function TimeEntryWidget(props) {
   const badgeColor = (sts)=>{
     switch (sts) {
       case "SUBMITTED":
+        return "bg-info"
       case "APPROVED":
-          return "bg-success"
+        return "bg-success"
       case "REJECTED":
       case "REWORK":
         return "bg-danger"
