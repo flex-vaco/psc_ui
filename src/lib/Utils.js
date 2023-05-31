@@ -66,3 +66,36 @@ export const getDatesBetween = (stDt, enDt) => {
     while (myDate < new Date(enDt));
     return (dates);
 }
+
+export const getStartEndDatesCurrentWeek = () =>{
+    const today = new Date(); // get current date  
+    const first = today.getDate() - today.getDay(); // First day is the  day of the month - the day of the week  
+    const last = first + 6; // last day is the first day + 6   
+    const firstday = new Date(today.setDate(first)).toString();   
+    const lastday = new Date(today.setDate(last)).toString();
+    return { weekStartDate: firstday , weekEndDate: lastday};
+}
+
+export const getStartEndDatesPreviousWeek = (givenDate = new Date()) =>{
+   
+    const previous = new Date(givenDate.getTime());
+    previous.setDate(givenDate.getDate() - 7);
+
+    const first = previous.getDate() - previous.getDay(); // First day is the  day of the month - the day of the week  
+    const last = first + 6; // last day is the first day + 6   
+    const firstday = new Date(previous.setDate(first)).toString();   
+    const lastday = new Date(previous.setDate(last)).toString();
+    return { prevWeekStartDate: firstday , prevWeekEndDate: lastday};
+}
+
+export const getStartEndDatesNextWeek = (givenDate = new Date()) =>{
+   
+    const previous = new Date(givenDate.getTime());
+    previous.setDate(givenDate.getDate() + 7);
+
+    const first = previous.getDate() - previous.getDay(); // First day is the  day of the month - the day of the week  
+    const last = first + 6; // last day is the first day + 6   
+    const firstday = new Date(previous.setDate(first)).toString();   
+    const lastday = new Date(previous.setDate(last)).toString();
+    return { nextWeekStartDate: firstday , nextWeekEndDate: lastday};
+}

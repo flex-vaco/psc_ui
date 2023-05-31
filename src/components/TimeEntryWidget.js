@@ -4,7 +4,9 @@ import axios from 'axios';
 function TimeEntryWidget(props) {
 
   const [taskName, setTaskName] = useState('');
-  const [taskHours, setTaskHours] = useState('');
+  const [taskHours, setTaskHours] = useState(0);
+  const [taskOvertime, setTaskOvertime] = useState(0);
+
     const [timesheetData, setTimesheetData] = useState([]);
 
     const [tempTimesheetId, setTempTimesheetId] = useState(`temp_${props.empAlloc.project_id}_${props.tsDate}`)
@@ -19,6 +21,7 @@ function TimeEntryWidget(props) {
           setTimesheetData(response.data?.timesheetsByAllocation[0]);
           setTaskName(response.data?.timesheetsByAllocation[0]?.task || '');
           setTaskHours(response.data?.timesheetsByAllocation[0]?.hours_per_day || 0);
+          setTaskOvertime(response.data?.timesheetsByAllocation[0]?.overtime || 0);
         })
         .catch(function (error) {
           console.log(error);
@@ -35,6 +38,7 @@ function TimeEntryWidget(props) {
     e.preventDefault();
     const taskNameEl = document.getElementById(`task_name_${tempTimesheetId}`);
     const taskHoursEl = document.getElementById(`task_hrs_${tempTimesheetId}`);
+    const taskOvertimeEl = document.getElementById(`task_ot_${tempTimesheetId}`);
 
     if (taskNameEl.value && taskHoursEl.value) {
       if((taskNameEl.value !== timesheetData?.task) || (taskHoursEl.value !== timesheetData?.hours_per_day)){
@@ -44,7 +48,8 @@ function TimeEntryWidget(props) {
           project_id: props.empAlloc.project_id,
           supervisor_email: props.empAlloc.supervisor_email,
           timesheet_date: props.tsDate,
-          hours_per_day: taskHoursEl.value,
+          hours_per_day: taskHoursEl.valueAsNumber,
+          overtime: taskOvertimeEl.valueAsNumber,
           timesheet_status: timesheetData?.timesheet_status || "ENTERED",
           task: taskNameEl.value,
           comments: {
@@ -58,12 +63,26 @@ function TimeEntryWidget(props) {
     }
   };
 
+  const badgeColor = (sts)=>{
+    switch (sts) {
+      case "SUBMITTED":
+      case "APPROVED":
+          return "bg-success"
+      case "REJECTED":
+      case "REWORK":
+        return "bg-danger"
+      default:
+        return "bg-light"
+    } 
+  }
+
   return (
     <div className="time-entry-widget">
       <form id={tempTimesheetId} className="row">
-        <div className="form-group col-md-10  mb-2">
+        <div className="form-group col-md-10 mb-2">
           <label htmlFor="task_name">
             <span className="fw-bold"> {props.empAlloc.project_name} </span>
+            <span className={`badge ${badgeColor(timesheetData?.timesheet_status)}`}>{timesheetData?.timesheet_status}</span>
           </label>
           <input
             onBlur={(event) => {
@@ -79,9 +98,9 @@ function TimeEntryWidget(props) {
             readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
           />
         </div>
-        <div className="form-group col-md-2">
+        <div className="form-group col-md-1 mb-2">
           <label htmlFor="hours" className="fw-bold">
-            Work hrs.
+            Hrs.
             <span className="fw-bold text-muted">
               {" "}
               {` (${props.empAlloc.hours_per_day})`}
@@ -96,8 +115,30 @@ function TimeEntryWidget(props) {
             type="number"
             placeholder="0"
             className="form-control"
+            min={0}
+            max={props.empAlloc.hours_per_day}
             id={`task_hrs_${tempTimesheetId}`}
             name="hours"
+            readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
+          />
+        </div>
+        <div className="form-group col-md-1 mb-2">
+          <label htmlFor="overtime" className="fw-bold">
+            Overtime
+          </label>
+          <input
+            onBlur={(event) => {
+              handleChange(event);
+            }}
+            onChange={(event)=>{setTaskOvertime(event.target.value)}}
+            value={taskOvertime}
+            type="number"
+            placeholder="0"
+            className="form-control"
+            min={0}
+            max={8}
+            id={`task_ot_${tempTimesheetId}`}
+            name="overtime"
             readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
           />
         </div>

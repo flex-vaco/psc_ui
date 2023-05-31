@@ -1,0 +1,168 @@
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from "react-router-dom"
+import Swal from 'sweetalert2'
+import axios from 'axios'
+import * as Utils from "../../lib/Utils";
+import Layout from "../../components/Layout"
+import TimeEntryWidget from "../../components/TimeEntryWidget";
+import APP_CONSTANTS from "../../appConstants";
+import * as APP_FUNCTIONS from "../../lib/AppFunctions";
+
+function ApproveEmpTimesheet() {
+    const [project_id, setprojectId] = useState(useParams().project_id);
+    const [emp_id, setempId] = useState(useParams().emp_id);
+    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
+    const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
+    const [isSaving, setIsSaving] = useState(false);
+    const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
+    const [empTimesheets, setEmpTimesheets] = useState([]);
+    const [taskName, setTaskName] = useState('');
+    const [taskHours, setTaskHours] = useState('');
+    const [timesheetId, setTimesheetId] = useState([]);
+    const [btnTitle, setBtnTitle] = useState();
+    const navigate = useNavigate();
+
+    const [isStatus, setIsStatus] = useState();
+
+    useEffect(() => {
+        if(userIsApprover) {
+          setIsStatus('APPROVED');
+          setBtnTitle('APPROVE');
+        }
+        
+        if(userIsProducer) {
+          setIsStatus('ACCEPTED');
+          setBtnTitle('ACCEPT');
+        }
+
+        if(userIsApprover || userIsProducer) {
+          fetchEmpPendingTimesheet();
+        } else {
+          return;
+        }
+    }, [supervisorEmail]);
+
+    const fetchEmpPendingTimesheet = () => {
+        axios
+            .post(`timesheets/empPendingTimesheet`, { params: { emp_id: emp_id, project_id: project_id } })
+            .then(function (response) {
+                setEmpTimesheets(response.data?.timesheets);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+    const handleSubmit = (e) => {
+      const status = e.target.name;
+      const submitData = {
+        status: status,
+        emp_id: emp_id,
+        project_id: project_id,
+      };
+      axios
+      .post("timesheets/change_status_supervisior", submitData)
+      .then((res) => {
+        Swal.fire({
+          icon: "success",
+          title: `Timesheet ${status}!`,
+          showConfirmButton: false,
+          timer: 3000
+        })
+        navigate("/approveTimesheet");
+      })
+      .catch((err) => {
+        console.log(err);
+        Swal.fire({
+          icon: "error",
+          title: "Failed to Submit Timesheet!",
+          text: err.response.data.message,
+          showConfirmButton: true,
+        });
+      });
+    }
+
+    return (
+        <Layout>
+          <div className="container-fluid">
+
+            <div className="card w-auto">
+              <div className="card-body table-responsive">
+                <table className="table table-hover">
+                  <thead className="bg-light">
+                    <tr>
+                      <th className="w-10">Date</th>
+                      <th className="w-20">Employee - Project</th>
+                      <th className="w-60">Enter/Edit Task Details</th>
+                      <th className="w-10">Hours</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {empTimesheets.map((empTimesheet, key) => {
+                    
+                      return (
+                        <tr key={key}>
+                          <td>
+                            {Utils.formatDateYYYYMMDD(empTimesheet.timesheet_date)}
+                          </td>
+                          <td>
+                          {empTimesheet.first_name} {empTimesheet.last_name} <br/>
+                          {empTimesheet.project_name}
+                          </td>
+                          <td>
+                            <input
+                                onChange={(event)=>{setTaskName(event.target.value)}}
+                                value={empTimesheet.task}
+                                placeholder="Enter Task"
+                                type="text"
+                                className="form-control"
+                                id={`task_name_${empTimesheet.timesheet_id}`}
+                                name="task_name"
+                            />
+                          </td>
+                          <td>
+                            <input
+                                onChange={(event)=>{setTaskHours(event.target.value)}}
+                                value={empTimesheet.hours_per_day}
+                                type="number"
+                                placeholder="0"
+                                className="form-control"
+                                id={`task_hrs_${empTimesheet.timesheet_id}`}
+                                name="hours"
+                            />
+                          </td>
+                          
+                        </tr>
+                      );
+                        
+                    })}
+                  </tbody>
+                </table>
+                <div hidden={!emp_id}  className="form-group col-md-6 align-items-center float-end">
+                    <button 
+                       
+                        disabled={isSaving}
+                        onClick={(event)=>{handleSubmit(event)}} 
+                        type="submit"
+                        name={isStatus}
+                        className="btn btn-outline-info me-3 float-end">
+                        {btnTitle}
+                    </button>
+                    <button 
+                        
+                        disabled={isSaving}
+                        onClick={(event)=>{handleSubmit(event)}} 
+                        type="submit"
+                        name="REJECTED"
+                        className="btn btn-outline-danger me-3 float-end">
+                        REJECT
+                    </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Layout>
+      );
+}
+
+export default ApproveEmpTimesheet;

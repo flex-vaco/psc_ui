@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
 import * as Utils from "../../lib/Utils";
@@ -11,25 +10,64 @@ import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 const Timesheet = () => {
     const [empId, setEmpId] = useState(APP_FUNCTIONS.userIsEmployee() ? JSON.parse(localStorage.getItem("user"))?.user_id : null);
     const [empAllocatations, setEmpAllocations] = useState([]);
-    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
+    const [userIsApprover, setUserIsApprover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
+    const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER); 
     const [isSaving, setIsSaving] = useState(false);
     const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
     const [empList, setEmpList] = useState([]);
-
-    const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+    const [prjList, setPrjList] = useState([]);
+    const [proprjList, setProProjectList] = useState([]);
+    const [origEmpAlloc, setOrigEmpAlloc] = useState([]);
+    const [proempList, setProEmpList] = useState([]);
+    // const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
     const weekEnd = ["Sat", "Sun"];
-    const { monthStartDate, monthEndDate } = Utils.getStartEndDatesCurrentMonth();
-    const [displayDates, setDisplayDates] = useState(Utils.getDatesBetween(monthStartDate, monthEndDate));
+    const {monthStartDate, monthEndDate } = Utils.getStartEndDatesCurrentMonth();
+    const {weekStartDate, weekEndDate} = Utils.getStartEndDatesCurrentWeek();
+    const [dispStartDate, setDispStartDate] = useState(weekStartDate);
+    const [dispEndDate, setDispEndDate] = useState(weekEndDate);
 
-    const [startDate, setStartDate] = useState();
+    const [displayDates, setDisplayDates] = useState(Utils.getDatesBetween(weekStartDate, weekEndDate));
+
+    const handleDateChange = (e) => {
+      e.preventDefault();
+      const action = e.target.name;
+      if (action == "prevWeek"){
+        const {prevWeekStartDate, prevWeekEndDate} = Utils.getStartEndDatesPreviousWeek(new Date(displayDates[0]));
+        setDisplayDates(Utils.getDatesBetween(prevWeekStartDate, prevWeekEndDate));
+        setDispStartDate(prevWeekStartDate);
+        setDispEndDate(prevWeekEndDate);
+      } else if (action == "nextWeek"){
+        const {nextWeekStartDate, nextWeekEndDate} = Utils.getStartEndDatesNextWeek(new Date(displayDates[0]));
+        setDisplayDates(Utils.getDatesBetween(nextWeekStartDate, nextWeekEndDate));
+        setDispStartDate(nextWeekStartDate);
+        setDispEndDate(nextWeekEndDate);
+      } else{
+       //const {weekStartDate, weekEndDate} = Utils.getStartEndDatesCurrentWeek(new Date());
+        setDisplayDates(Utils.getDatesBetween(dispStartDate, dispEndDate));
+        // setDispStartDate(weekStartDate);
+        // setDispEndDate(weekEndDate);
+      }
+    }
 
   const fetchSupervisorEmployees = (supervisorEmail) => {
     axios
       .get(`/employees`, {
-        params: { supervisor_email: supervisorEmail }, //"rpanyala@vaco.com" }//
+        params: { supervisor_email: supervisorEmail },
       })
       .then(function (response) {
         setEmpList(response.data?.employees);
+        console.log(response.data?.employees);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  
+  const fetchProducerProjects = () => {
+    axios
+      .get(`/projects`)
+      .then(function (response) {
+        setProProjectList(response.data?.projects);
         console.log(response.data?.employees);
       })
       .catch(function (error) {
@@ -40,7 +78,9 @@ const Timesheet = () => {
   useEffect(() => {
     if(userIsApprover) {
       fetchSupervisorEmployees(supervisorEmail);
-    } else {
+    } else if (userIsProducer) {
+      fetchProducerProjects();
+    }else {
       return;
     }
   }, [supervisorEmail]);
@@ -49,7 +89,18 @@ const Timesheet = () => {
     axios
       .get(`/empPrjAloc/empallocation`, { params: { emp_id: empId } })
       .then(function (response) {
+        let plist = [];
+        setOrigEmpAlloc(response.data?.employee_allocation);
         setEmpAllocations(response.data?.employee_allocation);
+        if(response.data?.employee_allocation.length > 0) {
+          response.data?.employee_allocation.map((element) => {
+            plist = [...plist, {project_id: element.project_id, project_name: element.project_name}]
+            setPrjList(plist);
+          });
+        } else {
+          setPrjList(plist);
+        }
+
       })
       .catch(function (error) {
         console.log(error);
@@ -65,9 +116,31 @@ const Timesheet = () => {
   };
 
   const handleEmpChange = (e) => {
+    e.preventDefault();
     setEmpId(e.target.value);
   };
 
+  const handleProjectChange = (e) => {
+    e.preventDefault();
+    if("-select-" === e.target.value) {
+      setEmpAllocations(origEmpAlloc);
+    } else {
+      setEmpAllocations(origEmpAlloc.filter(ea=> ea.project_id == e.target.value));
+    }
+  };
+  const handleProducerProjectChange = (e) => {
+    axios.get(`/empPrjAloc/project-employees/${e.target.value}`)
+        .then(function (response) {
+          setProEmpList(response.data.employees);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+  }
+  const handleProEmpChange = (e) => {
+    e.preventDefault();
+    setEmpId(e.target.value);
+  }
     const handleSave = async () => {
       if (Object.keys(timesheetData).length === 0) {
         Swal.fire({
@@ -152,8 +225,8 @@ const Timesheet = () => {
         status: status,
         emp_id: empAllocatations[0].emp_id,
         supervisor_email: empAllocatations[0].supervisor_email,
-        month_start_date: monthStartDate,
-        month_end_date: monthEndDate,
+        start_date: Utils.formatDateYYYYMMDD(dispStartDate),
+        end_date: Utils.formatDateYYYYMMDD(dispEndDate),
       };
       axios
         .post("timesheets/change_status", submitData)
@@ -179,17 +252,99 @@ const Timesheet = () => {
         });
     };
 
+    
 return (
     <Layout>
     <div className="container">
         <h4 className='text-center'>Time Sheet</h4>
-          <div hidden={!userIsApprover} className="form-group mb-3 col-md-3 align-items-center">
-            <label htmlFor="emp_id">Employee</label>
-            <select name="emp_id" id="emp_id" className="form-control" onChange={(e)=> {handleEmpChange(e)}}> 
-                <option value="-select-" > -- Select an Employee -- </option>
-                {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
-            </select>
-          </div>
+          <form> 
+            <div hidden={!userIsApprover}>
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="emp_id">Employee</label>
+              <select name="emp_id" id="emp_id" className="form-control" onChange={(e)=> {handleEmpChange(e)}}> 
+                  <option value="-select-"> -- Select an Employee -- </option>
+                  {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
+              </select>
+            </div>
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="project_id">Project</label>
+              <select name="project_id" id="project_id" className="form-control" onChange={(e)=> {handleProjectChange(e)}}> 
+                  <option value="-select-"> All </option>
+                  {prjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
+              </select>
+            </div>
+            </div> 
+            <div hidden={!userIsProducer}>
+            
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="project_id">Project</label>
+              <select name="producer_project_id" id="project_id" className="form-control" onChange={(e)=> {handleProducerProjectChange(e)}}> 
+                  <option value="-select-"> All </option>
+                  {proprjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
+              </select>
+            </div>
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="emp_id">Employee</label>
+              <select name="pro_emp_id" id="pro_emp_id" className="form-control" onChange={(e)=> {handleProEmpChange(e)}}> 
+                  <option value="-select-"> -- Select an Employee -- </option>
+                  {proempList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
+              </select>
+            </div>
+            </div> 
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="dispStartDate">Start Date</label>
+              <input 
+              className="form-control"
+              type='date'
+              name='dispStartDate'
+              id='dispStartDate'
+              onChange={e=>setDispStartDate(e.target.valueAsDate)}
+              />
+            </div>
+            <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="dispEndDate">End Date</label>
+              <input 
+              className="form-control"
+              type='date'
+              name='dispEndDate'
+              id='dispEndDate'
+              onChange={e=>setDispEndDate(e.target.valueAsDate)}
+              />
+            </div>
+            <div className='form-group float-start mb-2 me-2'>
+            <label htmlFor="get"> </label>
+              <button 
+                  onClick={(event)=>{handleDateChange(event)}} 
+                  type="submit"
+                  name="get"
+                  className="form-control btn btn-outline-info me-2">
+                  Go
+              </button>
+            </div>
+            </form>
+            {/* <div className='form-group float-end mb-2'>
+              <button 
+                  onClick={(event)=>{handleDateChange(event)}} 
+                  type="submit"
+                  name="prevWeek"
+                  className="btn btn-outline-info me-2">
+                  <i class="bi bi-caret-left-fill"> </i>
+              </button>
+              <button 
+                  onClick={(event)=>{handleDateChange(event)}} 
+                  type="submit"
+                  name="curWeek"
+                  className="btn btn-outline-info me-2">
+                  Current
+              </button>
+              <button 
+                  onClick={(event)=>{handleDateChange(event)}} 
+                  type="submit"
+                  name="nextWeek"
+                  className="btn btn-outline-info me-2">
+                  <i class="bi bi-caret-right-fill"> </i>
+              </button>
+            </div> */}
 
         <table hidden={!empId} className="table table-bordered">
         <thead>
@@ -224,6 +379,7 @@ return (
         </table>
         <div hidden={!empId}  className="form-group col-md-6 align-items-center float-end">
         <button 
+            hidden={userIsProducer}
             disabled={isSaving}
             onClick={handleSave} 
             type="submit"
@@ -231,6 +387,7 @@ return (
             SAVE
         </button>
         <button 
+            hidden={userIsProducer}
             disabled={isSaving}
             onClick={(event)=>{handleSubmit(event)}} 
             type="submit"
@@ -254,56 +411,3 @@ return (
 };
 
 export default Timesheet;
-
-
-// setDisplayDates(getDatesBetween(monthStartDate, monthEndDate));
-
-//   const handlePreviousWeek = () => {
-//     // setStartDate(new Date(startDate.setDate(startDate.getDate() - 7)));
-
-//     const prevWeek = new Date(startDate);
-//     prevWeek.setDate(startDate.getDate() - 7);
-//     setStartDate(prevWeek);
-//   };
-
-//   const handleNextWeek = () => {
-//     // setStartDate(new Date(startDate.setDate(startDate.getDate() + 7)));
-//     const nextWeek = new Date(startDate);
-//     nextWeek.setDate(startDate.getDate() + 7);
-//     setStartDate(nextWeek);
-//   };
-
-//   const handleAddRow = () => {
-//     setData([
-//       ...data,
-//       { project: `Project ${data.length + 1}`, hours: [0, 0, 0, 0, 0, 0, 0], total: 0 },
-//     ]);
-//   };
-
-//   const handleDeleteRow = (index) => {
-//     const updatedData = [...data];
-//     updatedData.splice(index, 1);
-//     setData(updatedData);
-//   };
-
-//   const handleSaveHours = () => {
-//     console.log('Hours saved:', data);
-//   };
-
-//   // const calculateTotal = (hours) => {
-//   //   let total = 0;
-//   //   for (let i = 0; i < hours.length; i++) {
-//   //     total += parseInt(hours[i]) || 0;
-//   //   }
-//   //   return total;
-//   // };
-
-//   const handleHoursChange = (projectIndex, dayIndex, value) => {
-//     const updatedData = [...data];
-//     updatedData[projectIndex].hours[dayIndex] = value;
-//     updatedData[projectIndex].total = updatedData[projectIndex].hours.reduce(
-//       (acc, cur) => acc + cur,
-//       0
-//     );
-//     setData(updatedData);
-//   };

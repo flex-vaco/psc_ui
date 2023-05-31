@@ -34,6 +34,10 @@ const reportAccessRoles = [
   APP_CONSTANTS.USER_ROLES.ADMINISTRATOR,
   APP_CONSTANTS.USER_ROLES.PRODUCER
 ];
+const reportAccessTimesheetApprove = [
+  APP_CONSTANTS.USER_ROLES.SUPERVISOR,
+  APP_CONSTANTS.USER_ROLES.PRODUCER
+];
 
 const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
@@ -69,6 +73,9 @@ export const hasAIChatAccess = (activeUserRole) => {
 };
 export const hasClientAccess = (activeUserRole) => {
   return clientAccessRoles.includes(activeUserRole) ? true : false;
+};
+export const hasApproveTimesheetAccess = (activeUserRole) => {
+  return reportAccessTimesheetApprove.includes(activeUserRole) ? true : false;
 };
 
 export const validateForm = (valdiationFields) => {

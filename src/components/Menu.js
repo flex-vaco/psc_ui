@@ -29,7 +29,13 @@ return(
                 {AppFunc.hasAllocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empProjList">Allocations</a></li>: ""}
                 {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
                 {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
-                {AppFunc.hasMenuAccess(activeUserRole) ? <li><a className="dropdown-item" href="/timesheet">Timesheet</a></li> : ""}
+                {AppFunc.hasApproveTimesheetAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Timesheets</a>
+                <ul className="dropdown-submenu">
+                            <li><a className="dropdown-item" href="/approveTimesheet">Approve Timesheets</a></li>
+                            <li><a className="dropdown-item" href="/timesheet">Timesheets</a></li>
+                        </ul>
+                  
+                </li> : ""}
                 {AppFunc.hasReportAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Reports</a>
                 <ul className="dropdown-submenu">
                             <li><a className="dropdown-item" href="/forecastHours">Forecast Hours</a></li>
