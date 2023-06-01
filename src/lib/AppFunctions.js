@@ -47,6 +47,14 @@ export const userIsEmployee = () => {
   return (activeUserRole === APP_CONSTANTS.USER_ROLES.EMPLOYEE) ? true : false;
 };
 
+export const userIsProducer = () => {
+  return (activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER) ? true : false;
+};
+
+export const userIsSupervisor = () => {
+  return (activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR) ? true : false;
+};
+
 export const hasMenuAccess = (activeUserRole) => {
   return menuAccessRoles.includes(activeUserRole) ? true : false;
 };

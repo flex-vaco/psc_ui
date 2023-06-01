@@ -11,7 +11,7 @@ const Timesheet = () => {
     const [empId, setEmpId] = useState(APP_FUNCTIONS.userIsEmployee() ? JSON.parse(localStorage.getItem("user"))?.user_id : null);
     const [empAllocatations, setEmpAllocations] = useState([]);
     const [userIsApprover, setUserIsApprover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
-    const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER); 
+    const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
     const [isSaving, setIsSaving] = useState(false);
     const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
     const [empList, setEmpList] = useState([]);
@@ -25,6 +25,8 @@ const Timesheet = () => {
     const {weekStartDate, weekEndDate} = Utils.getStartEndDatesCurrentWeek();
     const [dispStartDate, setDispStartDate] = useState(weekStartDate);
     const [dispEndDate, setDispEndDate] = useState(weekEndDate);
+    const [allocStartDate, setAllocStartDate] = useState(weekStartDate);
+    const [allocEndDate, setAllocEndDate] = useState(weekEndDate);
 
     const [displayDates, setDisplayDates] = useState(Utils.getDatesBetween(weekStartDate, weekEndDate));
 
@@ -42,10 +44,7 @@ const Timesheet = () => {
         setDispStartDate(nextWeekStartDate);
         setDispEndDate(nextWeekEndDate);
       } else{
-       //const {weekStartDate, weekEndDate} = Utils.getStartEndDatesCurrentWeek(new Date());
         setDisplayDates(Utils.getDatesBetween(dispStartDate, dispEndDate));
-        // setDispStartDate(weekStartDate);
-        // setDispEndDate(weekEndDate);
       }
     }
 
@@ -122,10 +121,13 @@ const Timesheet = () => {
 
   const handleProjectChange = (e) => {
     e.preventDefault();
+    const selectedProject = origEmpAlloc.filter(ea=> ea.project_id == e.target.value);
     if("-select-" === e.target.value) {
       setEmpAllocations(origEmpAlloc);
     } else {
-      setEmpAllocations(origEmpAlloc.filter(ea=> ea.project_id == e.target.value));
+      setEmpAllocations(selectedProject);
+      setAllocStartDate(selectedProject[0].start_date.split("T")[0]);
+      setAllocEndDate(selectedProject[0].end_date.split("T")[0]);
     }
   };
   const handleProducerProjectChange = (e) => {
@@ -141,8 +143,8 @@ const Timesheet = () => {
     e.preventDefault();
     setEmpId(e.target.value);
   }
-    const handleSave = async () => {
-      if (Object.keys(timesheetData).length === 0) {
+    const handleSave = async (chkDataChanges = true) => {
+      if ((Object.keys(timesheetData).length === 0) && (chkDataChanges === true)) {
         Swal.fire({
           icon: "info",
           title: "No Changes to Save!",
@@ -218,7 +220,9 @@ const Timesheet = () => {
       setIsSaving(false);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
+      const chkDataChanges = false;
+      await handleSave(chkDataChanges);
       e.preventDefault();
       const status = e.target.name;
       const submitData = {
@@ -258,24 +262,23 @@ return (
     <div className="container">
         <h4 className='text-center'>Time Sheet</h4>
           <form> 
-            <div hidden={!userIsApprover}>
-            <div className='form-group float-start mb-2 me-2'>
+            <div hidden={!userIsApprover} className='form-group float-start mb-2 me-2'>
               <label htmlFor="emp_id">Employee</label>
               <select name="emp_id" id="emp_id" className="form-control" onChange={(e)=> {handleEmpChange(e)}}> 
                   <option value="-select-"> -- Select an Employee -- </option>
                   {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
               </select>
             </div>
-            <div className='form-group float-start mb-2 me-2'>
+            <div hidden={APP_FUNCTIONS.userIsProducer()} className='form-group float-start mb-2 me-2'>
               <label htmlFor="project_id">Project</label>
               <select name="project_id" id="project_id" className="form-control" onChange={(e)=> {handleProjectChange(e)}}> 
                   <option value="-select-"> All </option>
                   {prjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
               </select>
             </div>
-            </div> 
-            <div hidden={!userIsProducer}>
             
+
+            <div hidden={!userIsProducer}>
             <div className='form-group float-start mb-2 me-2'>
               <label htmlFor="project_id">Project</label>
               <select name="producer_project_id" id="project_id" className="form-control" onChange={(e)=> {handleProducerProjectChange(e)}}> 
@@ -298,6 +301,8 @@ return (
               type='date'
               name='dispStartDate'
               id='dispStartDate'
+              max={allocEndDate}
+              min={allocStartDate}
               onChange={e=>setDispStartDate(e.target.valueAsDate)}
               />
             </div>
@@ -308,6 +313,8 @@ return (
               type='date'
               name='dispEndDate'
               id='dispEndDate'
+              max={allocEndDate}
+              min={allocStartDate}
               onChange={e=>setDispEndDate(e.target.valueAsDate)}
               />
             </div>
@@ -362,15 +369,17 @@ return (
                     {dt.toLocaleString()}
                 </td>
                 <td>
-                    {empAllocatations.map((ea) => {
-                    return (
+                  {empAllocatations.map((ea) => {
+                   if ((dt == Utils.getGreaterDate(dt, ea.start_date)) && (dt != Utils.getGreaterDate(dt, ea.end_date))) {
+                      return (
                         <TimeEntryWidget
-                        tsDate={Utils.formatDateYYYYMMDD(dt)}
-                        empAlloc={ea}
-                        tsData={appendTimesheetData}
+                          tsDate={Utils.formatDateYYYYMMDD(dt)}
+                          empAlloc={ea}
+                          tsData={appendTimesheetData}
                         />
-                    );
-                    })}
+                      );
+                   }
+                  })}
                 </td>
                 </tr>
             );

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
+import { userIsEmployee, userIsProducer, userIsSupervisor } from "../lib/AppFunctions";
 
 function TimeEntryWidget(props) {
 
@@ -27,7 +28,6 @@ function TimeEntryWidget(props) {
           console.log(error);
         });
     }
-  const tsReadOnlyStatuses = ['APPROVED','ACCEPTED','CANCELLED']
 
     useEffect(() => {
         fetchTimesheets();
@@ -68,6 +68,7 @@ function TimeEntryWidget(props) {
       case "SUBMITTED":
         return "bg-info"
       case "APPROVED":
+      case "ACCEPTED":
         return "bg-success"
       case "REJECTED":
       case "REWORK":
@@ -75,6 +76,20 @@ function TimeEntryWidget(props) {
       default:
         return "bg-light"
     } 
+  }
+
+  const readOnlyAccess = (taskStatus)=> {
+    const empReadOnlyStatuses = ['APPROVED','ACCEPTED','CANCELLED'];
+    const supervisorReadOnlyStatuses = ['ACCEPTED','CANCELLED'];
+
+    switch (taskStatus) {
+      case (empReadOnlyStatuses.includes(taskStatus)):
+        return userIsEmployee();
+      case (supervisorReadOnlyStatuses.includes(taskStatus)):
+        return userIsSupervisor();
+      default:
+        return userIsProducer();
+    }
   }
 
   return (
@@ -96,7 +111,7 @@ function TimeEntryWidget(props) {
             className="form-control"
             id={`task_name_${tempTimesheetId}`}
             name="task_name"
-            readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
+            readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
           />
         </div>
         <div className="form-group col-md-1 mb-2">
@@ -120,7 +135,7 @@ function TimeEntryWidget(props) {
             max={props.empAlloc.hours_per_day}
             id={`task_hrs_${tempTimesheetId}`}
             name="hours"
-            readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
+            readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
           />
         </div>
         <div className="form-group col-md-1 mb-2">
@@ -140,7 +155,7 @@ function TimeEntryWidget(props) {
             max={8}
             id={`task_ot_${tempTimesheetId}`}
             name="overtime"
-            readOnly={tsReadOnlyStatuses.includes(timesheetData?.timesheet_status)}
+            readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
           />
         </div>
       </form>

@@ -62,18 +62,18 @@ export const getDatesBetween = (stDt, enDt) => {
     do {
         const newDt = new Date(myDate.setDate(myDate.getDate() + 1));
         dates = [...dates, newDt.toDateString()];
-    }
-    while (myDate < new Date(enDt));
+    } while (myDate < new Date(enDt));
     return (dates);
 }
 
 export const getStartEndDatesCurrentWeek = () =>{
-    const today = new Date(); // get current date  
-    const first = today.getDate() - today.getDay(); // First day is the  day of the month - the day of the week  
+    const todayF = new Date();
+    const todayL = new Date(); // Need new variable as date changes with setDate
+    const first = todayF.getDate() - todayF.getDay();  
     const last = first + 6; // last day is the first day + 6   
-    const firstday = new Date(today.setDate(first)).toString();   
-    const lastday = new Date(today.setDate(last)).toString();
-    return { weekStartDate: firstday , weekEndDate: lastday};
+    const firstday = new Date(todayF.setDate(first)).toString();   
+    const lastday = new Date(todayL.setDate(last)).toString();
+    return {weekStartDate: firstday, weekEndDate: lastday};
 }
 
 export const getStartEndDatesPreviousWeek = (givenDate = new Date()) =>{
@@ -85,7 +85,7 @@ export const getStartEndDatesPreviousWeek = (givenDate = new Date()) =>{
     const last = first + 6; // last day is the first day + 6   
     const firstday = new Date(previous.setDate(first)).toString();   
     const lastday = new Date(previous.setDate(last)).toString();
-    return { prevWeekStartDate: firstday , prevWeekEndDate: lastday};
+    return {prevWeekStartDate: firstday, prevWeekEndDate: lastday};
 }
 
 export const getStartEndDatesNextWeek = (givenDate = new Date()) =>{
@@ -97,5 +97,19 @@ export const getStartEndDatesNextWeek = (givenDate = new Date()) =>{
     const last = first + 6; // last day is the first day + 6   
     const firstday = new Date(previous.setDate(first)).toString();   
     const lastday = new Date(previous.setDate(last)).toString();
-    return { nextWeekStartDate: firstday , nextWeekEndDate: lastday};
+    return {nextWeekStartDate: firstday, nextWeekEndDate: lastday};
 }
+
+export const getGreaterDate = (d1, d2) => {
+    let date1 = new Date(d1).getTime();
+    let date2 = new Date(d2).getTime();
+  
+    if (date1 < date2) {
+        return d2;
+    } else if (date1 > date2) {
+        return d1;
+    } else {
+        return null
+    }
+};
+  
