@@ -31,7 +31,7 @@ function TimeEntryWidget(props) {
 
     useEffect(() => {
         fetchTimesheets();
-    }, [props.tsDate, props.empAlloc.emp_id])
+    }, [props.tsDate, props.empAlloc.project_id, props.empAlloc.emp_id])
 
 
   const handleChange = (e) => {
