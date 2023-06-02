@@ -7,6 +7,8 @@ function TimeEntryWidget(props) {
   const [taskName, setTaskName] = useState('');
   const [taskHours, setTaskHours] = useState(0);
   const [taskOvertime, setTaskOvertime] = useState(0);
+  const [taskBenchHrs, setTaskBenchHrs] = useState(0);
+  const [taskPTO, setTaskPTO] = useState(0);
 
     const [timesheetData, setTimesheetData] = useState([]);
 
@@ -23,6 +25,8 @@ function TimeEntryWidget(props) {
           setTaskName(response.data?.timesheetsByAllocation[0]?.task || '');
           setTaskHours(response.data?.timesheetsByAllocation[0]?.hours_per_day || 0);
           setTaskOvertime(response.data?.timesheetsByAllocation[0]?.overtime || 0);
+          setTaskBenchHrs(response.data?.timesheetsByAllocation[0]?.bench_hours || 0);
+          setTaskPTO(response.data?.timesheetsByAllocation[0]?.time_off || 0);
         })
         .catch(function (error) {
           console.log(error);
@@ -39,6 +43,8 @@ function TimeEntryWidget(props) {
     const taskNameEl = document.getElementById(`task_name_${tempTimesheetId}`);
     const taskHoursEl = document.getElementById(`task_hrs_${tempTimesheetId}`);
     const taskOvertimeEl = document.getElementById(`task_ot_${tempTimesheetId}`);
+    const taskBenchHrsEl = document.getElementById(`task_bench_${tempTimesheetId}`);
+    const taskPTOEl = document.getElementById(`task_pto_${tempTimesheetId}`);
 
     if (taskNameEl.value && taskHoursEl.value) {
       if((taskNameEl.value !== timesheetData?.task) || (taskHoursEl.value !== timesheetData?.hours_per_day)){
@@ -50,6 +56,8 @@ function TimeEntryWidget(props) {
           timesheet_date: props.tsDate,
           hours_per_day: taskHoursEl.valueAsNumber,
           overtime: taskOvertimeEl.valueAsNumber,
+          bench_hours: taskBenchHrsEl.valueAsNumber,
+          time_off: taskPTOEl.valueAsNumber,
           timesheet_status: timesheetData?.timesheet_status || "ENTERED",
           task: taskNameEl.value,
           comments: {
@@ -95,7 +103,7 @@ function TimeEntryWidget(props) {
   return (
     <div className="time-entry-widget">
       <form id={tempTimesheetId} className="row">
-        <div className="form-group col-md-10 mb-2">
+        <div className="form-group col-md-8 mb-2">
           <label htmlFor="task_name">
             <span className="fw-bold"> {props.empAlloc.project_name} </span>
             <span className={`badge ${badgeColor(timesheetData?.timesheet_status)}`}>{timesheetData?.timesheet_status}</span>
@@ -116,7 +124,7 @@ function TimeEntryWidget(props) {
         </div>
         <div className="form-group col-md-1 mb-2">
           <label htmlFor="hours" className="fw-bold">
-            Hrs.
+            Project
             <span className="fw-bold text-muted">
               {" "}
               {` (${props.empAlloc.hours_per_day})`}
@@ -155,6 +163,46 @@ function TimeEntryWidget(props) {
             max={8}
             id={`task_ot_${tempTimesheetId}`}
             name="overtime"
+            readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
+          />
+        </div>
+        <div className="form-group col-md-1 mb-2">
+          <label htmlFor="benchHrs" className="fw-bold">
+            Bench
+          </label>
+          <input
+            onBlur={(event) => {
+              handleChange(event);
+            }}
+            onChange={(event)=>{setTaskBenchHrs(event.target.value)}}
+            value={taskBenchHrs}
+            type="number"
+            placeholder="0"
+            className="form-control"
+            min={0}
+            max={8}
+            id={`task_bench_${tempTimesheetId}`}
+            name="benchHrs"
+            readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
+          />
+        </div>
+        <div className="form-group col-md-1 mb-2">
+          <label htmlFor="PTO" className="fw-bold">
+            Time Off
+          </label>
+          <input
+            onBlur={(event) => {
+              handleChange(event);
+            }}
+            onChange={(event)=>{setTaskPTO(event.target.value)}}
+            value={taskPTO}
+            type="number"
+            placeholder="0"
+            className="form-control"
+            min={0}
+            max={8}
+            id={`task_pto_${tempTimesheetId}`}
+            name="PTO"
             readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
           />
         </div>

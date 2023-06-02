@@ -19,6 +19,7 @@ const Timesheet = () => {
     const [proprjList, setProProjectList] = useState([]);
     const [origEmpAlloc, setOrigEmpAlloc] = useState([]);
     const [proempList, setProEmpList] = useState([]);
+    const [selectedProjectId, setSelectedProjectId] = useState('');
     // const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
     const weekEnd = ["Sat", "Sun"];
     const {monthStartDate, monthEndDate } = Utils.getStartEndDatesCurrentMonth();
@@ -122,6 +123,7 @@ const Timesheet = () => {
   const handleProjectChange = (e) => {
     e.preventDefault();
     const selectedProject = origEmpAlloc.filter(ea=> ea.project_id == e.target.value);
+    setSelectedProjectId(selectedProject[0].project_id);
     if("-select-" === e.target.value) {
       setEmpAllocations(origEmpAlloc);
     } else {
@@ -231,6 +233,7 @@ const Timesheet = () => {
         supervisor_email: empAllocatations[0].supervisor_email,
         start_date: Utils.formatDateYYYYMMDD(dispStartDate),
         end_date: Utils.formatDateYYYYMMDD(dispEndDate),
+        project_id: selectedProjectId
       };
       axios
         .post("timesheets/change_status", submitData)
@@ -246,7 +249,7 @@ const Timesheet = () => {
           });
         })
         .catch((err) => {
-          console.log(err);
+          console.log("Submit Error: ",err);
           Swal.fire({
             icon: "error",
             title: "Failed to Submit Timesheet!",
@@ -356,8 +359,8 @@ return (
         <table hidden={!empId} className="table table-bordered">
         <thead>
           <tr>
-            <th className="w-25">Date</th>
-            <th className="w-75">Project <span className='text-muted'>(Enter/Edit Task Details)</span></th>
+            <th style={{width:"15%"}}> Date</th>
+            <th style={{width:"85%"}}> Project <span className='text-muted'>(Enter/Edit Task Details)</span> <span className='float-end'>Time in Hours </span></th>
           </tr>
         </thead>
         <tbody>
