@@ -86,17 +86,13 @@ function TimeEntryWidget(props) {
     } 
   }
 
-  const readOnlyAccess = (taskStatus)=> {
-    const empReadOnlyStatuses = ['APPROVED','ACCEPTED','CANCELLED'];
-    const supervisorReadOnlyStatuses = ['ACCEPTED','CANCELLED'];
-
-    switch (taskStatus) {
-      case (empReadOnlyStatuses.includes(taskStatus)):
-        return userIsEmployee();
-      case (supervisorReadOnlyStatuses.includes(taskStatus)):
-        return userIsSupervisor();
-      default:
-        return userIsProducer();
+  const readOnlyAccess = (tskStatus) => {
+    if (userIsEmployee()) {
+      return (['APPROVED', 'ACCEPTED', 'CANCELLED'].includes(tskStatus));
+    } else if (userIsSupervisor()) {
+      return (['ACCEPTED', 'CANCELLED'].includes(tskStatus));
+    } else if (userIsProducer()) {
+      return true;
     }
   }
 

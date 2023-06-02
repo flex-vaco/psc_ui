@@ -17,7 +17,10 @@ function ApproveEmpTimesheet() {
     const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
     const [empTimesheets, setEmpTimesheets] = useState([]);
     const [taskName, setTaskName] = useState('');
-    const [taskHours, setTaskHours] = useState('');
+    const [taskHours, setTaskHours] = useState(0);
+    const [taskOvertime, setTaskOvertime] = useState(0);
+    const [taskBenchHrs, setTaskBenchHrs] = useState(0);
+    const [taskPTO, setTaskPTO] = useState(0);
     const [timesheetId, setTimesheetId] = useState([]);
     const [btnTitle, setBtnTitle] = useState();
     const navigate = useNavigate();
@@ -91,10 +94,13 @@ function ApproveEmpTimesheet() {
                 <table className="table table-hover">
                   <thead className="bg-light">
                     <tr>
-                      <th className="w-10">Date</th>
-                      <th className="w-20">Employee - Project</th>
-                      <th className="w-60">Enter/Edit Task Details</th>
-                      <th className="w-10">Hours</th>
+                      <th style={{width:"8%"}}>Date</th>
+                      <th style={{width:"12%"}}>Employee - Project</th>
+                      <th style={{width:"60%"}}>Enter/Edit Task Details</th>
+                      <th style={{width:"5%"}}>Project</th>
+                      <th style={{width:"5%"}}>Overtime</th>
+                      <th style={{width:"5%"}}>Bench</th>
+                      <th style={{width:"5%"}}>Time-off</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -131,7 +137,39 @@ function ApproveEmpTimesheet() {
                                 name="hours"
                             />
                           </td>
-                          
+                          <td>
+                            <input
+                                onChange={(event)=>{setTaskOvertime(event.target.value)}}
+                                value={empTimesheet.overtime}
+                                type="number"
+                                placeholder="0"
+                                className="form-control"
+                                id={`task_ot_${empTimesheet.timesheet_id}`}
+                                name="overtime"
+                            />
+                          </td>
+                          <td>
+                            <input
+                                onChange={(event)=>{setTaskBenchHrs(event.target.value)}}
+                                value={empTimesheet.bench_hours}
+                                type="number"
+                                placeholder="0"
+                                className="form-control"
+                                id={`task_bench_${empTimesheet.timesheet_id}`}
+                                name="bench_hours"
+                            />
+                          </td>
+                          <td>
+                            <input
+                                onChange={(event)=>{setTaskPTO(event.target.value)}}
+                                value={empTimesheet.time_off}
+                                type="number"
+                                placeholder="0"
+                                className="form-control"
+                                id={`task_pto_${empTimesheet.timesheet_id}`}
+                                name="time_off"
+                            />
+                          </td>
                         </tr>
                       );
                         
