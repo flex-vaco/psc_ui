@@ -8,7 +8,7 @@ import APP_CONSTANTS from "../../appConstants";
 import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 
 const Timesheet = () => {
-    const [empId, setEmpId] = useState(APP_FUNCTIONS.userIsEmployee() ? JSON.parse(localStorage.getItem("user"))?.user_id : null);
+    const [empId, setEmpId] = useState(APP_FUNCTIONS.userIsEmployee() ? JSON.parse(localStorage.getItem("user"))?.emp_id : null);
     const [empAllocatations, setEmpAllocations] = useState([]);
     const [userIsApprover, setUserIsApprover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
     const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
