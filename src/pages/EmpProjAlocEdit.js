@@ -41,13 +41,10 @@ function EmpProjAlocEdit() {
                 showConfirmButton: false,
                 timer: 1500
             })
-        })
-          
-    })
-    useEffect(() => {
+        });
         fetchEmpList();
         fetchProjList();
-    })
+    }, [emp_proj_aloc_id])
   
     const fetchEmpList = () => {
         axios.get('/employees')
