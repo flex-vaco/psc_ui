@@ -685,6 +685,50 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   padding: 6px 10px;
 }
 
+.dashboard_table {
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  min-height: 400px;
+  overflow-y: auto;
+}
+
+.display_table {
+  overflow-x: auto;
+  min-height: 400px;
+  overflow-y: auto;
+}
+
+.panel-default>.panel-heading {
+  color: #333;
+  background-color: #f5f5f5;
+  border-color: #ddd;
+}
+.panel-default {
+  border-color: #ddd;
+}
+.panel-body {
+  padding: 15px;
+}
+
+.panel {
+  margin-bottom: 20px;
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+  box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.panel-default {
+  border-color: #ddd;
+}
+.panel-heading {
+  padding: 10px 15px;
+  border-bottom: 1px solid transparent;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+
   @media screen and (max-width: 767px) {
     .tss-1ej321f-MUIDataTableBodyCell-cellHide {
       display: none !important;

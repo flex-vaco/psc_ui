@@ -3,12 +3,15 @@ import React, { useEffect, useState } from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import Modal from 'react-modal';
-import HomePageLayout from "../components/HomePageLayout"
+import HomePageLayout from "../components/HomePageLayout";
+import APP_CONSTANTS from "../appConstants";
+import * as APP_FUNCTIONS from "../lib/AppFunctions";
  
 function Home() {
     const  [searchSkill, setSearchSkill] = useState('')
     const [modalIsOpen, setIsOpen] = useState(false);
     const [empModalDetails, setCatModalDetails] = useState([]);
+    const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
   
     const navigate = useNavigate();
     const [categoryList, setCategoryList] = useState([]);
@@ -72,6 +75,9 @@ function Home() {
   
     return (
         <HomePageLayout>
+            <div hidden={!userIsProducer} className="container">
+                <a href={'/dashboard'} className="btn btn-outline-primary">My Dashboard</a>
+            </div>
             <div className="container text-center mt-5">
                 <h4>Hello! <small>What skills are you looking to hire?</small></h4>
             </div>
