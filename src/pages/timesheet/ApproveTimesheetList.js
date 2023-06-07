@@ -6,17 +6,17 @@ import APP_CONSTANTS from "../../appConstants";
 import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 
 function ApproveTimesheetList() {
-    const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
-    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR); 
+    const [managerEmail, setManagerEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
+    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.MANAGER); 
     const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER); 
     const [empList, setEmpList] = useState([]);
     const [pageTitle, setPageTitle] = useState();
     const navigate = useNavigate();
 
-    const fetchSupervisorEmployees = (supervisorEmail) => {
+    const fetchManagerEmployees = (managerEmail) => {
         axios
           .get(`timesheets/approvependingemployees`, {
-            params: { supervisor_email: supervisorEmail }, //"rpanyala@vaco.com" }//
+            params: { manager_email: managerEmail }, //"rpanyala@vaco.com" }//
           })
           .then(function (response) {
             setEmpList(response.data?.employees);
@@ -29,7 +29,7 @@ function ApproveTimesheetList() {
     
       useEffect(() => {
         if(userIsApprover || userIsProducer) {
-          fetchSupervisorEmployees(supervisorEmail);
+          fetchManagerEmployees(managerEmail);
         } else {
           return;
         }
@@ -40,7 +40,7 @@ function ApproveTimesheetList() {
           setPageTitle('Pending for Acceptence');
         }
         
-      }, [supervisorEmail]);
+      }, [managerEmail]);
     
       return (
         <Layout>

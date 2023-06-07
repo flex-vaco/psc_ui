@@ -11,10 +11,10 @@ import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 function ApproveEmpTimesheet() {
     const [project_id, setprojectId] = useState(useParams().project_id);
     const [emp_id, setempId] = useState(useParams().emp_id);
-    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
+    const [userIsApprover, setUserIsApptover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.MANAGER);
     const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
     const [isSaving, setIsSaving] = useState(false);
-    const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
+    const [managerEmail, setManagerEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
     const [empTimesheets, setEmpTimesheets] = useState([]);
     const [taskName, setTaskName] = useState('');
     const [taskHours, setTaskHours] = useState(0);
@@ -43,7 +43,7 @@ function ApproveEmpTimesheet() {
         } else {
           return;
         }
-    }, [supervisorEmail]);
+    }, [managerEmail]);
 
     const fetchEmpPendingTimesheet = () => {
         axios

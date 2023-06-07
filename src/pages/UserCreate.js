@@ -112,7 +112,7 @@ function UserCreate() {
                     setShowProjectSel(false)
                     break;
                 case APP_CONSTANTS.USER_ROLES.ADMINISTRATOR:
-                case APP_CONSTANTS.USER_ROLES.SUPERVISOR:
+                case APP_CONSTANTS.USER_ROLES.MANAGER:
                     setShowEmpSel(false);
                     setShowClientSel(false);
                     setShowProjectSel(false)
@@ -136,7 +136,7 @@ function UserCreate() {
         setClient(e.target.value)
     }
     const handlEmployeeChange = (e) => {
-        const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE, APP_CONSTANTS.USER_ROLES.SUPERVISOR]
+        const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE, APP_CONSTANTS.USER_ROLES.MANAGER]
         if((empRequiredRoles.includes(role)) && (e.target.value === "-select-")){
             Swal.fire({
                 icon: 'warning',

@@ -20,8 +20,8 @@ function EmpShow() {
         vaco_join_date: '',
         home_location_city: '',
         office_location_city: '',
-        supervisor_name: '',
-        supervisor_email: '',
+        manager_name: '',
+        manager_email: '',
         is_onsite: '',
         resume: '',
         profile_picture: '',
@@ -73,8 +73,8 @@ function EmpShow() {
                         <p><b className="text-muted">Hourly Rate: </b>{empDetails.rate_per_hour} USD</p>
                         <p><b className="text-muted">Home Location City: </b>{empDetails.home_location_city}</p>
                         <p><b className="text-muted">Office Location City: </b>{empDetails.office_location_city}</p>
-                        <p><b className="text-muted">Supervisor Name: </b>{empDetails.supervisor_name}</p>
-                        <p><b className="text-muted">Supervisor Email: </b>{empDetails.supervisor_email}</p>
+                        <p><b className="text-muted">Manager Name: </b>{empDetails.manager_name}</p>
+                        <p><b className="text-muted">Manager Email: </b>{empDetails.manager_email}</p>
                         <p><b className="text-muted">Is working On-site? </b>{(empDetails.is_onsite) ? "YES" : "NO"}</p>
                         <p><b className="text-muted">Resume: </b>
                             <a href={(empDetails.resume) ? 

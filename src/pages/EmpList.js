@@ -133,7 +133,7 @@ function EmpList() {
       "profile_information",
       "resume",
       "education",
-      "supervisor_email"
+      "manager_email"
     ]
 
     return (
@@ -207,8 +207,8 @@ function EmpList() {
                     <th>Vaco Join Date</th>
                     <th>Home Location</th>
                     <th>Office Location</th>
-                    <th>Supervisor</th>
-                    <th>Supervisor Email</th>
+                    <th>Manager</th>
+                    <th>Manager Email</th>
                     <th>On Site</th>
                     <th>Resume</th>
                   </tr>
@@ -249,8 +249,8 @@ function EmpList() {
                         </td>
                         <td>{empDetails.home_location_city}</td>
                         <td>{empDetails.office_location_city}</td>
-                        <td>{empDetails.supervisor_name}</td>
-                        <td>{empDetails.supervisor_email}</td>
+                        <td>{empDetails.manager_name}</td>
+                        <td>{empDetails.manager_email}</td>
                         <td>{empDetails.is_onsite ? "YES" : "NO"}</td>
                         <td>
                           <a

@@ -18,8 +18,8 @@ function EmpCreate() {
     const [office_location_city, setOfficeLocCity] = useState('');
     const [role, setRole] = useState('');
     const [status, setStatus] = useState('Active');
-    const [supervisor_name, setSupervisorName] = useState('');
-    const [supervisor_email, setSupervisorEmail] = useState('');
+    const [manager_name, setManagerName] = useState('');
+    const [manager_email, setManagerEmail] = useState('');
     const [vaco_join_date, setVacoJoinDate] = useState('');
     const [email, setEmail] = useState('');
     const [is_onsite, setIsOnsite] = useState(false);
@@ -78,8 +78,8 @@ function EmpCreate() {
         data.append('vaco_join_date', vaco_join_date);
         data.append('home_location_city', home_location_city);
         data.append('office_location_city', office_location_city);
-        data.append('supervisor_name', supervisor_name);
-        data.append('supervisor_email', supervisor_email);
+        data.append('manager_name', manager_name);
+        data.append('manager_email', manager_email);
         data.append('is_onsite', onSite);
         data.append('resume', selected_resume);
         data.append('profile_picture', profile_picture);
@@ -108,8 +108,8 @@ function EmpCreate() {
             setOfficeLocCity('');
             setRole('');
             setStatus('');
-            setSupervisorName('');
-            setSupervisorEmail('');
+            setManagerName('');
+            setManagerEmail('');
             setEmail('');
             setIsOnsite(false);
             setSelectedResume('null');
@@ -324,25 +324,25 @@ function EmpCreate() {
                                     required/>
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="supervisor_name">Supervisor Name</label>
+                                <label htmlFor="manager_name">Manager Name</label>
                                 <input 
-                                    onChange={(event)=>{setSupervisorName(event.target.value)}}
-                                    value={supervisor_name}
+                                    onChange={(event)=>{setManagerName(event.target.value)}}
+                                    value={manager_name}
                                     type="text"
                                     className="form-control needs-validation"
-                                    id="supervisor_name"
-                                    name="supervisor_name"
+                                    id="manager_name"
+                                    name="manager_name"
                                     required/>
                             </div>
                             <div className="form-group col-md-6">
-                                <label htmlFor="supervisor_email">Supervisor Email</label>
+                                <label htmlFor="manager_email">Manager Email</label>
                                 <input 
-                                    onChange={(event)=>{setSupervisorEmail(event.target.value)}}
-                                    value={supervisor_email}
+                                    onChange={(event)=>{setManagerEmail(event.target.value)}}
+                                    value={manager_email}
                                     type="email"
                                     className="form-control needs-validation"
-                                    id="supervisor_email"
-                                    name="supervisor_email"
+                                    id="manager_email"
+                                    name="manager_email"
                                     required/>
                             </div>
                             <div className="form-group col-md-6">

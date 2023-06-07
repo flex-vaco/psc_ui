@@ -10,10 +10,10 @@ import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 const Timesheet = () => {
     const [empId, setEmpId] = useState(APP_FUNCTIONS.userIsEmployee() ? JSON.parse(localStorage.getItem("user"))?.emp_id : null);
     const [empAllocatations, setEmpAllocations] = useState([]);
-    const [userIsApprover, setUserIsApprover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.SUPERVISOR);
+    const [userIsApprover, setUserIsApprover] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.MANAGER);
     const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER);
     const [isSaving, setIsSaving] = useState(false);
-    const [supervisorEmail, setSupervisorEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
+    const [managerEmail, setManagerEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
     const [empList, setEmpList] = useState([]);
     const [prjList, setPrjList] = useState([]);
     const [proprjList, setProProjectList] = useState([]);
@@ -49,10 +49,10 @@ const Timesheet = () => {
       }
     }
 
-  const fetchSupervisorEmployees = (supervisorEmail) => {
+  const fetchManagerEmployees = (managerEmail) => {
     axios
       .get(`/employees`, {
-        params: { supervisor_email: supervisorEmail },
+        params: { manager_email: managerEmail },
       })
       .then(function (response) {
         setEmpList(response.data?.employees);
@@ -77,13 +77,13 @@ const Timesheet = () => {
 
   useEffect(() => {
     if(userIsApprover) {
-      fetchSupervisorEmployees(supervisorEmail);
+      fetchManagerEmployees(managerEmail);
     } else if (userIsProducer) {
       fetchProducerProjects();
     }else {
       return;
     }
-  }, [supervisorEmail]);
+  }, [managerEmail]);
 
   const fetchEmpProjects = (empId) => {
     axios
@@ -230,7 +230,7 @@ const Timesheet = () => {
       const submitData = {
         status: status,
         emp_id: empAllocatations[0].emp_id,
-        supervisor_email: empAllocatations[0].supervisor_email,
+        manager_email: empAllocatations[0].manager_email,
         start_date: Utils.formatDateYYYYMMDD(dispStartDate),
         end_date: Utils.formatDateYYYYMMDD(dispEndDate),
         project_id: selectedProjectId

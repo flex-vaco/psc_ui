@@ -155,7 +155,7 @@ function UserEdit() {
         case APP_CONSTANTS.USER_ROLES.EMPLOYEE:
             if(Object.is(employee, null)) { 
                 roleHasValidDependencies = false;
-                setErrMsg('Employee is required for Supervisor/Employee Role!');
+                setErrMsg('Employee is required for Manager/Employee Role!');
                setShowEmpSel(true);
                setShowClientSel(false);
                setShowProjectSel(false);
@@ -179,7 +179,7 @@ function UserEdit() {
             }
             break;
         case APP_CONSTANTS.USER_ROLES.ADMINISTRATOR:
-        case APP_CONSTANTS.USER_ROLES.SUPERVISOR:
+        case APP_CONSTANTS.USER_ROLES.MANAGER:
             setShowEmpSel(false);
             setShowClientSel(false);
             setShowProjectSel(false);

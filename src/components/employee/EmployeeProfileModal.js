@@ -62,8 +62,8 @@ const EmployeeProfileModal = (props) => {
                             <p><b className="text-muted">Vaco Joining Date: </b>{Utils.formatDateYYYYMMDD(props.employee.vaco_join_date)}</p>
                             <p><b className="text-muted">Home Location: </b>{props.employee.home_location_city}</p>
                             <p><b className="text-muted">Office Location: </b>{props.employee.office_location_city}</p>
-                            <p><b className="text-muted">Supervisor Name: </b>{props.employee.supervisor_name}</p>
-                            <p><b className="text-muted">Supervisor Email: </b>{props.employee.supervisor_email}</p>
+                            <p><b className="text-muted">Manager Name: </b>{props.employee.manager_name}</p>
+                            <p><b className="text-muted">Manager Email: </b>{props.employee.manager_email}</p>
                             <p><b className="text-muted">Is working On-site? </b>{(props.employee.is_onsite) ? "YES" : "NO"}</p>
                         </div>
                         <div className="col-12 education_details">

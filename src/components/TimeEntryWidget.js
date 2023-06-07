@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { userIsEmployee, userIsProducer, userIsSupervisor } from "../lib/AppFunctions";
+import { userIsEmployee, userIsProducer, userIsManager } from "../lib/AppFunctions";
 
 function TimeEntryWidget(props) {
 
@@ -52,7 +52,7 @@ function TimeEntryWidget(props) {
           timesheet_id: timesheetData?.timesheet_id || tempTimesheetId,
           emp_id: props.empAlloc.emp_id,
           project_id: props.empAlloc.project_id,
-          supervisor_email: props.empAlloc.supervisor_email,
+          manager_email: props.empAlloc.manager_email,
           timesheet_date: props.tsDate,
           hours_per_day: taskHoursEl.valueAsNumber,
           overtime: taskOvertimeEl.valueAsNumber,
@@ -89,7 +89,7 @@ function TimeEntryWidget(props) {
   const readOnlyAccess = (tskStatus) => {
     if (userIsEmployee()) {
       return (['APPROVED', 'ACCEPTED', 'CANCELLED'].includes(tskStatus));
-    } else if (userIsSupervisor()) {
+    } else if (userIsManager()) {
       return (['ACCEPTED', 'CANCELLED'].includes(tskStatus));
     } else if (userIsProducer()) {
       return true;
