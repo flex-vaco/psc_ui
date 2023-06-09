@@ -24,18 +24,43 @@ function ApproveEmpTimesheet() {
     const [timesheetId, setTimesheetId] = useState([]);
     const [btnTitle, setBtnTitle] = useState();
     const navigate = useNavigate();
+    const [timesheetIds,setTimesheetIds] = useState([]);
 
     const [isStatus, setIsStatus] = useState();
+    const [isRejectStatus, setIsRejectStatus] = useState();
+    const [btnRejectTitle, setBtnRejectTitle] = useState();
 
+    const handleCheck = (e, selectedId) => {
+      var timesheetIds_array = [...timesheetIds];
+      if (e.target.checked) {
+        timesheetIds_array = [...timesheetIds, selectedId];
+      } else {
+        timesheetIds_array.splice(timesheetIds.indexOf(selectedId), 1);
+      }
+      setTimesheetIds(timesheetIds_array);
+      
+    };
+    const handleCheckAllChange = (e) => {
+      if (e.target.checked) {
+        const allTimesheets = empTimesheets.map((c) => c.timesheet_id);
+        setTimesheetIds(allTimesheets);
+      } else {
+        setTimesheetIds([]);
+      }
+    };
     useEffect(() => {
         if(userIsApprover) {
           setIsStatus('APPROVED');
+          setIsRejectStatus('REJECTED');
           setBtnTitle('APPROVE');
+          setBtnRejectTitle('REJECT');
         }
         
         if(userIsProducer) {
           setIsStatus('ACCEPTED');
+          setIsRejectStatus('REJECTED');
           setBtnTitle('ACCEPT');
+          setBtnRejectTitle('REJECT');
         }
 
         if(userIsApprover || userIsProducer) {
@@ -62,6 +87,7 @@ function ApproveEmpTimesheet() {
         status: status,
         emp_id: emp_id,
         project_id: project_id,
+        timesheet_id: timesheetIds,
       };
       axios
       .post("timesheets/change_status_supervisior", submitData)
@@ -84,7 +110,7 @@ function ApproveEmpTimesheet() {
         });
       });
     }
-
+   
     return (
         <Layout>
           <div className="container-fluid">
@@ -94,9 +120,21 @@ function ApproveEmpTimesheet() {
                 <table className="table table-hover">
                   <thead className="bg-light">
                     <tr>
+                    <th style={{width:"2%"}}>
+                      <div className="form-check checkbox-xl">
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          id="selectAll"
+                          checked={timesheetIds.length === empTimesheets.length}
+                          onChange={handleCheckAllChange}
+                        />
+                      </div>
+
+                    </th>
                       <th style={{width:"8%"}}>Date</th>
                       <th style={{width:"12%"}}>Employee - Project</th>
-                      <th style={{width:"60%"}}>Enter/Edit Task Details</th>
+                      <th style={{width:"58%"}}>Enter/Edit Task Details</th>
                       <th style={{width:"5%"}}>Project</th>
                       <th style={{width:"5%"}}>Overtime</th>
                       <th style={{width:"5%"}}>Bench</th>
@@ -108,6 +146,18 @@ function ApproveEmpTimesheet() {
                     
                       return (
                         <tr key={key}>
+                          <td>
+                            <div class="form-check checkbox-xl">
+                              <input 
+                                class="form-check-input" 
+                                type='checkbox' 
+                                name="timesheet_selected" 
+                                value={empTimesheet.timesheet_id} 
+                                checked={timesheetIds.includes(empTimesheet.timesheet_id)}
+                                onChange={(e) => handleCheck(e, empTimesheet.timesheet_id)}>
+                              </input>
+                            </div>
+                          </td>
                           <td>
                             {Utils.formatDateYYYYMMDD(empTimesheet.timesheet_date)}
                           </td>
@@ -191,9 +241,9 @@ function ApproveEmpTimesheet() {
                         disabled={isSaving}
                         onClick={(event)=>{handleSubmit(event)}} 
                         type="submit"
-                        name="REJECTED"
+                        name={isRejectStatus}
                         className="btn btn-outline-danger me-3 float-end">
-                        REJECT
+                        {btnRejectTitle}
                     </button>
                 </div>
               </div>

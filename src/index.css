@@ -685,17 +685,28 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   padding: 6px 10px;
 }
 
+.checkbox-xl .form-check-input {
+  top: 1.2rem;
+  scale: 1.7;
+  margin-right: 0.8rem;
+  }
+ 
+ .checkbox-xl .form-check-label {
+  padding-top: 19px;
+  }
 .dashboard_table {
   width: 100%;
   display: block;
   overflow-x: auto;
   min-height: 400px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
 .display_table {
   overflow-x: auto;
   min-height: 400px;
+  max-height: 400px;
   overflow-y: auto;
 }
 
