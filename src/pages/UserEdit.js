@@ -5,6 +5,7 @@ import axios from 'axios'
 import Layout from "../components/Layout"
 import APP_CONSTANTS from "../appConstants";
 import * as Utils from "../lib/Utils";
+import Multiselect from 'multiselect-react-dropdown';
 
 function UserEdit() {
     const [user_id, setId] = useState(useParams().id)
@@ -17,7 +18,8 @@ function UserEdit() {
     const [roles, setRoles] = useState([]);
 
     const [clients, setClients] = useState([]);
-    const [client, setClient] = useState(null);
+    const [selectedClients, setSelectedClients] = useState([]);
+    const [producerClientIds, setProducerClientIds] = useState([]);
 
     const [projects, setProjects] = useState([]);
     const [project, setProject] = useState(null);
@@ -42,6 +44,7 @@ function UserEdit() {
             })
         } else {
                 setRole(roleVal);
+                validateRoleDependencies();
         }
     }
 
@@ -81,16 +84,7 @@ function UserEdit() {
           console.log(error);
         })
     }
-    const handleClientChange = (e) => {
-        if((role==APP_CONSTANTS.USER_ROLES.PRODUCER) && (e.target.value === "-select-")){
-            Swal.fire({
-                icon: 'warning',
-                title: 'Client Name is required!',
-                showConfirmButton: true
-            })
-        }
-        setClient(e.target.value)
-    }
+
     const handlEmployeeChange = (e) => {
         const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE]
         if((empRequiredRoles.includes(role)) && (e.target.value === "-select-")){
@@ -130,12 +124,13 @@ function UserEdit() {
             setPassword(userDetatils.password)
             setRole(userDetatils.role);
             setEmail(userDetatils.email);
-            setClient(userDetatils.client_id);
-            setShowClientSel(userDetatils.client_id ? true : false);
+            setProducerClientIds(userDetatils?.producer_clients?.map(prd_cl=>prd_cl.client_id));
+            setSelectedClients(clients.filter(cl=> producerClientIds.includes(cl.client_id)));
+            setShowClientSel(userDetatils.role === APP_CONSTANTS.USER_ROLES.PRODUCER);
             setProject(userDetatils.project_id);
             setShowProjectSel(userDetatils.project_id ? true : false);
             setEmployee(userDetatils.emp_id);
-            setShowEmpSel(userDetatils.emp_id ? true : false);
+            setShowEmpSel(userDetatils.role === APP_CONSTANTS.USER_ROLES.EMPLOYEE);
         })
         .catch(function (error) {
             Swal.fire({
@@ -160,32 +155,28 @@ function UserEdit() {
                setShowClientSel(false);
                setShowProjectSel(false);
             } else {
-                setClient(null);
                 setProject(null);
                 roleHasValidDependencies = true;
             }
             break;
         case APP_CONSTANTS.USER_ROLES.PRODUCER:
-            if(Object.is(client, null)){
-                roleHasValidDependencies = false;
-                setErrMsg('Client is required for Producer Role!');
-               setShowEmpSel(false);
-               setShowClientSel(true);
-               setShowProjectSel(false);
-            } else {
-                setProject(null);
-                setEmployee(null);
-                roleHasValidDependencies = true;
-            }
+            setShowEmpSel(false);
+            setShowClientSel(true);
+            setShowProjectSel(false);
+            setProject(null);
+            setEmployee(null);
+            roleHasValidDependencies = true;
             break;
         case APP_CONSTANTS.USER_ROLES.ADMINISTRATOR:
         case APP_CONSTANTS.USER_ROLES.MANAGER:
             setShowEmpSel(false);
             setShowClientSel(false);
             setShowProjectSel(false);
-            setClient(null);
             setProject(null);
             setEmployee(null);
+            roleHasValidDependencies = true;
+            break;
+        default:
             roleHasValidDependencies = true;
             break;
     }
@@ -195,19 +186,37 @@ function UserEdit() {
         validateRoleDependencies();
     }, [role])
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if(validateRoleDependencies()) {
             setIsSaving(true);
-            axios.post(`/users/update/${user_id}`, {
+
+            let updatedData = {
                 first_name: first_name,
                 last_name: last_name,
                 email: email,
-                password: password,
                 role: role,
+                password: password,
                 emp_id: employee,
-                client_id: client,
                 project_id: project
-            })
+            }
+            if (role === APP_CONSTANTS.USER_ROLES.PRODUCER) {
+                const clientIds = (selectedClients?.length > 0) ? selectedClients.map(s=>s.client_id) : producerClientIds;
+                if ((!clientIds) || (clientIds.length === 0)) {
+                    const { value: isConfirmed } = await Swal.fire({
+                        icon: 'warning',
+                        title: 'Client is Required \n for Producer Role',
+                        showConfirmButton: true
+                    })
+                    if (isConfirmed) {
+                        setIsSaving(false);
+                        return;
+                    }
+                } else {
+                    updatedData.client_ids = clientIds;
+                }
+            }
+
+            axios.post(`/users/update/${user_id}`, updatedData)
             .then(function (response) {
                 Swal.fire({
                     icon: 'success',
@@ -267,7 +276,19 @@ function UserEdit() {
             setIsSaving(false)
         });
     }
+    const handleClientAdd = (selectedList, selectedItem)=>{
+        setSelectedClients(selectedList);
+        setProducerClientIds(selectedList?.map(s=>s.client_id))
+    }
 
+    const handleClientRemove = (selectedList, removedItem)=>{
+        setSelectedClients(selectedList);
+        setProducerClientIds(selectedList?.map(s=>s.client_id))
+    }
+
+    const handleReset = ()=>{
+        window.location.reload(true);
+    }
     return (
         <Layout>
             <div className="container">
@@ -318,14 +339,16 @@ function UserEdit() {
                             </div>
                             {showClientSel ? 
                             (<div className="form-group">
-                                <label htmlFor="client">Client</label>
-                                <select name="client" id="client" className="form-control" onChange={handleClientChange} > 
-                                    <option value="-select-" > -- Select a Client -- </option>
-                                    {clients.map((cl) => {
-                                        const sel = (cl.client_id == client) ? true : false;
-                                        return <option key={cl.client_id} value={cl.client_id} selected={sel}>{cl.name.toUpperCase()}</option>;
-                                    })}
-                                </select>
+                                <label htmlFor="client">Client </label>
+                                <Multiselect
+                                    options={clients} 
+                                    selectedValues={clients.filter(cl=> producerClientIds?.includes(cl.client_id))} 
+                                    onSelect={handleClientAdd}
+                                    onRemove={handleClientRemove}
+                                    showCheckbox={true}
+                                    displayValue="name"
+                                    closeIcon="close"
+                                />
                             </div>) : ''}
                             {showProjectSel ? 
                             (<div className="form-group">
@@ -349,14 +372,20 @@ function UserEdit() {
                                     })}
                                 </select>
                             </div>) : ''}
-                            <button 
+                        </form>
+                        <button 
+                                onClick={handleReset} 
+                                type="submit"
+                                className="btn btn-outline-light me-3 mt-3">
+                                RESET
+                        </button>
+                        <button 
                                 disabled={isSaving}
                                 onClick={handleSave} 
                                 type="submit"
-                                className="btn btn-outline-primary mt-3">
-                                Update User
-                            </button>
-                        </form>
+                                className="btn btn-outline-info mt-3">
+                                UPDATE
+                        </button>
                         <button 
                                 disabled={isSaving}
                                 onClick={handlePasswordReset} 

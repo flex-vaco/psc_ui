@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import axios from 'axios'
 import Layout from "../components/Layout"
 import APP_CONSTANTS from "../appConstants";
- 
+import Multiselect from 'multiselect-react-dropdown';
  
 function UserCreate() {
     const [first_name, setFirstName] = useState('');
@@ -14,7 +14,7 @@ function UserCreate() {
     const [role, setRole] = useState('');
     const [roles, setRoles] = useState([]);
     const [clients, setClients] = useState([]);
-    const [client, setClient] = useState(null);
+    const [selectedClients, setSelectedClients] = useState([]);
 
     const [projects, setProjects] = useState([]);
     const [project, setProject] = useState(null);
@@ -125,16 +125,7 @@ function UserCreate() {
             }
         }
     }
-    const handleClientChange = (e) => {
-        if((role==APP_CONSTANTS.USER_ROLES.PRODUCER) && (e.target.value === "-select-")){
-            Swal.fire({
-                icon: 'warning',
-                title: 'Client Name is required!',
-                showConfirmButton: true
-            })
-        }
-        setClient(e.target.value)
-    }
+
     const handlEmployeeChange = (e) => {
         const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE, APP_CONSTANTS.USER_ROLES.MANAGER]
         if((empRequiredRoles.includes(role)) && (e.target.value === "-select-")){
@@ -164,16 +155,30 @@ function UserCreate() {
           }
         };
 
-        const data = {
+        let data = {
             first_name: first_name,
             last_name: last_name,
             email: email,
             role: role,
             password: password,
             emp_id: employee,
-            client_id: client,
             project_id: project
         }
+
+        const clientIds = selectedClients.map(s=>s.client_id);
+        if ((role === APP_CONSTANTS.USER_ROLES.PRODUCER) && (clientIds.length === 0)) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Please select a Client for Producer',
+                showConfirmButton: true
+            }).then((res) => {
+                setIsSaving(false);
+                return;
+            })
+        } else {
+            data.client_ids = clientIds;
+        }
+
         axios.post('/users/sign-up', data, config)
           .then(function (response) {
             Swal.fire({
@@ -197,6 +202,14 @@ function UserCreate() {
             })
             setIsSaving(false)
           });
+    }
+
+    const handleClientAdd = (e)=>{
+        setSelectedClients(e);
+    }
+
+    const handleClientRemove = (e)=>{
+        setSelectedClients(e);
     }
   
     return (
@@ -250,12 +263,14 @@ function UserCreate() {
                             {showClientSel ? 
                             (<div className="form-group">
                                 <label htmlFor="client">Client</label>
-                                <select name="client" id="client" className="form-control" onChange={handleClientChange} > 
-                                    <option value="-select-" > -- Select a Client -- </option>
-                                    {clients.map((cl) => {
-                                        return <option key={cl.client_id} value={cl.client_id}>{cl.name.toUpperCase()}</option>;
-                                    })}
-                                </select>
+                                <Multiselect
+                                    options={clients} 
+                                    onSelect={handleClientAdd} 
+                                    onRemove={handleClientRemove} 
+                                    showCheckbox={true}
+                                    displayValue="name" 
+                                    closeIcon="close"
+                                />
                             </div>) : ''}
                             {showProjectSel ? 
                             (<div className="form-group">
