@@ -919,5 +919,19 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   .card_height .card-img-top {
     max-height: 20vh !important;
     min-height: 20vh !important;
+  }
 }
+
+.dashboard_table::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+}
+
+.dashboard_table::-webkit-scrollbar-track {
+  background-color: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.dashboard_table::-webkit-scrollbar-thumb {
+  background-color: #f47b34ad;
+  outline: 1px solid #f47b34ad;
 }

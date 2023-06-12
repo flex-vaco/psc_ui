@@ -272,7 +272,7 @@ function EmpFilteredList() {
     <div className="col-xs-12 search_results col-sm-12 col-md-10 float-left col-12">
         <p className="pull-right visible-xs banner_background">
             <button type="button" className="btn btn-primary btn-xs" data-toggle="offcanvas"><i className="bi bi-sliders"></i></button>
-            <h3 className="banner_header">Find Your Required Talent</h3>
+            <h4 className="banner_header">Find Your Required Talent</h4>
         </p>
         <div className="col-xs-12 col-lg-12 mx-1">
             {empFilteredList && empFilteredList.map((empDetails, key)=>{

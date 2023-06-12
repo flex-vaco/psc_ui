@@ -88,7 +88,7 @@ function Home() {
                     <input className="form-control homepage_search_input" 
                         onChange={(event)=>{setSearchSkill(event.target.value)}}
                         type="text"
-                        placeholder="Java, Python, Netsuit etc..." aria-label="Search" 
+                        placeholder="Java, Python, Netsuite etc..." aria-label="Search" 
                     />
                     <button disabled={searchSkill.length < 3} className="btn btn-outline-success homepage_search_btn"  onClick={navigateToEmployeeFilter}>Search</button>
                 </form>

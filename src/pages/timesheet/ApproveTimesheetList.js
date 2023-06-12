@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from 'axios';
 import Layout from "../../components/Layout";
 import APP_CONSTANTS from "../../appConstants";
 import * as APP_FUNCTIONS from "../../lib/AppFunctions";
+import EmployeeProfileModal from '../../components/employee/EmployeeProfileModal'
 
 function ApproveTimesheetList() {
     const [managerEmail, setManagerEmail] = useState(JSON.parse(localStorage.getItem("user"))?.email);
@@ -11,7 +12,8 @@ function ApproveTimesheetList() {
     const [userIsProducer, setUserIsProducer] = useState(APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER); 
     const [empList, setEmpList] = useState([]);
     const [pageTitle, setPageTitle] = useState();
-    const navigate = useNavigate();
+    const [empModalDetails, setEmpModalDetails] = useState({})
+    const [modalIsOpen, setIsOpen] = useState(false);
 
     const fetchManagerEmployees = (managerEmail) => {
         axios
@@ -26,6 +28,16 @@ function ApproveTimesheetList() {
             console.log(error);
           });
       };
+    const openModal = (empId) => {
+      axios.get(`/employees/${empId}`)
+        .then((response) => {
+          setEmpModalDetails(response.data.employees[0])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setIsOpen(true);
+    }
     
       useEffect(() => {
         if(userIsApprover || userIsProducer) {
@@ -69,11 +81,11 @@ function ApproveTimesheetList() {
                             </Link>
                           </td>
                           <td>
-                            <Link
-                              to={`/clientShow/${empDetail.emp_id}`}
-                            >
-                              {empDetail.first_name} {empDetail.last_name}
-                            </Link>
+                              <a href="#"
+                               onClick={(e) => openModal(empDetail.emp_id)}
+                              >
+                                {empDetail.first_name} {empDetail.last_name}
+                              </a>
                           </td>
                           <td>
                             <Link
@@ -88,6 +100,13 @@ function ApproveTimesheetList() {
                     })}
                   </tbody>
                 </table>
+                <EmployeeProfileModal
+                modelstatus={modalIsOpen}
+                close={() => setIsOpen(false)}
+                employee={empModalDetails}
+                hideAddInListBtn={true}
+                hideHireBtn={true}
+              />
               </div>
             </div>
           </div>
