@@ -275,12 +275,11 @@ function EmpFilteredList() {
             <h4 className="banner_header">Find Your Required Talent</h4>
         </p>
         <div className="col-xs-12 col-lg-12 mx-1">
-            {empFilteredList && empFilteredList.map((empDetails, key)=>{
+            {(empFilteredList?.length > 0) ? empFilteredList.map((empDetails, key)=>{
                 return (
                     <EmployeeProfileCard availability={selectedAvailability} handleProfileClick={openModal} employee={empDetails} key={key}></EmployeeProfileCard>
                 )
-            
-                })
+                }) : <div className="d-flex justify-content-center"><h2><br/><br/><br/> Resources Not Found! </h2> </div>
             }                                            
         </div>
         <EmployeeProfileModal modelstatus={modalIsOpen} close={() => setIsOpen(false)} employee={empModalDetails}/>                            
