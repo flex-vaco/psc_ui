@@ -20,7 +20,7 @@ function UserCreate() {
     const [project, setProject] = useState(null);
 
     const [employees, setEmployees] = useState([]);
-    const [employee, setEmployee] = useState(null);
+    const [empId, setEmpId] = useState(null);
     const [email, setEmail] = useState('');
     const [isSaving, setIsSaving] = useState(false);
     const [formErr, setFormErr] = useState("");
@@ -43,12 +43,15 @@ function UserCreate() {
         if (pswd !== password) {
             setIsSaving(true);
             setFormErr("Passwords Do Not Match");
+        } else if (pswd.length < 8 || password.length < 8) {
+            setIsSaving(true);
+            setFormErr("Password length should be minimum 8 charaters");
         } else {
             setIsSaving(false);
             setFormErr("");
         }
-
     };
+
     const handleCancel = () => {
         navigate("/userList");
     }
@@ -92,6 +95,13 @@ function UserCreate() {
     const handleRoleChange = (e) => {
         const roleVal =  e.target.value;
         e.stopPropagation();
+
+        if(roleVal !== APP_CONSTANTS.USER_ROLES.EMPLOYEE){
+            setEmail('');
+            setFirstName('');
+            setLastName('');
+        }
+        
         if (roleVal === "-select-") {
             Swal.fire({
                 icon: 'warning',
@@ -127,7 +137,8 @@ function UserCreate() {
     }
 
     const handlEmployeeChange = (e) => {
-        const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE, APP_CONSTANTS.USER_ROLES.MANAGER]
+        const selectedEmpId = parseInt(e.target.value);
+        const empRequiredRoles = [APP_CONSTANTS.USER_ROLES.EMPLOYEE];
         if((empRequiredRoles.includes(role)) && (e.target.value === "-select-")){
             Swal.fire({
                 icon: 'warning',
@@ -135,7 +146,11 @@ function UserCreate() {
                 showConfirmButton: true
             })
         }
-        setEmployee(e.target.value)
+        setEmpId(selectedEmpId);
+        const selectedEmployee = employees.filter(e => e.emp_id === selectedEmpId);
+        setEmail(selectedEmployee[0].email);
+        setFirstName(selectedEmployee[0].first_name);
+        setLastName(selectedEmployee[0].last_name);
     }
     const handleProjectChange = (e) => {
         if(e.target.value === "-select-"){
@@ -161,7 +176,7 @@ function UserCreate() {
             email: email,
             role: role,
             password: password,
-            emp_id: employee,
+            emp_id: empId,
             project_id: project
         }
 
@@ -222,36 +237,6 @@ function UserCreate() {
                     <div className="card-body">
                         <form>
                             <div className="form-group">
-                                <label htmlFor="first_name">First Name</label>
-                                <input 
-                                    onChange={(event)=>{setFirstName(event.target.value)}}
-                                    value={first_name}
-                                    type="text"
-                                    className="form-control"
-                                    id="first_name"
-                                    name="first_name"/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="last_name">Last Name</label>
-                                <input 
-                                    onChange={(event)=>{setLastName(event.target.value)}}
-                                    value={last_name}
-                                    type="text"
-                                    className="form-control"
-                                    id="last_name"
-                                    name="last_name"/>
-                            </div>
-                            <div className="form-group">
-                                <label htmlFor="email">Email ID</label>
-                                <input 
-                                    onChange={(event)=>{setEmail(event.target.value)}}
-                                    value={email}
-                                    type="text"
-                                    className="form-control"
-                                    id="email"
-                                    name="email"/>
-                            </div>
-                            <div className="form-group">
                                 <label htmlFor="role">Role Name</label>
                                 <select name="role" id="role" className="form-control" onChange={handleRoleChange} > 
                                     <option value="-select-" > -- Select a Role -- </option>
@@ -292,6 +277,37 @@ function UserCreate() {
                                     })}
                                 </select>
                             </div>) : ''}
+                            <div className="form-group">
+                                <label htmlFor="first_name">First Name</label>
+                                <input 
+                                    onChange={(event)=>{setFirstName(event.target.value)}}
+                                    value={first_name}
+                                    type="text"
+                                    className="form-control"
+                                    id="first_name"
+                                    name="first_name"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="last_name">Last Name</label>
+                                <input 
+                                    onChange={(event)=>{setLastName(event.target.value)}}
+                                    value={last_name}
+                                    type="text"
+                                    className="form-control"
+                                    id="last_name"
+                                    name="last_name"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="email">Email ID</label>
+                                <input 
+                                    onChange={(event)=>{setEmail(event.target.value)}}
+                                    value={email}
+                                    type="text"
+                                    className="form-control"
+                                    id="email"
+                                    name="email"
+                                    readOnly={role === APP_CONSTANTS.USER_ROLES.EMPLOYEE}/>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="password">Password</label>
                                 <input 

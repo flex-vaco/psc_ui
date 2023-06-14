@@ -935,3 +935,9 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   background-color: #f47b34ad;
   outline: 1px solid #f47b34ad;
 }
+
+@media screen and (min-width: 1209px) and (max-width: 1440px){ 
+  .card.text-center.min_height {
+    min-height: 180px;
+ }
+ }

@@ -27,15 +27,19 @@ function ResetPassword() {
     };
 
     const handleSave = () => {
+        setIsSaving(true);
         if (password.length < 8) {
             Swal.fire({
                 icon: 'warning',
                 text: `Password Length should be minimum 8 characters.`,
                 showConfirmButton: true
-            })
-            return;
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setIsSaving(false);
+                    return;
+                }
+            });
         }
-        setIsSaving(true);
         axios.post(`/users/resetPassword/${user_id}`, {
             email: email,
             password: password,
@@ -47,7 +51,11 @@ function ResetPassword() {
                     title: `Password Reset successfull!`,
                     text: "Please Login with new password",
                     showConfirmButton: true
-                }).then(() => { navigate("/home") })
+                }).then((result) => { 
+                    if (result.isConfirmed) {
+                        navigate("/home");
+                    }
+                })
                 setIsSaving(false);
             })
             .catch(function (error) {

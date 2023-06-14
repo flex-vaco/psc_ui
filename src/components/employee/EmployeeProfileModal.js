@@ -1,6 +1,7 @@
 import React from "react";
 import Modal from 'react-modal';
 import * as Utils from "../../lib/Utils"
+import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 
 const EmployeeProfileModal = (props) => {
 
@@ -55,7 +56,7 @@ const EmployeeProfileModal = (props) => {
                 <div className="col-12 float-left mt-5">
                     <div className="col-12 col-lg-6 float-left">
                         <div className="col-12">
-                            <p><b className="text-muted">Email: </b>{props.employee.email}</p>
+                            <p hidden={APP_FUNCTIONS.userIsProducer()}><b className="text-muted">Email: </b>{props.employee.email}</p>
                             <p><b className="text-muted">Role: </b>{props.employee.role}</p>
                             <p><b className="text-muted">Experience: </b>{props.employee.total_work_experience_years} years</p>
                             <p><b className="text-muted">Rate/HR: </b>{props.employee.rate_per_hour} USD</p>

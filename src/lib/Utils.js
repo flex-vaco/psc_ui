@@ -59,10 +59,10 @@ export const getStartEndDatesCurrentMonth = () => {
 export const getDatesBetween = (stDt, enDt) => {
     let myDate = new Date(stDt);
     let dates = [myDate.toDateString()];
-    do {
+    while (myDate < new Date(enDt)) {
         const newDt = new Date(myDate.setDate(myDate.getDate() + 1));
         dates = [...dates, newDt.toDateString()];
-    } while (myDate < new Date(enDt));
+    } ;
     return (dates);
 }
 
@@ -113,3 +113,24 @@ export const getGreaterDate = (d1, d2) => {
     }
 };
   
+export const firstDateIsGreaterOrEqual = (d1, d2) => {
+    let date1 = new Date(d1).getTime();
+    let date2 = new Date(d2).getTime();
+  
+    if (date1 >= date2) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+export const firstDateIsLessOrEqual = (d1, d2) => {
+    let date1 = new Date(d1).getTime();
+    let date2 = new Date(d2).getTime();
+  
+    if (date1 <= date2) {
+        return true;
+    } else {
+        return false;
+    }
+};

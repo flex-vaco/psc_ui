@@ -122,11 +122,11 @@ const Timesheet = () => {
 
   const handleProjectChange = (e) => {
     e.preventDefault();
-    const selectedProject = origEmpAlloc.filter(ea=> ea.project_id == e.target.value);
-    setSelectedProjectId(selectedProject[0].project_id);
     if("-select-" === e.target.value) {
       setEmpAllocations(origEmpAlloc);
     } else {
+      const selectedProject = origEmpAlloc.filter(ea=> ea.project_id == e.target.value);
+      setSelectedProjectId(selectedProject[0].project_id);
       setEmpAllocations(selectedProject);
       setAllocStartDate(selectedProject[0].start_date.split("T")[0]);
       setAllocEndDate(selectedProject[0].end_date.split("T")[0]);
@@ -332,29 +332,6 @@ return (
               </button>
             </div>
             </form>
-            {/* <div className='form-group float-end mb-2'>
-              <button 
-                  onClick={(event)=>{handleDateChange(event)}} 
-                  type="submit"
-                  name="prevWeek"
-                  className="btn btn-outline-info me-2">
-                  <i class="bi bi-caret-left-fill"> </i>
-              </button>
-              <button 
-                  onClick={(event)=>{handleDateChange(event)}} 
-                  type="submit"
-                  name="curWeek"
-                  className="btn btn-outline-info me-2">
-                  Current
-              </button>
-              <button 
-                  onClick={(event)=>{handleDateChange(event)}} 
-                  type="submit"
-                  name="nextWeek"
-                  className="btn btn-outline-info me-2">
-                  <i class="bi bi-caret-right-fill"> </i>
-              </button>
-            </div> */}
 
         <table hidden={!empId} className="table table-bordered">
         <thead>
@@ -373,7 +350,7 @@ return (
                 </td>
                 <td>
                   {empAllocatations.map((ea) => {
-                   if ((dt == Utils.getGreaterDate(dt, ea.start_date)) && (dt != Utils.getGreaterDate(dt, ea.end_date))) {
+                   if (Utils.firstDateIsGreaterOrEqual(dt, ea.start_date) && Utils.firstDateIsLessOrEqual(dt, ea.end_date)) {
                       return (
                         <TimeEntryWidget
                           tsDate={Utils.formatDateYYYYMMDD(dt)}
