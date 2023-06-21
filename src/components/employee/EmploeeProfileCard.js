@@ -22,7 +22,7 @@ function EmployeeProfileCard(props) {
 
     useEffect(()=> {
         setDisplayStatus(availability >= props.availability);
-    },[props.availability])
+    },[availability])
 
     const fetchEmpAllocation = () => {
         axios.post(`/empPrjAloc/empPrjAlcToday`, {empId: props.employee.emp_id})

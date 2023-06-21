@@ -2,16 +2,25 @@ import React from "react";
 import Modal from 'react-modal';
 import * as Utils from "../../lib/Utils"
 import * as APP_FUNCTIONS from "../../lib/AppFunctions";
+import { useNavigate } from "react-router-dom"
 
 const EmployeeProfileModal = (props) => {
 
     const [modalIsOpen, setIsOpen] = React.useState(props.modalIsOpen);
     const [hideAddInListBtn, setHideAddInListBtn] = React.useState(props.hideAddInListBtn || false);
     const [hideHireBtn, setHideHireBtn] = React.useState(props.hideHireBtn || false);
+    const navigate = useNavigate();
 
-
-    function closeModal() {
+    const closeModal = () => {
         setIsOpen(false);
+    }
+
+    const handleHireClick = () => {
+        navigate(`/hireResource`, {
+            state: {
+                employee: props.employee,
+            },
+          });
     }
 
     return (
@@ -26,17 +35,18 @@ const EmployeeProfileModal = (props) => {
                         <button onClick={props.close} className="btn btn-primary btn-xs exitarrow"><i className="bi bi-box-arrow-left"></i></button>
                     </div>
                     <div className="col-9 col-lg-4 float-left">
-                        <div className="col-5 col-lg-4 float-left" hidden={hideAddInListBtn}>
-                            <button className="btn btn-primary btn-xs add_in_list">Add In List</button>
+                        <div className="col-3 col-lg-4 float-right" hidden={hideHireBtn}>
+                            <button
+                            className="btn btn-primary btn-xs hire"
+                            onClick={handleHireClick}
+                            >
+                             Hire
+                            </button>
                         </div>
-                        <div className="col-3 col-lg-4 float-left">
+                        <div className="col-3 col-lg-4 float-right">
                             <a href={(props.employee.resume) ?
                                 `${process.env.REACT_APP_API_BASE_URL}/uploads/resume/${props.employee.resume}` : null}
                                 target="_blank" className="btn btn-primary btn-xs add_in_list">Resume</a>
-                        </div>
-
-                        <div className="col-3 col-lg-4 float-right" hidden={hideHireBtn}>
-                            <button className="btn btn-primary btn-xs hire">Hire</button>
                         </div>
                     </div>
                 </div>
@@ -64,7 +74,7 @@ const EmployeeProfileModal = (props) => {
                             <p><b className="text-muted">Home Location: </b>{props.employee.home_location_city}</p>
                             <p><b className="text-muted">Office Location: </b>{props.employee.office_location_city}</p>
                             <p><b className="text-muted">Manager Name: </b>{props.employee.manager_name}</p>
-                            <p><b className="text-muted">Manager Email: </b>{props.employee.manager_email}</p>
+                            <p><b className="text-muted">Manager Email: </b> <a href={`mailto:${props.employee.manager_email}`}>{props.employee.manager_email}</a></p>
                             <p><b className="text-muted">Is working On-site? </b>{(props.employee.is_onsite) ? "YES" : "NO"}</p>
                         </div>
                         <div className="col-12 education_details">
