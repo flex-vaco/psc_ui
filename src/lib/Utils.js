@@ -1,6 +1,9 @@
+import * as FileSaver from "file-saver";
+import * as XLSX from "xlsx";
+import Swal from "sweetalert2";
 
 export const formatDateYYYYMMDD = (givenDate) => {
-    var myDate = new Date(givenDate);
+    let myDate = new Date(givenDate);
     let dd = myDate.getDate();
     dd = dd < 10 ? "0" + dd.toString() : dd.toString();
     let mm = myDate.getMonth() + 1; // add 1 as month start from 0
@@ -9,24 +12,21 @@ export const formatDateYYYYMMDD = (givenDate) => {
     return `${yyyy}-${mm}-${dd}`;
 };
 export const formatDateDDMM = (givenDate) => {
-    var myDate = new Date(givenDate);
+    let myDate = new Date(givenDate);
     let dd = myDate.getDate();
     dd = dd < 10 ? "0" + dd.toString() : dd.toString();
     let mm = myDate.getMonth() + 1; // add 1 as month start from 0
     mm = mm < 10 ? "0" + mm.toString() : mm.toString();
-    const yyyy = myDate.getFullYear();
     return `${dd}-${mm}`;
 };
 export const formatDateDDMMNAME = (givenDate) => {
-    var myDate = new Date(givenDate);
+    let myDate = new Date(givenDate);
     let dd = myDate.getDate();
     dd = dd < 10 ? "0" + dd.toString() : dd.toString();
     let month =  myDate.toLocaleString('default', { month: 'short' });
     let mm = month.toLocaleString('en-US', {
         month: 'long',
       });
-    //mm = mm < 10 ? "0" + mm.toString() : mm.toString();
-    const yyyy = myDate.getFullYear();
     return `${dd} ${mm}`;
 };
 
@@ -112,6 +112,34 @@ export const getGreaterDate = (d1, d2) => {
         return null
     }
 };
+
+export const exportTableToExcel = (tableID, filename = '') => {
+    let downloadLink;
+    let fileType = 'application/vnd.ms-excel';
+    let tableElement = document.getElementById(tableID);
+    let tableHTML = encodeURIComponent(tableElement.outerHTML);
+
+    // Specify file name
+    filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+    // Create download link element
+    downloadLink = document.createElement("a");
+    document.body.appendChild(downloadLink);
+
+    if (navigator.msSaveOrOpenBlob) {
+        let blob = new Blob(['\ufeff', tableHTML], {
+            type: fileType
+        });
+        navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        // Create a link to the file
+        downloadLink.href = 'data:' + fileType + ', ' + tableHTML;
+        // Setting the file name
+        downloadLink.download = filename;
+        //triggering the function
+        downloadLink.click();
+    }
+};
   
 export const firstDateIsGreaterOrEqual = (d1, d2) => {
     let date1 = new Date(d1).getTime();
@@ -134,3 +162,87 @@ export const firstDateIsLessOrEqual = (d1, d2) => {
         return false;
     }
 };
+
+const saveWorksheetToExcel = (worksheet, fileName) => {
+    const fileType =
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+    const fileExtension = ".xlsx";
+    const workbook = { Sheets: { data: worksheet }, SheetNames: ["data"] };
+    //XLSX.utils.book_append_sheet(workbook, worksheet, "Dates"); // Add worksheet to workbook
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const data = new Blob([excelBuffer], { type: fileType });
+    FileSaver.saveAs(data, fileName + fileExtension);
+}
+
+export const exportDataToExcel = ({ apiData, fileName }) => {
+
+    if (apiData.length === 0) {
+        Swal.fire({
+            icon: "error",
+            title: "Data Not found!",
+            confirmButtonColor: "#0e4372",
+            showConfirmButton: true,
+        }).then((res) => {
+            if (res.isConfirmed) {
+                return;
+            }
+        });
+    } else {
+        const ws = XLSX.utils.json_to_sheet(apiData);
+        saveWorksheetToExcel(ws, fileName);
+    }
+};
+
+const deleteColumnWithHeader = ({tableId, colHeadsToDelete=[]}) => {
+    //  get the HTML table
+    const table = document.getElementById(tableId);
+    // get header row
+    const headerRow = table.getElementsByTagName('tr')[0];
+    // get headers
+    const headers = headerRow.getElementsByTagName('th');
+
+    colHeadsToDelete.forEach((headerName) => {
+        let columnIndex = -1;
+        // find column index
+        for (let i = 0; i < headers.length; i++) {
+            if (headers[i].innerHTML === headerName) {
+                columnIndex = i;
+                break;
+            }
+        }
+        // use column index to delete cells
+        if (columnIndex >= 0) {
+            var rowCount = table.rows.length;
+            for (var i = 0; i < rowCount; i++) {
+                table.rows[i].deleteCell(columnIndex);
+            }
+        }
+    });
+}
+
+export const exportHTMLTableToExcel = async (tableId, fileName, colsToIgnore=["Action"]) => {
+    const tableElement = document.getElementById(tableId);
+
+    if (!tableElement) {
+        Swal.fire({
+            icon: "error",
+            title: `HTML Table Not found with id: "${tableId}"!`,
+            confirmButtonColor: "#0e4372",
+            showConfirmButton: true,
+        }).then((res) => {
+            if (res.isConfirmed) {
+                return;
+            }
+        });
+    } else {
+        deleteColumnWithHeader({tableId, colHeadsToDelete: colsToIgnore}); //we don't need action column in excel
+        const worksheet = XLSX.utils.table_to_sheet(tableElement);
+        await saveWorksheetToExcel(worksheet, fileName);
+        window.location.reload(true); //reload the page to get the action column back
+    }
+};
+
+export const isValidPhoneNum = (phoneNum) => {
+    const phoneNumRegex = /^[0-9]{10}$/;
+    return phoneNumRegex.test(phoneNum);
+}

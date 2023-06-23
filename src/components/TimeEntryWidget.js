@@ -11,6 +11,8 @@ function TimeEntryWidget(props) {
   const [taskPTO, setTaskPTO] = useState(0);
 
     const [timesheetData, setTimesheetData] = useState([]);
+    const [weekEndBGColor] = useState(props.isWeekend ? "bg-light bg-gradient" : "");
+    const [labelFont] = useState(props.isWeekend ? "text-muted" : "fw-bold");
 
     const [tempTimesheetId, setTempTimesheetId] = useState(`temp_${props.empAlloc.project_id}_${props.tsDate}`)
     const fetchTimesheets = () => {
@@ -101,7 +103,7 @@ function TimeEntryWidget(props) {
       <form id={tempTimesheetId} className="row">
         <div className="form-group col-md-8 mb-2">
           <label htmlFor="task_name">
-            <span className="fw-bold"> {props.empAlloc.project_name} </span>
+            <span className={`${labelFont}`}> {props.empAlloc.project_name} </span>
             <span className={`badge ${badgeColor(timesheetData?.timesheet_status)}`}>{timesheetData?.timesheet_status}</span>
           </label>
           <input
@@ -112,16 +114,16 @@ function TimeEntryWidget(props) {
             value={taskName}
             placeholder="Enter Task"
             type="text"
-            className="form-control"
+            className={`form-control ${weekEndBGColor}`}
             id={`task_name_${tempTimesheetId}`}
             name="task_name"
             readOnly={readOnlyAccess(timesheetData?.timesheet_status)}
           />
         </div>
         <div className="form-group col-md-1 mb-2">
-          <label htmlFor="hours" className="fw-bold">
+          <label htmlFor="hours" className={`${labelFont}`}>
             Project
-            <span className="fw-bold text-muted">
+            <span>
               {" "}
               {` (${props.empAlloc.hours_per_day})`}
             </span>
@@ -134,7 +136,7 @@ function TimeEntryWidget(props) {
             value={taskHours}
             type="number"
             placeholder="0"
-            className="form-control"
+            className={`form-control ${weekEndBGColor}`}
             min={0}
             max={props.empAlloc.hours_per_day}
             id={`task_hrs_${tempTimesheetId}`}
@@ -143,7 +145,7 @@ function TimeEntryWidget(props) {
           />
         </div>
         <div className="form-group col-md-1 mb-2">
-          <label htmlFor="overtime" className="fw-bold">
+          <label htmlFor="overtime" className={`${labelFont}`}>
             Overtime
           </label>
           <input
@@ -154,7 +156,7 @@ function TimeEntryWidget(props) {
             value={taskOvertime}
             type="number"
             placeholder="0"
-            className="form-control"
+            className={`form-control ${weekEndBGColor}`}
             min={0}
             max={8}
             id={`task_ot_${tempTimesheetId}`}
@@ -163,7 +165,7 @@ function TimeEntryWidget(props) {
           />
         </div>
         <div className="form-group col-md-1 mb-2">
-          <label htmlFor="benchHrs" className="fw-bold">
+          <label htmlFor="benchHrs" className={`${labelFont}`}>
             Bench
           </label>
           <input
@@ -174,7 +176,7 @@ function TimeEntryWidget(props) {
             value={taskBenchHrs}
             type="number"
             placeholder="0"
-            className="form-control"
+            className={`form-control ${weekEndBGColor}`}
             min={0}
             max={8}
             id={`task_bench_${tempTimesheetId}`}
@@ -183,7 +185,7 @@ function TimeEntryWidget(props) {
           />
         </div>
         <div className="form-group col-md-1 mb-2">
-          <label htmlFor="PTO" className="fw-bold">
+          <label htmlFor="PTO" className={`${labelFont}`}>
             Time Off
           </label>
           <input
@@ -194,7 +196,7 @@ function TimeEntryWidget(props) {
             value={taskPTO}
             type="number"
             placeholder="0"
-            className="form-control"
+            className={`form-control ${weekEndBGColor}`}
             min={0}
             max={8}
             id={`task_pto_${tempTimesheetId}`}

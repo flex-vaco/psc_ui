@@ -20,7 +20,6 @@ const Timesheet = () => {
     const [origEmpAlloc, setOrigEmpAlloc] = useState([]);
     const [proempList, setProEmpList] = useState([]);
     const [selectedProjectId, setSelectedProjectId] = useState('');
-    // const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri"];
     const weekEnd = ["Sat", "Sun"];
     const {monthStartDate, monthEndDate } = Utils.getStartEndDatesCurrentMonth();
     const {weekStartDate, weekEndDate} = Utils.getStartEndDatesCurrentWeek();
@@ -28,7 +27,6 @@ const Timesheet = () => {
     const [dispEndDate, setDispEndDate] = useState(weekEndDate);
     const [allocStartDate, setAllocStartDate] = useState(weekStartDate);
     const [allocEndDate, setAllocEndDate] = useState(weekEndDate);
-
     const [displayDates, setDisplayDates] = useState(Utils.getDatesBetween(weekStartDate, weekEndDate));
 
     const handleDateChange = (e) => {
@@ -122,12 +120,13 @@ const Timesheet = () => {
 
   const handleProjectChange = (e) => {
     e.preventDefault();
-    if("-select-" === e.target.value) {
+    if ("-select-" === e.target.value) {
       setEmpAllocations(origEmpAlloc);
     } else {
       const selectedProject = origEmpAlloc.filter(ea=> ea.project_id == e.target.value);
       setSelectedProjectId(selectedProject[0].project_id);
       setEmpAllocations(selectedProject);
+      console.log("Sele Pro", selectedProject);
       setAllocStartDate(selectedProject[0].start_date.split("T")[0]);
       setAllocEndDate(selectedProject[0].end_date.split("T")[0]);
     }
@@ -259,79 +258,125 @@ const Timesheet = () => {
         });
     };
 
-    
+  const handleExcelExport = async () => {
+    Swal.showLoading();
+    await axios
+      .post(`/timesheets/for_export`, {
+        emp_id: empId,
+        project_id: selectedProjectId,
+        start_date: Utils.formatDateYYYYMMDD(dispStartDate),
+        end_date: Utils.formatDateYYYYMMDD(dispEndDate)
+      })
+      .then(async (response) => {
+        if (response.data?.timesheets.length === 0) {
+          const { value: isConfirmed } = await Swal.fire({
+            icon: "warning",
+            title: "Data Not found !",
+            text: "No Timesheets for the selected Employee/Project and Date-range.",
+            confirmButtonColor: "#0e4372",
+            showConfirmButton: true
+          });
+          if (isConfirmed) {
+            return;
+          }
+        } else {
+          let exportFileName = 'Timesheet';
+          if (APP_FUNCTIONS.userIsEmployee()) {
+            exportFileName += ` ${APP_FUNCTIONS.activeUser.first_name}_${APP_FUNCTIONS.activeUser.last_name}`;
+          } else if (empList?.length > 0){
+            const selectedEmp = empList.filter((emp) => emp.emp_id === parseInt(empId));
+            exportFileName += ` ${selectedEmp[0].first_name}_${selectedEmp[0].last_name}`
+          }
+          Utils.exportDataToExcel({apiData: response.data?.timesheets, fileName: exportFileName});
+          Swal.hideLoading();
+          document.querySelector(".swal2-confirm.swal2-styled").click();
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
 return (
     <Layout>
     <div className="container">
         <h4 className='text-center'>Time Sheet</h4>
-          <form> 
-            <div hidden={!userIsApprover} className='form-group float-start mb-2 me-2'>
-              <label htmlFor="emp_id">Employee</label>
-              <select name="emp_id" id="emp_id" className="form-control" onChange={(e)=> {handleEmpChange(e)}}> 
-                  <option value="-select-"> -- Select an Employee -- </option>
-                  {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
-              </select>
-            </div>
-            <div hidden={APP_FUNCTIONS.userIsProducer()} className='form-group float-start mb-2 me-2'>
-              <label htmlFor="project_id">Project</label>
-              <select name="project_id" id="project_id" className="form-control" onChange={(e)=> {handleProjectChange(e)}}> 
-                  <option value="-select-"> All </option>
-                  {prjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
-              </select>
-            </div>
-            
+            <form> 
+              <div hidden={!userIsApprover} className='form-group float-start mb-2 me-2'>
+                <label htmlFor="emp_id">Employee</label>
+                <select name="emp_id" id="emp_id" className="form-control" onChange={(e)=> {handleEmpChange(e)}}> 
+                    <option value="-select-"> -- Select an Employee -- </option>
+                    {empList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
+                </select>
+              </div>
+              <div hidden={APP_FUNCTIONS.userIsProducer()} className='form-group float-start mb-2 me-2'>
+                <label htmlFor="project_id">Project</label>
+                <select name="project_id" id="project_id" className="form-control" onChange={(e)=> {handleProjectChange(e)}}> 
+                    <option value="-select-"> All </option>
+                    {prjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
+                </select>
+              </div>
+              
 
-            <div hidden={!userIsProducer}>
-            <div className='form-group float-start mb-2 me-2'>
-              <label htmlFor="project_id">Project</label>
-              <select name="producer_project_id" id="project_id" className="form-control" onChange={(e)=> {handleProducerProjectChange(e)}}> 
-                  <option value="-select-"> All </option>
-                  {proprjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
-              </select>
-            </div>
-            <div className='form-group float-start mb-2 me-2'>
-              <label htmlFor="emp_id">Employee</label>
-              <select name="pro_emp_id" id="pro_emp_id" className="form-control" onChange={(e)=> {handleProEmpChange(e)}}> 
-                  <option value="-select-"> -- Select an Employee -- </option>
-                  {proempList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
-              </select>
-            </div>
-            </div> 
-            <div className='form-group float-start mb-2 me-2'>
-              <label htmlFor="dispStartDate">Start Date</label>
-              <input 
-              className="form-control"
-              type='date'
-              name='dispStartDate'
-              id='dispStartDate'
-              max={allocEndDate}
-              min={allocStartDate}
-              onChange={e=>setDispStartDate(e.target.valueAsDate)}
-              />
-            </div>
-            <div className='form-group float-start mb-2 me-2'>
-              <label htmlFor="dispEndDate">End Date</label>
-              <input 
-              className="form-control"
-              type='date'
-              name='dispEndDate'
-              id='dispEndDate'
-              max={allocEndDate}
-              min={allocStartDate}
-              onChange={e=>setDispEndDate(e.target.valueAsDate)}
-              />
-            </div>
-            <div className='form-group float-start mb-2 me-2'>
-            <label htmlFor="get"> </label>
-              <button 
-                  onClick={(event)=>{handleDateChange(event)}} 
-                  type="submit"
-                  name="get"
-                  className="form-control btn btn-outline-info me-2">
-                  Go
-              </button>
-            </div>
+              <div hidden={!userIsProducer}>
+              <div className='form-group float-start mb-2 me-2'>
+                <label htmlFor="project_id">Project</label>
+                <select name="producer_project_id" id="project_id" className="form-control" onChange={(e)=> {handleProducerProjectChange(e)}}> 
+                    <option value="-select-"> All </option>
+                    {proprjList.map((prj) => <option value={prj.project_id}>{prj.project_name}</option>)}
+                </select>
+              </div>
+              <div className='form-group float-start mb-2 me-2'>
+                <label htmlFor="emp_id">Employee</label>
+                <select name="pro_emp_id" id="pro_emp_id" className="form-control" onChange={(e)=> {handleProEmpChange(e)}}> 
+                    <option value="-select-"> -- Select an Employee -- </option>
+                    {proempList.map((emp) => <option value={emp.emp_id}>{emp.first_name}, {emp.last_name}</option>)}
+                </select>
+              </div>
+              </div> 
+              <div className='form-group float-start mb-2 me-2'>
+                <label htmlFor="dispStartDate">Start Date</label>
+                <input 
+                className="form-control"
+                type='date'
+                name='dispStartDate'
+                id='dispStartDate'
+                max={allocEndDate}
+                min={allocStartDate}
+                onChange={e=>setDispStartDate(e.target.valueAsDate)}
+                />
+              </div>
+              <div className='form-group float-start mb-2 me-2'>
+                <label htmlFor="dispEndDate">End Date</label>
+                <input 
+                className="form-control"
+                type='date'
+                name='dispEndDate'
+                id='dispEndDate'
+                max={allocEndDate}
+                min={allocStartDate}
+                onChange={e=>setDispEndDate(e.target.valueAsDate)}
+                />
+              </div>
+              <div className='form-group float-start mb-2 me-2'>
+              <label htmlFor="get"> </label>
+                <button 
+                    onClick={(event)=>{handleDateChange(event)}} 
+                    type="submit"
+                    name="get"
+                    className="form-control btn btn-outline-info me-2">
+                    Go
+                </button>
+              </div>
             </form>
+            <div className='form-group float-end mb-2 me-2'>
+                <label htmlFor="export">Export </label>
+                <button
+                  onClick={(e) => handleExcelExport(e)}
+                  className="form-control btn btn-outline-info me-2">
+                  XLS <i className="bi bi-filetype-xls"></i>
+                </button>
+            </div>
 
         <table hidden={!empId} className="table table-bordered">
         <thead>
@@ -356,6 +401,7 @@ return (
                           tsDate={Utils.formatDateYYYYMMDD(dt)}
                           empAlloc={ea}
                           tsData={appendTimesheetData}
+                          isWeekend={isWeekend}
                         />
                       );
                    }

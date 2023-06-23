@@ -102,12 +102,25 @@ function ProjectList() {
     window.location.reload(true);
   };
 
+  const handleExcelExport = () => {
+    Utils.exportHTMLTableToExcel('projectListTable', 'Project List', ["Action"])
+  };
+
   const searchKeysToIgnore = ["project_id", "client_id","clientDetails"];
 
     return (
       <Layout>
         <div className="container-fluid">
           <div className="card w-auto">
+          <div className="text-align-left mt-2 mb-2 ms-3">
+              <button
+                type="button"
+                onClick={handleExcelExport}
+                className="btn btn-sm btn-outline-info float-start"
+              >
+                EXCEL <i className="bi bi-filetype-xls"></i>
+              </button>
+            </div>
             <div className="card-header">
               <div className="row">
               <div className="col input-group">
@@ -138,7 +151,7 @@ function ProjectList() {
               </div>
             </div>
             <div className="card-body table-responsive">
-              <table className="table table-hover">
+              <table className="table table-hover" id='projectListTable'>
                 <thead className="bg-light">
                   <tr>
                     <th hidden={hasReadOnlyAccess}>Action</th>
