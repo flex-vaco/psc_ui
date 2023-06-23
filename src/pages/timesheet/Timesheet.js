@@ -285,7 +285,7 @@ const Timesheet = () => {
             exportFileName += ` ${APP_FUNCTIONS.activeUser.first_name}_${APP_FUNCTIONS.activeUser.last_name}`;
           } else if (empList?.length > 0){
             const selectedEmp = empList.filter((emp) => emp.emp_id === parseInt(empId));
-            exportFileName += ` ${selectedEmp[0].first_name}_${selectedEmp[0].last_name}`
+            exportFileName += ` ${selectedEmp[0].first_name}_${selectedEmp[0].last_name}`;
           }
           Utils.exportDataToExcel({apiData: response.data?.timesheets, fileName: exportFileName});
           Swal.hideLoading();
