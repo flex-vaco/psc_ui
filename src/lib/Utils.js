@@ -246,3 +246,8 @@ export const isValidPhoneNum = (phoneNum) => {
     const phoneNumRegex = /^[0-9]{10}$/;
     return phoneNumRegex.test(phoneNum);
 }
+
+export const isWeekendDate = (givenDate) => {
+    const dayOfWeek = givenDate.getDay();
+    return dayOfWeek === 0 || dayOfWeek === 6;
+  };
