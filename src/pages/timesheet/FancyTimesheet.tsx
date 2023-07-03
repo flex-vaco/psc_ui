@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import * as Utils from "../../lib/Utils";
-import Layout from "../../components/Layout";
 import APP_CONSTANTS from "../../appConstants";
 import * as APP_FUNCTIONS from "../../lib/AppFunctions";
 import "./FancyTimesheet.css";
@@ -11,6 +10,7 @@ import { TimesheetEntry } from "../../types/TimesheetEntry";
 import { Nullable } from "../../types/Nullable";
 import { User } from "../../types/User";
 import { EmployeeProject } from "../../types/EmployeeProject";
+import TaskEffort from "../../components/TaskEffort";
 
 const FancyTimesheet = () => {
   const userAsString: string = localStorage.getItem("user")?.toString() || "";
@@ -18,24 +18,66 @@ const FancyTimesheet = () => {
   const [employeeId, setEmployeeId] = useState<Nullable<number>>(
     APP_FUNCTIONS.userIsEmployee() ? user?.emp_id : null
   );
-  const [employeeProjects, setEmployeeProjects] = useState<
-    Array<EmployeeProject>
-  >([]);
   const [timesheetEntries, setTimesheetEntries] = useState<
     Array<TimesheetEntries>
   >([]);
-
-  const [entry, setTaskName] = useState("");
-
-  useEffect(() => {
-    fetchEmployeeProjects(employeeId);
-  }, [employeeId]);
+  const [showWeekend, setShowWeekend] = useState<boolean>(false);
+  const [startDate, setStartDate] = useState<string>("2023-04-01");
+  const [endDate, setEndDate] = useState<string>("2023-05-30");
 
   useEffect(() => {
     fetchTimesheets();
-  }, [employeeId, employeeProjects]); //TODO: trigger when employee projects or selected date changets
+  }, [startDate, endDate, employeeId]);
 
-  //To fetch the employee-projects relationship data
+  function calculateTotalHours(timesheetData: any): number {
+    return isNaN(timesheetData?.bench_hours)
+      ? 0
+      : Number(timesheetData?.bench_hours) +
+          (isNaN(timesheetData?.time_off)
+            ? 0
+            : Number(timesheetData?.time_off) +
+              (isNaN(timesheetData?.overtime)
+                ? 0
+                : Number(timesheetData?.overtime) +
+                  (isNaN(timesheetData?.hours_per_day)
+                    ? 0
+                    : Number(timesheetData?.hours_per_day))));
+  }
+
+  const loadInitialTimesheetEntries = (
+    showWeekend: boolean
+  ): TimesheetEntries[] => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const dates: Date[] = [];
+
+    // Iterate over each day between start and end dates
+    for (let date = start; date <= end; date.setDate(date.getDate() + 1)) {
+      // Check if the current date is a weekend
+      if (showWeekend || !Utils.isWeekendDate(date)) {
+        dates.push(new Date(date));
+      }
+    }
+
+    // Initialize timesheetEntries state with the array of dates
+    const initialEntries: TimesheetEntries[] = dates.map((date) => ({
+      date,
+      entry: [],
+    }));
+
+    return initialEntries;
+  };
+
+  /*    
+  const [employeeProjects, setEmployeeProjects] = useState<
+    Array<EmployeeProject>
+  >([]);
+  
+  useEffect(() => {
+    fetchEmployeeProjects(employeeId);
+  }, [employeeId]);*/
+
+  /*//To fetch the employee-projects relationship data
   const fetchEmployeeProjects = (empId: Nullable<number>) => {
     axios
       .get(`/empPrjAloc/empallocation`, { params: { emp_id: empId } })
@@ -64,100 +106,100 @@ const FancyTimesheet = () => {
       .catch(function (error) {
         console.log(error);
       });
-  };
+  };*/
 
-  // To fetch the timesheet data for the 1.employee, 2.project, 3.given date
   const fetchTimesheets = () => {
-    setTimesheetEntries([]);
-    const givenDate: Date = new Date("2023-05-15");
-    employeeProjects.map((empProjects) => {
-      axios
-        .post(`/timesheets/by_allocation`, {
-          givenDate: Utils.formatDateYYYYMMDD(givenDate),
-          projectId: empProjects.projectDetails?.projectId,
-          empId: empProjects.employeeId,
-        })
-        .then(function (response) {
-          const timesheetEntryArray: Array<TimesheetEntry> = [
-            {
-              timesheetId:
-                response.data?.timesheetsByAllocation[0]?.timesheet_id,
-              timesheetDate:
-                response.data?.timesheetsByAllocation[0]?.timesheet_date,
-              managerEmail:
-                response.data?.timesheetsByAllocation[0]?.manager_email,
-              benchHours: response.data?.timesheetsByAllocation[0]?.bench_hours,
-              timeOffHours: response.data?.timesheetsByAllocation[0]?.time_off,
-              overTimeHours: response.data?.timesheetsByAllocation[0]?.overtime,
-              projectHours:
-                response.data?.timesheetsByAllocation[0]?.hours_per_day,
-              taskDescription: response.data?.timesheetsByAllocation[0]?.task,
-              status:
-                response.data?.timesheetsByAllocation[0]?.timesheet_status,
-              comments: response.data?.timesheetsByAllocation[0]?.comments,
-              createdBy: response.data?.timesheetsByAllocation[0]?.created_by,
-              createdDate: response.data?.timesheetsByAllocation[0]?.created_at,
-              updatedBy: response.data?.timesheetsByAllocation[0]?.updated_by,
-              updatedDate: response.data?.timesheetsByAllocation[0]?.updated_at,
-              totalHours:
-                response.data?.timesheetsByAllocation[0]?.bench_hours +
-                response.data?.timesheetsByAllocation[0]?.time_off +
-                response.data?.timesheetsByAllocation[0]?.overtime +
-                response.data?.timesheetsByAllocation[0]?.hours_per_day,
-              isWeekend: Utils.isWeekendDate(givenDate),
-              employeeProject: {
-                employeeProjectAllocationId:
-                  response.data?.timesheetsByAllocation[0]?.emp_proj_aloc_id,
-                allocationHoursPerDay:
-                  response.data?.timesheetsByAllocation[0]
-                    ?.allocation_hrs_per_day,
-              },
-              projectDetails: {
-                projectId: response.data?.timesheetsByAllocation[0]?.project_id,
-                projectName:
-                  response.data?.timesheetsByAllocation[0]?.project_name,
-                location:
-                  response.data?.timesheetsByAllocation[0]?.project_location,
-              },
-            } as TimesheetEntry,
-          ];
+    axios
+      .post(`/timesheets/entries_by_dates`, {
+        startDate: Utils.formatDateYYYYMMDD(new Date(startDate)),
+        endDate: Utils.formatDateYYYYMMDD(new Date(endDate)),
+        empId: employeeId,
+      })
+      .then((response) => {
+        const updatedEntries: Array<TimesheetEntries> =
+          loadInitialTimesheetEntries(showWeekend);
 
-          appendTimesheetEntries(givenDate, timesheetEntryArray);
-        })
-        .catch(function (error) {
-          console.log(error);
+        response.data.timesheetsByAllocation.forEach((timesheetData: any) => {
+          const totalHours = calculateTotalHours(timesheetData);
+          const timesheetEntry: TimesheetEntry = {
+            timesheetId: timesheetData?.timesheet_id,
+            employeeId: timesheetData?.emp_id,
+            timesheetDate: timesheetData?.timesheet_date,
+            managerEmail: timesheetData?.manager_email,
+            benchHours: timesheetData?.bench_hours,
+            timeOffHours: timesheetData?.time_off,
+            overTimeHours: timesheetData?.overtime,
+            projectHours: timesheetData?.hours_per_day,
+            taskDescription: timesheetData?.task,
+            status: timesheetData?.timesheet_status,
+            comments: timesheetData?.comments,
+            createdBy: timesheetData?.created_by,
+            createdDate: timesheetData?.created_at,
+            updatedBy: timesheetData?.updated_by,
+            updatedDate: timesheetData?.updated_at,
+            totalHours: totalHours,
+            isWeekend: Utils.isWeekendDate(timesheetData?.timesheet_date),
+            employeeProject: {
+              employeeProjectAllocationId: timesheetData?.emp_proj_aloc_id,
+              allocationHoursPerDay: timesheetData?.allocation_hrs_per_day,
+            },
+            projectDetails: {
+              projectId: timesheetData?.project_id,
+              projectName: timesheetData?.project_name,
+              location: timesheetData?.project_location,
+            },
+          } as TimesheetEntry;
+
+          let dateExists = false;
+          updatedEntries.forEach((obj) => {
+            const objDate = new Date(obj.date);
+            const givenDate = new Date(timesheetData?.timesheet_date);
+
+            const isSameDate =
+              objDate.getFullYear() === givenDate.getFullYear() &&
+              objDate.getMonth() === givenDate.getMonth() &&
+              objDate.getDate() === givenDate.getDate();
+
+            if (isSameDate) {
+              dateExists = true;
+              obj.entry.push(timesheetEntry);
+            }
+          });
+
+          if (!dateExists) {
+            updatedEntries.push({
+              date: timesheetData?.timesheet_date,
+              entry: [timesheetEntry],
+            });
+          }
         });
-    });
+
+        // Calculate totalHoursThisDay for each entry
+        updatedEntries.forEach((entry) => {
+          entry.totalHoursThisDay = calculateTotalHoursThisDay(entry.entry);
+        });
+
+        setTimesheetEntries(updatedEntries);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
-  const appendTimesheetEntries = (
-    givenDate: Date,
-    newItem: TimesheetEntry[]
-  ) => {
-    let dateExists = false;
-
-    const updatedEntries: TimesheetEntries[] = timesheetEntries.map((obj) => {
-      if (obj.date === givenDate) {
-        dateExists = true;
-        return {
-          ...obj,
-          entry: [...obj.entry, ...newItem],
-        };
-      }
-      return obj;
-    });
-
-    if (!dateExists) {
-      updatedEntries.push({ date: givenDate, entry: newItem });
-    }
-
-    setTimesheetEntries(updatedEntries);
+  const calculateTotalHoursThisDay = (entry: TimesheetEntry[]): number => {
+    return entry.reduce((total, item) => (total += item.totalHours || 0), 0);
   };
 
   return (
-    <div>
-      <h1>hai from fancy timesheet..</h1>
-    </div>
+    <React.Fragment>
+      {timesheetEntries.map((timesheetEntry) => (
+        <TaskEffort
+          key={timesheetEntry.date.toString()} // Remember to provide a unique key for each mapped element
+          date={timesheetEntry.date}
+          entry={timesheetEntry.entry}
+        />
+      ))}
+    </React.Fragment>
   );
 };
 

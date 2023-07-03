@@ -248,6 +248,6 @@ export const isValidPhoneNum = (phoneNum) => {
 }
 
 export const isWeekendDate = (givenDate) => {
-    const dayOfWeek = givenDate.getDay();
+    const dayOfWeek = new Date(givenDate).getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };

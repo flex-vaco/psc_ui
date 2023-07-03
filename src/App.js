@@ -37,6 +37,8 @@ import ClientShow from "./pages/clients/ClientShow"
 import InteliChat from "./pages/aiChat/InteliChat";
 import ResetPassword from "./pages/ResetPassword";
 import TimeSheet from './pages/timesheet/Timesheet';
+import FancyTimeSheet from './pages/timesheet/FancyTimesheet';
+
 import ApproveTimesheet from './pages/timesheet/ApproveTimesheetList';
 import ApproveEmpTimesheet from './pages/timesheet/ApproveEmpTimesheet';
 import Dashboard from "./pages/Dashboard";
@@ -80,7 +82,7 @@ function App() {
           <Route path="/clientShow/:id"  element={isLoggedIn ? <ClientShow/> : <Login/>} />
           <Route path="/ichat"  element={isLoggedIn ? <InteliChat/> : <Login/>} />
           <Route path="/resetPassword"  element={(needsPasswordReset === 1) ? <ResetPassword/> : <Login/>} />
-          <Route path="/timesheet"  element={isLoggedIn ? <TimeSheet/> : <Login/>} />
+          <Route path="/timesheet"  element={isLoggedIn ? <FancyTimeSheet/> : <Login/>} />
           <Route path="/approveTimesheet"  element={isLoggedIn ? <ApproveTimesheet/> : <Login/>} />
           <Route path="/approveEmpTimesheet/:project_id/:emp_id"  element={isLoggedIn ? <ApproveEmpTimesheet/> : <Login/>} />
           <Route path="/dashboard"  element={isLoggedIn ? <Dashboard/> : <Login/>} />

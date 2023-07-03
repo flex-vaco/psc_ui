@@ -23,7 +23,7 @@ export interface TimesheetEntry {
   timesheetDate: Date;
 
   //Calculation
-  totalHours: Nullable<string>; //PH+OH+BH+TH
+  totalHours: number; //PH+OH+BH+TH
   isWeekend: boolean; //true or false
   isHoliday: boolean;
 }

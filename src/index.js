@@ -14,7 +14,7 @@ import "bootstrap";
 import Swal from "sweetalert2";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL;
+axios.defaults.baseURL = 'http://localhost:3006';
 const token = localStorage.getItem('jwt-access-token') || "-RAJENDER-";
 
 // Request interceptors for API calls
