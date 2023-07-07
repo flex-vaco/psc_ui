@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import Layout from "../../components/Layout"
+import axios from 'axios'
 
 function InteliChat() {
   const [messages, setMessages] = useState([
@@ -22,14 +23,24 @@ function InteliChat() {
   },[messages.length]);
 
   const customChatGptAPICall = async (message, chatMessages)=>{
-    const response = await fetch(`http://15.206.232.42:5601/query?text=${message}`)
-    setIsTyping(false)
-    const responseConversionToText = await response.text()
-    setMessages([...chatMessages, {
-      message: responseConversionToText
-    }])
+    axios.defaults.withCredentials = true;
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      }
+    };
+    const URL = `http://15.206.232.42:5601/query?text=${message}`;
+    axios.get(URL, {config})
+      .then((res) => {
+        setIsTyping(false)
+        setMessages([...chatMessages, {
+          message: res.data?.answer || "Sorry, something went wrong. Please try again!"
+        }])
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
-
 
   return (
     <Layout>

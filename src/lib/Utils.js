@@ -246,3 +246,51 @@ export const isValidPhoneNum = (phoneNum) => {
     const phoneNumRegex = /^[0-9]{10}$/;
     return phoneNumRegex.test(phoneNum);
 }
+
+export const isValidEmail = (email) => {
+    const emailRegex = /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/;
+    return emailRegex.test(email);
+}
+
+//function to find shortest path between two nodes in a graph
+export const findShortestPath = (graph, startNode, endNode) => {
+    // create a queue which will store path(s) of type Array
+    let queue = [];
+    // path starts from startNode
+    queue.push([startNode]);
+    while (queue.length > 0) {
+        // get the path from the queue
+        let path = queue.shift();
+        // get the last node from the path
+        let node = path[path.length - 1];
+        // path found
+        if (node === endNode) {
+            return path;
+        }
+        // go through all neighbour nodes, construct a new path and
+        // push it into the queue
+        for (let i = 0; i < graph[node].length; i++) {
+            let newPath = [...path];
+            newPath.push(graph[node][i]);
+            queue.push(newPath);
+        }
+    }
+}
+
+//write function to test findShortestPath function
+export const testFindShortestPath = () => {
+    const graph = {
+        A: ["B", "C"],
+        B: ["A", "D", "E"],
+        C: ["A", "F"],
+        D: ["B"],
+        E: ["B", "F"],
+        F: ["C", "E"],
+    };
+    const startNode = "A";
+    const endNode = "E";
+    const shortestPath = findShortestPath(graph, startNode, endNode);
+    console.log("shortestPath: ", shortestPath);
+}
+
+
