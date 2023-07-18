@@ -15,7 +15,8 @@ import Swal from "sweetalert2";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 axios.defaults.baseURL = 'http://localhost:3006';
-const token = localStorage.getItem('jwt-access-token') || "-RAJENDER-";
+const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfaWQiOjEsImZpcnN0X25hbWUiOiJSYWplbmRlciIsImxhc3RfbmFtZSI6IlZhbmFtYWxhIiwiZW1haWwiOiJydmFuYW1hbGFAdmFjby5jb20iLCJyb2xlIjoiZW1wbG95ZWUiLCJlbXBfaWQiOjEsInByb2plY3RfaWQiOm51bGwsIm5lZWRzUGFzc3dvcmRSZXNldCI6bnVsbH0sImlhdCI6MTY4ODQ2MTI1NCwiZXhwIjoxNjg4NDcyMDU0fQ.PxCnAL60dkZ9RgN3CohRZbccOopn3JhDS8Vj1HgnWao'
+const token = localStorage.getItem('jwt-access-token') || jwt;
 
 // Request interceptors for API calls
 axios.interceptors.request.use(

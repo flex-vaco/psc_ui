@@ -198,6 +198,7 @@ const FancyTimesheet = () => {
           date={timesheetEntry.date}
           entry={timesheetEntry.entry}
         />
+        
       ))}
     </React.Fragment>
   );
