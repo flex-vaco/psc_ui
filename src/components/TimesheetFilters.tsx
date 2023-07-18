@@ -8,9 +8,7 @@ import { HoursType } from "../pages/timesheet/FancyTimesheet";
 import "./TaskEffort.css";
 import Dropdown, { Option } from "react-dropdown";
 import "react-dropdown/style.css";
-import {
-  OnDatesChangeProps,
-} from "@datepicker-react/styled";
+import { OnDatesChangeProps } from "@datepicker-react/styled";
 import { DateRangeInput } from "@datepicker-react/styled";
 import { ThemeProvider } from "styled-components";
 
@@ -81,7 +79,7 @@ const TimesheetFilters = (props: FiltersProps) => {
       </div>
       <div className="row">
         <div className="col-7">
-            <ThemeProvider
+          <ThemeProvider
             theme={{
               breakpoints: ["32em", "48em", "64em"],
               reactDatepicker: {
@@ -96,7 +94,6 @@ const TimesheetFilters = (props: FiltersProps) => {
                 dateRangeZIndex: "999",
               },
             }}
-            
           >
             <DateRangeInput
               onDatesChange={(data) => {
@@ -111,7 +108,6 @@ const TimesheetFilters = (props: FiltersProps) => {
               focusedInput={state.focusedInput} // START_DATE, END_DATE or null
             />
           </ThemeProvider>
-
         </div>
         <div className="col-3"></div>
         <div className="col-2">
@@ -126,7 +122,9 @@ const TimesheetFilters = (props: FiltersProps) => {
           />
         </div>
       </div>
-      <div className="row"><br></br></div>
+      <div className="row">
+        <br></br>
+      </div>
       <div className="row">
         <HoursDashboard
           startDate={props.startDate}

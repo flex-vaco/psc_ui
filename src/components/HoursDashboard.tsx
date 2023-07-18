@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./TaskEffort.css";
-import { TimesheetEntries } from "../types/TimesheetEntries";
 import { formatToMonthDate } from "../lib/Utils";
 import { HoursType } from "../pages/timesheet/FancyTimesheet";
-import { VerticalAlignBottom } from "@mui/icons-material";
 
 export interface HoursDashboardProps {
   startDate: string;
@@ -89,9 +87,9 @@ const HoursDashboard: React.FC<HoursDashboardProps> = (
         >
           <div>
             <div style={{ verticalAlign: "bottom", float: "right" }}>
-              <span className="period">{"Timesheet Total "}</span>
+              <span className="hours-name">{"Timesheet Total "}</span>
               <span className="timesheetTotalHours">{`${props.timesheetHours.totalReportedHours}`}</span>
-              <span className="period">{"  hours"}</span>
+              <span className="hours-name">{"  hours"}</span>
             </div>
 
             <div
