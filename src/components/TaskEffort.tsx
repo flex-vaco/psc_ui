@@ -11,6 +11,7 @@ import {
   TextField,
 } from "@mui/material";
 import AddEditTimesheet from "./AddEditTimeSheet";
+import { EmployeeProject } from "../types/EmployeeProject";
 
 const dayAbbreviation = (date: Date) =>
   date.toLocaleDateString("en-US", { weekday: "short" });
@@ -27,7 +28,13 @@ const colorNames: string[] = [
   "progress-bar bg-primary",
 ];
 
-const TaskEffort = (props: TimesheetEntries) => {
+interface TaskEffort {
+  projects: Array<EmployeeProject>;
+}
+
+type TaskEffortPros = TimesheetEntries & TaskEffort;
+
+const TaskEffort = (props: TaskEffortPros) => {
   const [open, setOpen] = React.useState(false);
 
   const showAddEditTimesheet = () => {
@@ -98,24 +105,25 @@ const TaskEffort = (props: TimesheetEntries) => {
           ))}
         </div>
       </div>
-      {open && ( 
+      {open && (
         <div style={{ width: "100%" }}>
-        <Dialog  open={open} onClose={handleClose}>
-          {/* <DialogTitle>New Entry</DialogTitle> */}
-          <DialogContent >
-            <AddEditTimesheet
-              key={props.date.toDateString()} // Remember to provide a unique key for each mapped element
-              date={props.date}
-              entry={props.entry}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleClose}>Save</Button>
-          </DialogActions>
-        </Dialog>
+          <Dialog open={open} onClose={handleClose}>
+            {/* <DialogTitle>New Entry</DialogTitle> */}
+            <DialogContent>
+              <AddEditTimesheet
+                projects={props.projects}
+                key={props.date.toDateString()} // Remember to provide a unique key for each mapped element
+                date={props.date}
+                entry={props.entry}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Cancel</Button>
+              {/* <Button onClick={handleClose}>Save</Button> */}
+            </DialogActions>
+          </Dialog>
         </div>
-      )}  
+      )}
     </>
   );
 };

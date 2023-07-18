@@ -22,12 +22,18 @@ const FancyTimesheet = () => {
     Array<TimesheetEntries>
   >([]);
   const [showWeekend, setShowWeekend] = useState<boolean>(false);
+  const [employeeProjects, setEmployeeProjects] =
+    useState<Array<EmployeeProject>>();
   const [startDate, setStartDate] = useState<string>("2023-04-01");
   const [endDate, setEndDate] = useState<string>("2023-05-30");
 
   useEffect(() => {
     fetchTimesheets();
   }, [startDate, endDate, employeeId]);
+
+  useEffect(() => {
+    fetchEmployeeProjects(employeeId);
+  }, [employeeId]);
 
   function calculateTotalHours(timesheetData: any): number {
     return isNaN(timesheetData?.bench_hours)
@@ -77,7 +83,7 @@ const FancyTimesheet = () => {
     fetchEmployeeProjects(employeeId);
   }, [employeeId]);*/
 
-  /*//To fetch the employee-projects relationship data
+  //To fetch the employee-projects relationship data
   const fetchEmployeeProjects = (empId: Nullable<number>) => {
     axios
       .get(`/empPrjAloc/empallocation`, { params: { emp_id: empId } })
@@ -106,7 +112,7 @@ const FancyTimesheet = () => {
       .catch(function (error) {
         console.log(error);
       });
-  };*/
+  };
 
   const fetchTimesheets = () => {
     axios
@@ -194,11 +200,11 @@ const FancyTimesheet = () => {
     <React.Fragment>
       {timesheetEntries.map((timesheetEntry) => (
         <TaskEffort
+          projects={employeeProjects || []}
           key={timesheetEntry.date.toString()} // Remember to provide a unique key for each mapped element
           date={timesheetEntry.date}
           entry={timesheetEntry.entry}
         />
-        
       ))}
     </React.Fragment>
   );

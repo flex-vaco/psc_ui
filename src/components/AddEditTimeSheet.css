@@ -1,10 +1,9 @@
-.MuiGrid-root {
-}
 
 .MuiDialogContent-root {
   /* // padding-top: 20px !important; */
-  margin: 20px !important;
+  margin: 10px !important;
   padding: 10px !important;
+
 }
 .dialogBody {
   padding: 10px !important;
