@@ -6,6 +6,8 @@ import { EmployeeProject } from "../types/EmployeeProject";
 import HoursDashboard from "./HoursDashboard";
 import { HoursType } from "../pages/timesheet/FancyTimesheet";
 import "./TaskEffort.css";
+import Dropdown, { Option } from "react-dropdown";
+import "react-dropdown/style.css";
 
 export interface FiltersProps {
   userInfo: User;
@@ -29,6 +31,13 @@ const TimesheetFilters = (props: FiltersProps) => {
     props.handleDateFilter(startDate, endDate);
   };
 
+  const options = props.empProjects.map((empProjects) => {
+    return {
+      value: empProjects.projectDetails?.projectId.toString(),
+      label: empProjects.projectDetails?.projectName,
+    } as Option;
+  });
+
   return (
     <div className="container border">
       <div className="row">
@@ -44,48 +53,13 @@ const TimesheetFilters = (props: FiltersProps) => {
         </div>
         <div className="col-3"></div>
         <div className="col-3">
-          <label htmlFor="project-dropdown">Select Project </label>
-          <div id="project-dropdown" className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle projectDropdownButton"
-              type="button"
-              id="projectDropdown"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              {
-                props.empProjects.filter(
-                  (a) =>
-                    a?.projectDetails?.projectId === props.selectedProjectId
-                )[0]?.projectDetails?.projectName
-              }
-            </button>
-            <ul
-              className="dropdown-menu projectDropdownMenu"
-              aria-labelledby="projectDropdown"
-            >
-              {props.empProjects.map((empProjects) => (
-                <li key={empProjects.projectDetails?.projectId}>
-                  <button
-                    className="dropdown-item"
-                    type="button"
-                    onClick={() =>
-                      props.handleProjectFilter(
-                        empProjects.projectDetails?.projectId
-                      )
-                    }
-                  >
-                    {empProjects.projectDetails?.projectName}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
+          
         </div>
       </div>
       <div className="row">
         <div className="col-7">
-          <form onSubmit={handleSubmit} className="row">
+          <form onSubmit={handleSubmit}>
+            <div className="row">
               <div className="col-3">
                 <div className="form-group float-start mb-2 me-2">
                   <label htmlFor="dispStartDate">Start Date</label>
@@ -127,10 +101,22 @@ const TimesheetFilters = (props: FiltersProps) => {
                   </button>
                 </div>
               </div>
+            </div>
           </form>
         </div>
-        <div className="col-4">
-          
+        <div className="col-3"></div>
+        <div className="col-2">
+          <Dropdown
+            options={options}
+            value={
+              props.empProjects.filter(
+                (a) => a?.projectDetails?.projectId === props.selectedProjectId
+              )[0]?.projectDetails?.projectName
+            }
+            onChange={(args) =>
+              props.handleProjectFilter(Number(args?.value))
+            }
+          />
         </div>
       </div>
       <div className="row">
