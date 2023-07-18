@@ -26,7 +26,6 @@
   padding-left: 10px;
   font-weight: bold;
   font-size: 0.75rem;
-  font-family: "avenirbold" !important;
 }
 .progressBarStatusSection {
   float: left;
@@ -76,21 +75,19 @@
 }
 
 .period {
-  font-weight: bold;
+  font-weight: normal;
   font-size: 12px;
 }
 
 .hours {
-  font-weight: bold;
+  font-weight: bolder;
   font-size: 28px;
-  font-family: "avenirbold" !important;
-  margin-bottom: -8px;
+  margin-bottom: -4px;
 }
 
 .hours-name {
-  font-weight: normal;
+  font-weight: bold;
   font-size: 14px;
-  font-family: "avenirbold" !important;
 }
 
 .vr {
@@ -113,7 +110,7 @@
 .timesheetTotalHours {
   font-weight: bolder;
   font-size: 18px;
-  color: forestgreen;
+  color: rgb(216, 54, 111);
 }
 .emp-name {
   font-weight: bolder;
@@ -131,8 +128,11 @@
   width: 60%;
   text-align: left;
 }
-.projectDropdownMenu{
+.projectDropdownMenu {
   border-radius: 0;
   border-width: 1px;
   background-color: whitesmoke;
+}
+.fEhhM {
+  color: rgb(216, 54, 111) !important;
 }
