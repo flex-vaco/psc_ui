@@ -1,33 +1,138 @@
-.dateContainerSection{
-    float: left; margin-right: 10px;
+.dateContainerSection {
+  float: left;
+  margin-right: 10px;
 }
-.daySection1{
-    height:40px; width:50px; background-color: lightgray; font-weight: bold;
+.daySection1 {
+  height: 40px;
+  width: 50px;
+  background-color: lightgray;
+  font-weight: bold;
 }
-.daySection2{
-    font-size: 0.7em; padding-top:3px; font-size: 0.8em;
+.daySection2 {
+  padding-top: 3px;
+  font-size: 0.8em;
 }
-.dateSection{
-    font-size: 0.8em;
+.dateSection {
+  font-size: 0.8em;
 }
-.redFontColor{
-    color:rgba(255, 0, 0, 0.651);
+.redFontColor {
+  color: rgba(255, 0, 0, 0.651);
 }
-.progressBar{
-    height: 40px;
+.progressBar {
+  height: 40px;
 }
-.progressBarHoursSection{
-    float:left; padding-left:10px; font-weight: bold; font-size: 0.75rem;
+.progressBarHoursSection {
+  float: left;
+  padding-left: 10px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  font-family: "avenirbold" !important;
 }
-.progressBarTaskSection{
-    float:left; padding-left:10px; font-size: 0.75rem;
+.progressBarStatusSection {
+  float: left;
+  padding-right: 10px;
+  font-weight: bold;
+  font-size: 0.75rem;
+  float: right;
+  /* font-family: 'avenirbold' !important; */
+}
+.progressBarTaskSection {
+  float: left;
+  padding-left: 10px;
+  font-size: 0.75rem;
 }
 
 .wholeDiv {
-    border: none;
-    transition: border-color 2s ease, background-color 0.1s ease;
-  }
+  border: none;
+  transition: border-color 2s ease, background-color 0.1s ease;
+}
 .wholeDiv:hover {
-    border: 1px solid rgba(74, 152, 248, 0.689);
-    background-color: rgb(214, 227, 255);
-  }
+  border: 1px solid rgba(74, 152, 248, 0.689);
+  background-color: rgb(214, 227, 255);
+}
+.checkmark {
+  display: inline-block;
+  transform: rotate(45deg);
+  height: 16px;
+  width: 8px;
+  border-bottom: 3px solid #78b13f;
+  border-right: 3px solid #78b13f;
+  margin-right: 10px;
+  float: right;
+}
+
+.red-x {
+  color: red;
+  margin-right: 10px;
+  float: right;
+  display: inline-block;
+  height: 16px;
+  width: 8px;
+}
+
+.form-control {
+  border-radius: 0 !important;
+  font-size: inherit !important;
+}
+
+.period {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.hours {
+  font-weight: bold;
+  font-size: 28px;
+  font-family: "avenirbold" !important;
+  margin-bottom: -8px;
+}
+
+.hours-name {
+  font-weight: normal;
+  font-size: 14px;
+  font-family: "avenirbold" !important;
+}
+
+.vr {
+  align-self: center;
+  width: 1px;
+  height: 85px;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.hoursContainer {
+  background-color: whitesmoke;
+  min-height: 90px;
+  padding: 12px;
+  border-bottom: lightgray solid;
+  border-left: lightgray solid;
+  border-right: lightgray solid;
+}
+
+.timesheetTotalHours {
+  font-weight: bolder;
+  font-size: 18px;
+  color: forestgreen;
+}
+.emp-name {
+  font-weight: bolder;
+  font-size: 18px;
+  font-family: "avenirbold" !important;
+}
+.email {
+  font-weight: normal;
+  font-size: 14px;
+}
+.projectDropdownButton {
+  border-radius: 0;
+  background-color: white;
+  color: black;
+  width: 60%;
+  text-align: left;
+}
+.projectDropdownMenu{
+  border-radius: 0;
+  border-width: 1px;
+  background-color: whitesmoke;
+}

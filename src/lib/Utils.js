@@ -251,3 +251,10 @@ export const isWeekendDate = (givenDate) => {
     const dayOfWeek = new Date(givenDate).getDay();
     return dayOfWeek === 0 || dayOfWeek === 6;
   };
+
+ export const formatToMonthDate = (date) => {
+    const month = date.getMonth() + 1; // Adding 1 because getMonth() returns zero-based index
+    const day = date.getDate();
+    return `${month}/${day}`;
+  };
+  

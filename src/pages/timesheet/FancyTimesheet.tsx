@@ -11,6 +11,15 @@ import { Nullable } from "../../types/Nullable";
 import { User } from "../../types/User";
 import { EmployeeProject } from "../../types/EmployeeProject";
 import TaskEffort from "../../components/TaskEffort";
+import TimesheetFilters from "../../components/TimesheetFilters";
+
+export type HoursType = {
+  projectHours: number;
+  benchHours: number;
+  overTimeHours: number;
+  timeOffHours: number;
+  totalReportedHours: number;
+};
 
 const FancyTimesheet = () => {
   const userAsString: string = localStorage.getItem("user")?.toString() || "";
@@ -21,13 +30,40 @@ const FancyTimesheet = () => {
   const [timesheetEntries, setTimesheetEntries] = useState<
     Array<TimesheetEntries>
   >([]);
+  const [loggedInUserInfo, setLoggedInUserInfo] = useState<User>(user);
   const [showWeekend, setShowWeekend] = useState<boolean>(false);
-  const [startDate, setStartDate] = useState<string>("2023-04-01");
-  const [endDate, setEndDate] = useState<string>("2023-05-30");
+  const currentMonthDates = Utils.getStartEndDatesCurrentMonth();
+  const [startDate, setStartDate] = useState<string>(
+    currentMonthDates?.monthStartDate
+  );
+  const [endDate, setEndDate] = useState<string>(
+    currentMonthDates?.monthEndDate
+  );
+  const [employeeProjects, setEmployeeProjects] = useState<
+    Array<EmployeeProject>
+  >([]);
+  const [selectedProjectId, setSelectedProjectId] = useState<number>(-1);
+  const [timesheetHours, setTimesheetHours] = useState<HoursType>({
+    benchHours: 0,
+    projectHours: 0,
+    overTimeHours: 0,
+    timeOffHours: 0,
+    totalReportedHours: 0,
+  } as HoursType);
 
   useEffect(() => {
     fetchTimesheets();
-  }, [startDate, endDate, employeeId]);
+    fetchEmployeeProjects();
+  }, [employeeId]);
+
+  useEffect(() => {
+    fetchTimesheets();
+    filterByDate();
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    fetchTimesheets();
+  }, [selectedProjectId, showWeekend]);
 
   function calculateTotalHours(timesheetData: any): number {
     return isNaN(timesheetData?.bench_hours)
@@ -68,25 +104,30 @@ const FancyTimesheet = () => {
     return initialEntries;
   };
 
-  /*    
-  const [employeeProjects, setEmployeeProjects] = useState<
-    Array<EmployeeProject>
-  >([]);
-  
-  useEffect(() => {
-    fetchEmployeeProjects(employeeId);
-  }, [employeeId]);*/
-
-  /*//To fetch the employee-projects relationship data
-  const fetchEmployeeProjects = (empId: Nullable<number>) => {
+  //To fetch the employee-projects relationship data
+  const fetchEmployeeProjects = (): void => {
+    let employeeProjectsLocal: Array<EmployeeProject>;
     axios
-      .get(`/empPrjAloc/empallocation`, { params: { emp_id: empId } })
-      .then(function (response) {
-        let employeeProjects: Array<EmployeeProject> = [];
+      .get(`/empPrjAloc/empallocation`, { params: { emp_id: employeeId } })
+      .then((response) => {
+        //default project option "All"
+        employeeProjectsLocal = [
+          {
+            projectDetails: {
+              projectId: -1,
+              projectName: "All",
+              location: "",
+            },
+            employeeId: employeeId,
+            employeeProjectAllocationId: -1,
+            allocationHoursPerDay: -1,
+          },
+        ];
+
         if (response.data?.employee_allocation.length > 0) {
           response.data?.employee_allocation.map((element: any) => {
-            employeeProjects = [
-              ...employeeProjects,
+            employeeProjectsLocal = [
+              ...employeeProjectsLocal,
               {
                 projectDetails: {
                   projectId: element.project_id,
@@ -99,14 +140,27 @@ const FancyTimesheet = () => {
               },
             ];
           });
-          setEmployeeProjects(employeeProjects);
+          setEmployeeProjects(employeeProjectsLocal);
         }
-        setEmployeeProjects(employeeProjects);
+        setEmployeeProjects(employeeProjectsLocal);
       })
       .catch(function (error) {
         console.log(error);
       });
-  };*/
+  };
+
+  const fetchUserDetails = () => {
+    axios.get(`/users/${employeeId}`).then((response) => {
+      const user: User = {
+        first_name: response?.data.first_name,
+        last_name: response?.data.last_name,
+        email: response?.data.email,
+        role: response?.data.role,
+        emp_id: response?.data.emp_id,
+      } as User;
+      setLoggedInUserInfo(user);
+    });
+  };
 
   const fetchTimesheets = () => {
     axios
@@ -115,7 +169,7 @@ const FancyTimesheet = () => {
         endDate: Utils.formatDateYYYYMMDD(new Date(endDate)),
         empId: employeeId,
       })
-      .then((response) => {
+      .then(async (response) => {
         const updatedEntries: Array<TimesheetEntries> =
           loadInitialTimesheetEntries(showWeekend);
 
@@ -139,6 +193,7 @@ const FancyTimesheet = () => {
             updatedDate: timesheetData?.updated_at,
             totalHours: totalHours,
             isWeekend: Utils.isWeekendDate(timesheetData?.timesheet_date),
+            projectId: timesheetData?.project_id,
             employeeProject: {
               employeeProjectAllocationId: timesheetData?.emp_proj_aloc_id,
               allocationHoursPerDay: timesheetData?.allocation_hrs_per_day,
@@ -179,26 +234,125 @@ const FancyTimesheet = () => {
           entry.totalHoursThisDay = calculateTotalHoursThisDay(entry.entry);
         });
 
-        setTimesheetEntries(updatedEntries);
+        if (selectedProjectId !== -1) {
+          const filteredEntriesByProject = filterByProject(updatedEntries);
+          setTimesheetEntries(filteredEntriesByProject);
+          setTimesheetHours(calculateAllTimesheetHours(filteredEntriesByProject));
+        } else {
+          setTimesheetEntries(updatedEntries);
+          setTimesheetHours(calculateAllTimesheetHours(updatedEntries));
+
+        }
+        
       })
       .catch(function (error) {
         console.log(error);
       });
   };
 
+  const calculateAllTimesheetHours = (timesheetEntriesArray: Array<TimesheetEntries>): HoursType => {
+    var projectHours = 0;
+    var overTimeHours = 0;
+    var benchHours = 0;
+    var timeOffHours = 0;
+    var totalReportedHours = 0;
+
+    timesheetEntriesArray.forEach((entries) => {
+      entries.entry.forEach((timesheetEntry) => {
+        projectHours += timesheetEntry.projectHours ?? 0;
+        benchHours += timesheetEntry.benchHours ?? 0;
+        overTimeHours += timesheetEntry.overTimeHours ?? 0;
+        timeOffHours += timesheetEntry.timeOffHours ?? 0;
+        totalReportedHours += timesheetEntry.totalHours ?? 0;
+      });
+    });
+    return {
+      benchHours: benchHours,
+      projectHours: projectHours,
+      overTimeHours: overTimeHours,
+      timeOffHours: timeOffHours,
+      totalReportedHours: totalReportedHours,
+    } as HoursType
+  };
+
   const calculateTotalHoursThisDay = (entry: TimesheetEntry[]): number => {
     return entry.reduce((total, item) => (total += item.totalHours || 0), 0);
+  };
+  const filterByDate = (): void => {
+    const filteredEntries = timesheetEntries.filter((entry) => {
+      const entryDate = new Date(entry.date);
+      const startDateObj = new Date(startDate);
+      const endDateObj = new Date(endDate);
+      const isDateInRange =
+        entryDate >= startDateObj && entryDate <= endDateObj;
+
+      return isDateInRange;
+    });
+    setTimesheetEntries(filteredEntries);
+  };
+
+  const filterByProject = (
+    timesheetEntriesParam: TimesheetEntries[]
+  ): TimesheetEntries[] => {
+    const filteredEntries = timesheetEntriesParam.map((e) => {
+      return {
+        date: e.date,
+        totalHoursThisDay: e.totalHoursThisDay,
+        entry: e?.entry?.filter((a) => a?.projectId === selectedProjectId),
+      } as TimesheetEntries;
+    });
+
+    const filteredByProject = filteredEntries.filter((a) => a.entry.length > 0);
+    //setTimesheetEntries(filteredProject);
+    return filteredByProject;
+  };
+
+  const handleProjectFilter = (projectId: number): void => {
+    setSelectedProjectId(projectId);
+  };
+  const handleDateFilter = (startDate: string, endDate: string): void => {
+    if (!startDate) setStartDate(currentMonthDates?.monthStartDate);
+    else setStartDate(startDate);
+    if (!endDate) setEndDate(currentMonthDates?.monthEndDate);
+    else setEndDate(endDate);
+  };
+
+  const handleShowWeekend = (isShowWeekend: boolean): void => {
+    setShowWeekend(isShowWeekend);
   };
 
   return (
     <React.Fragment>
-      {timesheetEntries.map((timesheetEntry) => (
-        <TaskEffort
-          key={timesheetEntry.date.toString()} // Remember to provide a unique key for each mapped element
-          date={timesheetEntry.date}
-          entry={timesheetEntry.entry}
-        />
-      ))}
+      <div className="container">
+        <div className="row" style={{ backgroundColor: "lightgray" }}>
+          <TimesheetFilters
+            userInfo={loggedInUserInfo}
+            empProjects={employeeProjects}
+            startDate={startDate}
+            endDate={endDate}
+            showWeekend={showWeekend}
+            selectedProjectId={selectedProjectId}
+            timesheetHours={timesheetHours}
+            handleDateFilter={handleDateFilter}
+            handleProjectFilter={handleProjectFilter}
+            handleShowWeekend={handleShowWeekend}
+          ></TimesheetFilters>
+        </div>
+        <div className="row">
+          <div className="col-md-3">
+            <br />
+          </div>
+        </div>
+        <div className="row">
+          {timesheetEntries.map((timesheetEntry) => (
+            <TaskEffort
+              key={timesheetEntry.date.toString()} // Remember to provide a unique key for each mapped element
+              date={timesheetEntry.date}
+              entry={timesheetEntry.entry}
+            />
+          ))}
+        </div>
+      </div>
     </React.Fragment>
   );
 };
