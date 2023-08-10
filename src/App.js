@@ -41,6 +41,7 @@ import ApproveTimesheet from './pages/timesheet/ApproveTimesheetList';
 import ApproveEmpTimesheet from './pages/timesheet/ApproveEmpTimesheet';
 import Dashboard from "./pages/Dashboard";
 import HireResource from "./pages/HireResource";
+import IntelliDB from './pages/aiChat/InteliDB'
 
 function App() {
   const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
@@ -85,6 +86,8 @@ function App() {
           <Route path="/approveEmpTimesheet/:project_id/:emp_id"  element={isLoggedIn ? <ApproveEmpTimesheet/> : <Login/>} />
           <Route path="/dashboard"  element={isLoggedIn ? <Dashboard/> : <Login/>} />
           <Route path="/hireResource"  element={isLoggedIn ? <HireResource/> : <Login/>} />
+          <Route path="/idb"  element={isLoggedIn ? <IntelliDB/> : <Login/>} />
+
       </Routes>
     </Router>
   );
