@@ -24,17 +24,39 @@ function InteliChat() {
 
   const customChatGptAPICall = async (message, chatMessages)=>{
     axios.defaults.withCredentials = true;
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded"
+    //   }
+    // };
+    // const URL = `http://15.206.232.42:5601/query?text=${message}`;
+    // axios.get(URL, {config})
+    //   .then((res) => {
+    //     setIsTyping(false)
+    //     setMessages([...chatMessages, {
+    //       message: res.data?.answer || "Sorry, something went wrong. Please try again!"
+    //     }])
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   })
+
+    const URL = `http://15.206.232.42:5601/doc_qa/multi_doc_index`;
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       }
     };
-    const URL = `http://15.206.232.42:5601/query?text=${message}`;
-    axios.get(URL, {config})
+    const data = {
+      // additional_instructions: "",
+      category: "resumes",
+      query: message
+    };
+    axios.post(URL, data, {config})
       .then((res) => {
         setIsTyping(false)
         setMessages([...chatMessages, {
-          message: res.data?.answer || "Sorry, something went wrong. Please try again!"
+          message: res.data || "Sorry, something went wrong. Please try again!"
         }])
       })
       .catch((error) => {
