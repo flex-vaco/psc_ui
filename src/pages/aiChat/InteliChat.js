@@ -39,7 +39,7 @@ function InteliChat() {
     const data = new FormData();
     data.append("category", "resumes");
     data.append("query", message)
-    data.append("additional_instructions", "Make your answers clear and concise.")
+    //data.append("additional_instructions", "Make your answers clear and concise.")
     
     axios.post(URL, data, config)
       .then((res) => {
