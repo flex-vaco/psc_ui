@@ -4,6 +4,9 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import Layout from "../../components/Layout"
 import axios from 'axios'
+import Cookies from 'universal-cookie';
+const cookies = new Cookies();
+cookies.set('chat_history', 'session', { path: '/' });
 
 function InteliChat() {
   const [messages, setMessages] = useState([
@@ -24,35 +27,21 @@ function InteliChat() {
 
   const customChatGptAPICall = async (message, chatMessages)=>{
     axios.defaults.withCredentials = true;
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/x-www-form-urlencoded"
-    //   }
-    // };
-    // const URL = `http://15.206.232.42:5601/query?text=${message}`;
-    // axios.get(URL, {config})
-    //   .then((res) => {
-    //     setIsTyping(false)
-    //     setMessages([...chatMessages, {
-    //       message: res.data?.answer || "Sorry, something went wrong. Please try again!"
-    //     }])
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   })
+
 
     const URL = `http://15.206.232.42:5601/doc_qa/multi_doc_index`;
     const config = {
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
+        'Content-Type': 'multipart/form-data'
       }
     };
-    const data = {
-      // additional_instructions: "",
-      category: "resumes",
-      query: message
-    };
-    axios.post(URL, data, {config})
+
+    const data = new FormData();
+    data.append("category", "resumes");
+    data.append("query", message)
+    data.append("additional_instructions", "Make your answers clear and concise.")
+    
+    axios.post(URL, data, config)
       .then((res) => {
         setIsTyping(false)
         setMessages([...chatMessages, {
