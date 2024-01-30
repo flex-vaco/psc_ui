@@ -29,7 +29,7 @@ function InteliChat() {
     axios.defaults.withCredentials = true;
 
 
-    const URL = `http://15.206.232.42:5601/doc_qa/multi_doc_index`;
+    const URL = `http://15.206.232.42:5605/resume_qa`;
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data'
