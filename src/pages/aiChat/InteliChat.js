@@ -29,7 +29,7 @@ function InteliChat() {
     axios.defaults.withCredentials = true;
 
 
-    const URL = `http://15.206.232.42:5605/resume_qa`;
+    const URL = `http://15.206.232.42:5601/query`;//`http://15.206.232.42:5605/resume_qa`;
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -38,14 +38,14 @@ function InteliChat() {
 
     const data = new FormData();
     data.append("category", "resumes");
-    data.append("query", message)
+    data.append("text", message)
     //data.append("additional_instructions", "Make your answers clear and concise.")
     
     axios.post(URL, data, config)
       .then((res) => {
         setIsTyping(false)
         setMessages([...chatMessages, {
-          message: res.data || "Sorry, something went wrong. Please try again!"
+          message: res.data.answer || "Sorry, something went wrong. Please try again!"
         }])
       })
       .catch((error) => {
