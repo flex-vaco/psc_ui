@@ -28,6 +28,7 @@ return(
                 {AppFunc.hasClientAccess(activeUserRole) ? <li><a className="dropdown-item" href="/clients">Clients</a></li>: ""}
                 {AppFunc.hasAllocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empProjList">Allocations</a></li>: ""}
                 {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
+                {AppFunc.hasCategoriesAccess(activeUserRole) ? <li><a className="dropdown-item" href="/categoryList">Categories</a></li> : ""}
                 {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
                 {AppFunc.hasApproveTimesheetAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Timesheets</a>
                 <ul className="dropdown-submenu">

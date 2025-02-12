@@ -38,7 +38,9 @@ const reportAccessTimesheetApprove = [
   APP_CONSTANTS.USER_ROLES.MANAGER,
   APP_CONSTANTS.USER_ROLES.PRODUCER
 ];
-
+const categoryAccessRole = [
+  APP_CONSTANTS.USER_ROLES.ADMINISTRATOR
+];
 const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
 export const activeUserRole = localStorage.getItem("user_role");
@@ -86,7 +88,9 @@ export const hasClientAccess = (activeUserRole) => {
 export const hasApproveTimesheetAccess = (activeUserRole) => {
   return reportAccessTimesheetApprove.includes(activeUserRole) ? true : false;
 };
-
+export const hasCategoriesAccess = (activeUserRole) => {
+  return categoryAccessRole.includes(activeUserRole) ? true : false;
+};
 export const validateForm = (valdiationFields) => {
   //remove all previous invalid-feedback divs
   document.querySelectorAll('.invalid-feedback').forEach(f => { f.remove() })
