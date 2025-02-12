@@ -67,7 +67,7 @@ const EmployeeProfileModal = (props) => {
                     <div className="col-12 col-lg-6 float-left">
                         <div className="col-12">
                             <p hidden={APP_FUNCTIONS.userIsProducer()}><b className="text-muted">Email: </b>{props.employee.email}</p>
-                            <p><b className="text-muted">Role: </b>{props.employee.role}</p>
+                            <p><b className="text-muted">Designation: </b>{props.employee.designation}</p>
                             <p><b className="text-muted">Experience: </b>{props.employee.total_work_experience_years} years</p>
                             <p><b className="text-muted">Rate/HR: </b>{props.employee.rate_per_hour} USD</p>
                             <p><b className="text-muted">Vaco Joining Date: </b>{Utils.formatDateYYYYMMDD(props.employee.vaco_join_date)}</p>
@@ -85,7 +85,7 @@ const EmployeeProfileModal = (props) => {
                     </div>
                     <div className="col-12 col-lg-6 float-left">
                         <div className="col-12">
-                            <h4 className="role_heading">{props.employee.role}</h4>
+                            <h4 className="role_heading">{props.employee.designation}</h4>
                             <p>{props.employee.profile_information}</p>
                         </div>
                         <div className="col-12">

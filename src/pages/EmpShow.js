@@ -10,7 +10,7 @@ function EmpShow() {
         last_name: '',
         status: '',
         email: '',
-        role: '',
+        designation: '',
         primary_skills: '',
         secondary_skills: '',
         education: '',
@@ -62,7 +62,7 @@ function EmpShow() {
                     <div className="row">
                     <div className="col fw-bold">
                         <p><b className="text-muted">Name: </b>{empDetails.first_name}, {empDetails.last_name}</p>
-                        <p><b className="text-muted">Role: </b>{empDetails.role}</p>
+                        <p><b className="text-muted">Designation: </b>{empDetails.designation}</p>
                         <p><b className="text-muted">Email: </b>{empDetails.email}</p>
                         <p><b className="text-muted">Primary Skills: </b>{empDetails.primary_skills}</p>
                         <p><b className="text-muted">Secondary Skills: </b>{empDetails.secondary_skills}</p>
