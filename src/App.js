@@ -41,7 +41,7 @@ import ApproveTimesheet from './pages/timesheet/ApproveTimesheetList';
 import ApproveEmpTimesheet from './pages/timesheet/ApproveEmpTimesheet';
 import Dashboard from "./pages/Dashboard";
 import HireResource from "./pages/HireResource";
-
+import IntelliDB from './pages/aiChat/InteliDB'
 import CategoryCreate from "./pages/categories/CategoryCreate";
 import CategoryEdit from "./pages/categories/CategoryEdit";
 import CategoryList from "./pages/categories/CategoryList";
@@ -89,6 +89,7 @@ function App() {
           <Route path="/approveEmpTimesheet/:project_id/:emp_id"  element={isLoggedIn ? <ApproveEmpTimesheet/> : <Login/>} />
           <Route path="/dashboard"  element={isLoggedIn ? <Dashboard/> : <Login/>} />
           <Route path="/hireResource"  element={isLoggedIn ? <HireResource/> : <Login/>} />
+          <Route path="/idb"  element={isLoggedIn ? <IntelliDB/> : <Login/>} />
           <Route path="/categoryCreate"  element={isLoggedIn ? <CategoryCreate/> : <Login/>} />
           <Route path="/categoryList"  element={isLoggedIn ? <CategoryList/> : <Login/>} />
           <Route path="/categoryEdit/:id"  element={isLoggedIn ? <CategoryEdit/> : <Login/>} />
