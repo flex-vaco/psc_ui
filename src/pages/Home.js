@@ -14,7 +14,7 @@ function Home() {
   const [userIsProducer, setUserIsProducer] = useState(
     APP_FUNCTIONS.activeUserRole === APP_CONSTANTS.USER_ROLES.PRODUCER
   );
-
+  const imageURL = process.env.REACT_APP_API_BASE_URL + "/uploads/technologies/";
   const navigate = useNavigate();
   const [categoryList, setCategoryList] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState({});
@@ -122,7 +122,7 @@ function Home() {
                   <div className="card text-center min_height">
                     <img
                       className="cat_images mx-auto d-block"
-                      src={`/images/` + category.image_name}
+                      src={ imageURL + category.image_name}
                       alt={category.category_name}
                     />
                     <div className="card-block">
@@ -152,7 +152,7 @@ function Home() {
             <div className="col-12 float-left">
               <div className="col-12 col-lg-5 float-left right-border text-center">
                 <div id="photo2">
-                  <img src={`/images/` + selectedCategory?.image_name} alt="" />
+                  <img src={imageURL + selectedCategory?.image_name} alt="" />
                   <span></span>
                 </div>
               </div>
@@ -165,7 +165,7 @@ function Home() {
                       key={key}
                     >
                       <img
-                        src={`/images/` + selectedCategory?.image_name}
+                        src={imageURL + selectedCategory?.image_name}
                         alt=""
                       />
                       <span>{tech}</span>
