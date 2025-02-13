@@ -23,7 +23,7 @@ function EmpFilteredList() {
         last_name: '',
         status: '',
         email: '',
-        role: '',
+        designation: '',
         primary_skills: '',
         secondary_skills: '',
         education: '',

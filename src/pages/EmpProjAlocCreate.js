@@ -12,6 +12,7 @@ function EmpProjAlocCreate() {
     const [end_date, setEndDate] = useState('');
     const [work_location, setWorkLocation] = useState('');
     const [hours_per_day, setHoursPerDay] = useState('');
+    const [rate_per_hour, setRatePerHour] = useState('');
     const [shift_start_time, setShiftStartTime] = useState('');
     const [shift_end_time, setShiftEndTime] = useState('');
 
@@ -87,7 +88,8 @@ function EmpProjAlocCreate() {
             work_location : work_location,
             hours_per_day :hours_per_day,
             shift_start_time : shift_start_time, // 'hh:mi:ss',
-            shift_end_time : shift_end_time
+            shift_end_time : shift_end_time,
+            rate_per_hour : rate_per_hour
         };
 
         axios.post('/empPrjAloc/add', data, config)
@@ -183,6 +185,16 @@ function EmpProjAlocCreate() {
                                     className="form-control"
                                     id="hours_per_day"
                                     name="hours_per_day"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="hours_per_day">Rate Per Hour (USD)</label>
+                                <input 
+                                    onChange={(event)=>{setRatePerHour(event.target.value)}}
+                                    value={rate_per_hour}
+                                    type="number"
+                                    className="form-control"
+                                    id="rate_per_hour"
+                                    name="rate_per_hour"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="shift_start_time">Shift Start Time</label>

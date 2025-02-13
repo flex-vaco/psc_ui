@@ -18,7 +18,7 @@ function EmpEdit() {
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
     const [office_location_city, setOfficeLocCity] = useState('');
-    const [role, setRole] = useState('');
+    const [designation, setDesignation] = useState('');
     const [status, setStatus] = useState('');
     const [manager_name, setManagerName] = useState('');
     const [manager_email, setManagerEmail] = useState('');
@@ -52,7 +52,7 @@ function EmpEdit() {
             setVacoJoinDate(Utils.formatDateYYYYMMDD(empDetails.vaco_join_date));
             setHomeLocCity(empDetails.home_location_city);
             setOfficeLocCity(empDetails.office_location_city);
-            setRole(empDetails.role);
+            setDesignation(empDetails.designation);
             setStatus(empDetails.status);
             setManagerName(empDetails.manager_name);
             setManagerEmail(empDetails.manager_email);
@@ -110,7 +110,7 @@ function EmpEdit() {
         data.append('last_name', last_name);
         data.append('status', status);
         data.append('email', email);
-        data.append('role', role);
+        data.append('designation', designation);
         data.append('primary_skills', primary_skills);
         data.append('secondary_skills', secondary_skills);
         data.append('education', education);
@@ -253,14 +253,14 @@ function EmpEdit() {
                                     name="profile_information"></textarea>
                             </div>
                             <div className="form-group">
-                                <label htmlFor="role">Role</label>
+                                <label htmlFor="designation">Designation</label>
                                 <input 
-                                    onChange={(event)=>{setRole(event.target.value)}}
-                                    value={role}
+                                    onChange={(event)=>{setDesignation(event.target.value)}}
+                                    value={designation}
                                     type="text"
                                     className="form-control"
-                                    id="role"
-                                    name="role"/>
+                                    id="designation"
+                                    name="designation"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="resume">Employment Type</label><br/>

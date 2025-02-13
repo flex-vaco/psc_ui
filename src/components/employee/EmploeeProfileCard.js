@@ -45,7 +45,7 @@ function EmployeeProfileCard(props) {
                     <div className="media-body">
                         <h6 className="mt-2 mb-0">{props.employee.first_name} {props.employee.last_name}</h6>
                         <div className="d-flex flex-row justify-content-between align-text-center">
-                            <small className="text-muted">{props.employee.role}</small>
+                            <small className="text-muted">{props.employee.designation}</small>
                         </div>
                     </div>
                 </div>

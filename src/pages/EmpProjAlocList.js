@@ -172,6 +172,7 @@ function EmpProjAlocList() {
                     <th>End Date</th>
                     <th>Work Location</th>
                     <th>Hours per Day</th>
+                    <th>Rate Per Hour (USD)</th>
                     <th>Shift Start Time</th>
                     <th>Shift End Time</th>
                   </tr>
@@ -211,6 +212,7 @@ function EmpProjAlocList() {
                         <td>{Utils.formatDateYYYYMMDD(empProjAlloc.end_date)}</td>
                         <td>{empProjAlloc.work_location}</td>
                         <td>{empProjAlloc.hours_per_day}</td>
+                        <td>{empProjAlloc.rate_per_hour}</td>
                         <td>{empProjAlloc.shift_start_time}</td>
                         <td>{empProjAlloc.shift_end_time}</td>
                       </tr>

@@ -13,6 +13,7 @@ function EmpProjAlocEdit() {
     const [end_date, setEndDate] = useState('');
     const [work_location, setWorkLocation] = useState('');
     const [hours_per_day, setHoursPerDay] = useState('');
+    const [rate_per_hour, setRatePerHour] = useState('');
     const [shift_start_time, setShiftStartTime] = useState('');
     const [shift_end_time, setShiftEndTime] = useState('');
 
@@ -31,6 +32,7 @@ function EmpProjAlocEdit() {
             setEndDate(Utils.formatDateYYYYMMDD(response.data?.empProjAlloc?.end_date));
             setWorkLocation(response.data?.empProjAlloc?.work_location);
             setHoursPerDay(response.data?.empProjAlloc?.hours_per_day);
+            setRatePerHour(response.data?.empProjAlloc?.rate_per_hour);
             setShiftStartTime(response.data?.empProjAlloc?.shift_start_time);
             setShiftEndTime(response.data?.empProjAlloc?.shift_end_time);
         })
@@ -96,7 +98,8 @@ function EmpProjAlocEdit() {
             work_location : work_location,
             hours_per_day :hours_per_day,
             shift_start_time : shift_start_time, // 'hh:mi:ss',
-            shift_end_time : shift_end_time
+            shift_end_time : shift_end_time,
+            rate_per_hour : rate_per_hour
         })
         .then(function (response) {
             Swal.fire({
@@ -186,6 +189,16 @@ function EmpProjAlocEdit() {
                                     className="form-control"
                                     id="hours_per_day"
                                     name="hours_per_day"/>
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="hours_per_day">Rate Per Hour (USD)</label>
+                                <input 
+                                    onChange={(event)=>{setRatePerHour(event.target.value)}}
+                                    value={rate_per_hour}
+                                    type="number"
+                                    className="form-control"
+                                    id="rate_per_hour"
+                                    name="rate_per_hour"/>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="shift_start_time">Shift Start Time</label>

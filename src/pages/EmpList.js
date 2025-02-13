@@ -198,7 +198,7 @@ function EmpList() {
                     <th>Action</th>
                     <th>Name</th>
                     <th>Email</th>
-                    <th>Role</th>
+                    <th>Designation</th>
                     <th>Primary Skills</th>
                     <th>Secondary Skills</th>
                     <th>Status</th>
@@ -238,7 +238,7 @@ function EmpList() {
                           {empDetails.first_name}, {empDetails.last_name}
                         </td>
                         <td>{empDetails.email}</td>
-                        <td>{empDetails.role}</td>
+                        <td>{empDetails.designation}</td>
                         <td>{empDetails.primary_skills}</td>
                         <td>{empDetails.secondary_skills}</td>
                         <td>{empDetails.status}</td>

@@ -10,10 +10,10 @@ function EmpProjUtiliCreate() {
     const [emp_id, setEmpId] = useState('');
     const [project_id, setProjectId] = useState('');
     const [week_starting, setWeekStart] = useState('');
-    const [proj_hours_per_week, setProjPerWeek] = useState('');
-    const [allc_work_hours_per_week, setAllcPerWeek] = useState('');
-    const [forecast_hours_per_week, setForecastPerWeek] = useState('');
-    const [pto_hours_per_week, setPtoPerWeek] = useState('');
+    const [proj_hours_per_week, setProjPerWeek] = useState(0);
+    const [allc_work_hours_per_week, setAllcPerWeek] = useState(0);
+    const [forecast_hours_per_week, setForecastPerWeek] = useState(0);
+    const [pto_hours_per_week, setPtoPerWeek] = useState(0);
 
     const [isSaving, setIsSaving] = useState(false)
     const navigate = useNavigate();

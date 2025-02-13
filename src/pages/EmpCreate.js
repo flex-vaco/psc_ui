@@ -16,7 +16,7 @@ function EmpCreate() {
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
     const [office_location_city, setOfficeLocCity] = useState('');
-    const [role, setRole] = useState('');
+    const [designation, setDesignation] = useState('');
     const [status, setStatus] = useState('Active');
     const [manager_name, setManagerName] = useState('');
     const [manager_email, setManagerEmail] = useState('');
@@ -68,7 +68,7 @@ function EmpCreate() {
         data.append('last_name', last_name);
         data.append('status', status);
         data.append('email', email);
-        data.append('role', role);
+        data.append('designation', designation);
         data.append('primary_skills', primary_skills);
         data.append('secondary_skills', secondary_skills);
         data.append('education', education);
@@ -106,7 +106,7 @@ function EmpCreate() {
             setVacoJoinDate('');
             setHomeLocCity('');
             setOfficeLocCity('');
-            setRole('');
+            setDesignation('');
             setStatus('');
             setManagerName('');
             setManagerEmail('');
@@ -233,14 +233,14 @@ function EmpCreate() {
                                     name="profile_information"></textarea>
                             </div>
                             <div className="form-group col-md-3">
-                                <label htmlFor="role">Role</label>
+                                <label htmlFor="designation">Designation</label>
                                 <input 
-                                    onChange={(event)=>{setRole(event.target.value)}}
-                                    value={role}
+                                    onChange={(event)=>{setDesignation(event.target.value)}}
+                                    value={designation}
                                     type="text"
                                     className="form-control needs-validation"
-                                    id="role"
-                                    name="role"
+                                    id="designation"
+                                    name="designation"
                                     required/>
                             </div>
                             <div className="form-group col-md-2">
