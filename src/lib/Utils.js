@@ -291,10 +291,6 @@ export const testFindShortestPath = () => {
     const endNode = "E";
     const shortestPath = findShortestPath(graph, startNode, endNode);
     console.log("shortestPath: ", shortestPath);
-<<<<<<< HEAD
 }
 
 
-=======
-}
->>>>>>> 6b6ad93bcd9e7b730af3f63aa227c9ddeda8bba4

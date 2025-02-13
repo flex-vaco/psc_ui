@@ -42,16 +42,9 @@ import ApproveEmpTimesheet from './pages/timesheet/ApproveEmpTimesheet';
 import Dashboard from "./pages/Dashboard";
 import HireResource from "./pages/HireResource";
 import IntelliDB from './pages/aiChat/InteliDB'
-<<<<<<< HEAD
-=======
 import CategoryCreate from "./pages/categories/CategoryCreate";
 import CategoryEdit from "./pages/categories/CategoryEdit";
 import CategoryList from "./pages/categories/CategoryList";
-
-import CategoryCreate from "./pages/categories/CategoryCreate";
-import CategoryEdit from "./pages/categories/CategoryEdit";
-import CategoryList from "./pages/categories/CategoryList";
->>>>>>> 6b6ad93bcd9e7b730af3f63aa227c9ddeda8bba4
 
 function App() {
   const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
@@ -97,13 +90,9 @@ function App() {
           <Route path="/dashboard"  element={isLoggedIn ? <Dashboard/> : <Login/>} />
           <Route path="/hireResource"  element={isLoggedIn ? <HireResource/> : <Login/>} />
           <Route path="/idb"  element={isLoggedIn ? <IntelliDB/> : <Login/>} />
-<<<<<<< HEAD
-
-=======
           <Route path="/categoryCreate"  element={isLoggedIn ? <CategoryCreate/> : <Login/>} />
           <Route path="/categoryList"  element={isLoggedIn ? <CategoryList/> : <Login/>} />
           <Route path="/categoryEdit/:id"  element={isLoggedIn ? <CategoryEdit/> : <Login/>} />
->>>>>>> 6b6ad93bcd9e7b730af3f63aa227c9ddeda8bba4
       </Routes>
     </Router>
   );
