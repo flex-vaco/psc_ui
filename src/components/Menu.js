@@ -45,6 +45,7 @@ return(
                   
                 </li> : ""}
                 {AppFunc.hasAIChatAccess(activeUserRole) ? <li><a className="dropdown-item" href="/ichat">Explore Resumes</a></li> : ""}
+                {AppFunc.hasAIChatAccess(activeUserRole) ? <li><a className="dropdown-item" href="/idb">Explore Database</a></li> : ""}
               </ul>
             </li> : ""}
             <li className="nav-item dropdown ms-3 me-3">
