@@ -46,6 +46,10 @@ import CategoryCreate from "./pages/categories/CategoryCreate";
 import CategoryEdit from "./pages/categories/CategoryEdit";
 import CategoryList from "./pages/categories/CategoryList";
 
+import CategoryCreate from "./pages/categories/CategoryCreate";
+import CategoryEdit from "./pages/categories/CategoryEdit";
+import CategoryList from "./pages/categories/CategoryList";
+
 function App() {
   const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
   const isLoggedIn= ((localStorage.getItem("user") !== null) && (needsPasswordReset !== 1));
