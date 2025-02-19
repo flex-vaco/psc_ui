@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import Footer from "../components/Footer";
 import APP_CONSTANTS from "../appConstants";
+import ForgotPasswordModal from '../components/ForgotPasswordModal'
 
 function EmpShow() {
   const [tryingLogin, setTryingLogin] = useState(false);
@@ -12,6 +13,12 @@ function EmpShow() {
   const [errMessage, setErrMessage] = useState("");
 
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    setIsModalOpen(true);
+  };
 
   const handleLogin = () => {
     Swal.showLoading();
@@ -127,6 +134,7 @@ function EmpShow() {
                                 >
                                     Login
                                 </button>
+                                <p onClick={handleForgotPassword} className="forgot-password">Forget password?</p>
                           </div>    
                         </form>
                         <div className="text-center poweredby_logo">
@@ -136,6 +144,10 @@ function EmpShow() {
                     
                 </div>
             </div>
+            <ForgotPasswordModal 
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
+            />
         </div>
         <div className="container login_footer">
           <Footer />

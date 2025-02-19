@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -27,8 +27,28 @@ function EmpCreate() {
     const [selected_resume, setSelectedResume] = useState(null);
     const [profile_picture, setSelectedProfilePicture] = useState(null);
     const [employment_type, setSelectedEmpType] = useState('Full-time');
+    const [managerList, setManagerList] = useState([]);
     const navigate = useNavigate();
+    const [manager_id, setSelectedManager] = useState("-select-");
 
+    useEffect(() => {
+        const configs = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+        };
+        const datas = {
+            role: 'manager',
+        };
+  
+        axios.post('/users/getUserByRole', datas, configs)
+        .then(function (response) {
+          setManagerList(response.data.users);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }, []);
     const handleResumeChange = (e) => {
         if (AppFunc.validateUploadFile(e.target.files[0], "resume")) {
             setSelectedResume(e.target.files[0]);
@@ -52,6 +72,22 @@ function EmpCreate() {
     const handleCancel = () => {
         navigate("/employees");
     }
+
+    const handleManagerChange = (event) => {
+        const selectedManagerId = event.target.value;
+        setSelectedManager(selectedManagerId);
+
+        const selectedManagerDetails = managerList.find((manager) => manager.user_id == selectedManagerId);
+        console.log(selectedManagerDetails);
+        if (selectedManagerDetails) {
+            setManagerName(`${selectedManagerDetails.first_name} ${selectedManagerDetails.last_name}`);
+            setManagerEmail(selectedManagerDetails.email);
+        } else {
+            setManagerName('');
+            setManagerEmail('');
+        }
+
+    };
 
     const handleSave = () => {
         if(!AppFunc.validateForm(document.querySelectorAll('.needs-validation'))) return;
@@ -325,14 +361,10 @@ function EmpCreate() {
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="manager_name">Manager Name</label>
-                                <input 
-                                    onChange={(event)=>{setManagerName(event.target.value)}}
-                                    value={manager_name}
-                                    type="text"
-                                    className="form-control needs-validation"
-                                    id="manager_name"
-                                    name="manager_name"
-                                    required/>
+                                <select name="manager_id" id="manager_id" value={manager_id} className="form-control" onChange={handleManagerChange}> 
+                                    <option value="-select-" > -- Select Manager -- </option>
+                                    {managerList.map((manager) => <option value={manager.user_id}>{manager.first_name}, {manager.last_name}</option>)}
+                                </select>
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="manager_email">Manager Email</label>
@@ -343,7 +375,9 @@ function EmpCreate() {
                                     className="form-control needs-validation"
                                     id="manager_email"
                                     name="manager_email"
-                                    required/>
+                                    required
+                                    readOnly
+                                    />
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="resume">Resume</label>

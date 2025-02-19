@@ -7,7 +7,8 @@ const Menu = () => {
     const activeUserRole = localStorage.getItem("user_role");
     const [searchSkill, setSearchSkill] = useState('');
     const dummyState = {categoryTech:[], technologies:''};
-  
+    const [notificationsCount, setNotificationsCount] = useState(0);
+
     const handleLogout = () => {
       navigate("/")
       localStorage.removeItem("jwt-access-token");
@@ -44,11 +45,53 @@ return(
                         </ul>
                   
                 </li> : ""}
+                {AppFunc.hasHiringAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Hiring Enquires</a>
+                <ul className="dropdown-submenu">
+                            <li><a className="dropdown-item" href="/enquiredbyme">By Me</a></li>
+                            <li><a className="dropdown-item" href="/enquiredtome">To Me</a></li>
+                        </ul>
+                  
+                </li> : ""}
                 {AppFunc.hasAIChatAccess(activeUserRole) ? <li><a className="dropdown-item" href="/ichat">Explore Resumes</a></li> : ""}
                 {AppFunc.hasAIChatAccess(activeUserRole) ? <li><a className="dropdown-item" href="/idb">Explore Database</a></li> : ""}
               </ul>
             </li> : ""}
-            <li className="nav-item dropdown ms-3 me-3">
+            <li className="nav-item dropdown ms-2 me-2">
+              <a className="nav-link" href="#" id="navbarDropdownNotifications" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i className="bi bi-bell-fill"></i>
+                {notificationsCount > 0 && (
+                  <span className="badge bg-danger">{notificationsCount}</span>
+                )}
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdownNotifications">
+                {notificationsCount > 0 ? (
+                  <>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        New Notification 1
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        New Notification 2
+                      </a>
+                    </li>
+                    <li>
+                      <a className="dropdown-item" href="#">
+                        See All Notifications
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <li>
+                    <a className="dropdown-item" href="#">
+                      No Notifications
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </li>
+            <li className="nav-item dropdown ms-2 me-2">
               <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownuser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img src="/images/img_avatar1.png" alt="Avatar Logo" className="rounded-pill nav_profileimg"/>
               </a>

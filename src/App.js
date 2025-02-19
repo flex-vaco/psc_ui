@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import Login from "./pages/Login"
+import UpdatePassword from "./pages/UpdatePassword";
 
 import EmpList from "./pages/EmpList"
 import EmpCreate from "./pages/EmpCreate"
@@ -45,6 +46,9 @@ import IntelliDB from './pages/aiChat/InteliDB'
 import CategoryCreate from "./pages/categories/CategoryCreate";
 import CategoryEdit from "./pages/categories/CategoryEdit";
 import CategoryList from "./pages/categories/CategoryList";
+
+import EnquiredByMe from "./pages/hirings/EnquiredByMe";
+import EnquiredToMe from "./pages/hirings/EnquiredToMe";
 
 function App() {
   const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
@@ -93,6 +97,9 @@ function App() {
           <Route path="/categoryCreate"  element={isLoggedIn ? <CategoryCreate/> : <Login/>} />
           <Route path="/categoryList"  element={isLoggedIn ? <CategoryList/> : <Login/>} />
           <Route path="/categoryEdit/:id"  element={isLoggedIn ? <CategoryEdit/> : <Login/>} />
+          <Route path="/enquiredbyme"  element={isLoggedIn ? <EnquiredByMe/> : <Login/>} />
+          <Route path="/enquiredtome"  element={isLoggedIn ? <EnquiredToMe/> : <Login/>} />
+          <Route exact path="/updatePassword"  element={<UpdatePassword/>} />
       </Routes>
     </Router>
   );

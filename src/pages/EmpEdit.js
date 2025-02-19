@@ -32,6 +32,43 @@ function EmpEdit() {
     const [profile_picture, setSelectedProfilePicture] = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const navigate = useNavigate();
+    const [manager_id, setSelectedManager] = useState("-select-");
+    const [managerList, setManagerList] = useState([]);
+
+    useEffect(() => {
+        const configs = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+        };
+        const datas = {
+            role: 'manager',
+        };
+  
+        axios.post('/users/getUserByRole', datas, configs)
+        .then(function (response) {
+          setManagerList(response.data.users);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }, []);
+
+    const handleManagerChange = (event) => {
+        const selectedManagerId = event.target.value;
+        setSelectedManager(selectedManagerId);
+
+        const selectedManagerDetails = managerList.find((manager) => manager.user_id == selectedManagerId);
+        if (selectedManagerDetails) {
+            setManagerName(`${selectedManagerDetails.first_name} ${selectedManagerDetails.last_name}`);
+            setManagerEmail(selectedManagerDetails.email);
+        } else {
+            setManagerName('');
+            setManagerEmail('');
+        }
+
+    };
+
     const httpConfig = {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -54,13 +91,22 @@ function EmpEdit() {
             setOfficeLocCity(empDetails.office_location_city);
             setDesignation(empDetails.designation);
             setStatus(empDetails.status);
-            setManagerName(empDetails.manager_name);
-            setManagerEmail(empDetails.manager_email);
             setEmail(empDetails.email);
             setIsOnsite(empDetails.is_onsite);
             setSelectedEmpType(empDetails.employment_type);
             setResumeFileName(empDetails.resume);
-            setProfilePicFileName(empDetails.profile_picture)
+            setProfilePicFileName(empDetails.profile_picture);
+            
+
+            const selectedManagerDetails = managerList.find((manager) => manager.email === empDetails.manager_email);
+            if (selectedManagerDetails) {
+                setSelectedManager(selectedManagerDetails.user_id);
+                setManagerName(`${selectedManagerDetails.first_name} ${selectedManagerDetails.last_name}`);
+                setManagerEmail(selectedManagerDetails.email);
+            } else {
+                setManagerName('');
+                setManagerEmail('');
+            }
         })
         .catch(function (error) {
             Swal.fire({
@@ -71,7 +117,7 @@ function EmpEdit() {
             })
         })
           
-    }, [])
+    }, [managerList])
   
     const handleEmpTypeChange = (event) => {
         setSelectedEmpType(event.target.value);
@@ -122,6 +168,7 @@ function EmpEdit() {
         data.append('office_location_city', office_location_city);
         data.append('manager_name', manager_name);
         data.append('manager_email', manager_email);
+        data.append('manager_id', manager_id);
         data.append('is_onsite', onSite);
         data.append('employment_type', employment_type);
         data.append('profile_pic_file_name', profilePicFileName);
@@ -328,13 +375,10 @@ function EmpEdit() {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="manager_name">Manager Name</label>
-                                <input 
-                                    onChange={(event)=>{setManagerName(event.target.value)}}
-                                    value={manager_name}
-                                    type="text"
-                                    className="form-control"
-                                    id="manager_name"
-                                    name="manager_name"/>
+                                <select name="managerId" id="managerId" value={manager_id} className="form-control" onChange={handleManagerChange}> 
+                                    <option value="-select-" > -- Select Manager -- </option>
+                                    {managerList.map((manager) => <option value={manager.user_id}>{manager.first_name}, {manager.last_name}</option>)}
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="manager_email">Manager Email</label>
@@ -344,7 +388,9 @@ function EmpEdit() {
                                     type="email"
                                     className="form-control"
                                     id="manager_email"
-                                    name="manager_email"/>
+                                    name="manager_email"
+                                    readOnly
+                                    />
                             </div>
                             <div className="form-group">
                                 <label htmlFor="resume">Resume</label>

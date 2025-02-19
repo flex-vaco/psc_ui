@@ -65,7 +65,6 @@ function Home() {
   };
 
   const handleTechClick = (event, technology) => {
-    console.log("Tech", technology)
     event.preventDefault();
     navigate(`/filter`, {
       state: {
