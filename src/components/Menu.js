@@ -31,6 +31,7 @@ return(
                 {AppFunc.hasUtilizationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/empUtiliList">Utilization</a></li> : ""}
                 {AppFunc.hasCategoriesAccess(activeUserRole) ? <li><a className="dropdown-item" href="/categoryList">Categories</a></li> : ""}
                 {AppFunc.hasUserAccess(activeUserRole) ? <li><a className="dropdown-item" href="/userList">Users</a></li> : ""}
+                {AppFunc.hasLocationAccess(activeUserRole) ? <li><a className="dropdown-item" href="/officeLocations">Office Locations</a></li> : ""}
                 {AppFunc.hasApproveTimesheetAccess(activeUserRole) ? <li className="nav-item dropdown"><a className="dropdown-item" href="#">Timesheets</a>
                 <ul className="dropdown-submenu">
                             <li><a className="dropdown-item" href="/approveTimesheet">Approve Timesheets</a></li>

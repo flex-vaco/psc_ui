@@ -47,6 +47,7 @@ const hiringAccessRole = [
 ];
 const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
+const locationAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
 export const activeUserRole = localStorage.getItem("user_role");
 export const activeUser = JSON.parse(localStorage.getItem("user"));
 
@@ -79,6 +80,9 @@ export const hasUtilizationAccess = (activeUserRole) => {
 };
 export const hasUserAccess = (activeUserRole) => {
   return userAccessRoles.includes(activeUserRole) ? true : false;
+};
+export const hasLocationAccess = (activeUserRole) => {
+  return locationAccessRoles.includes(activeUserRole) ? true : false;
 };
 export const hasReportAccess = (activeUserRole) => {
   return reportAccessRoles.includes(activeUserRole) ? true : false;

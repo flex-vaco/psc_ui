@@ -17,7 +17,7 @@ function EmpEdit() {
     const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
-    const [office_location_city, setOfficeLocCity] = useState('');
+    const [office_location_city, setOfficeLocCity] = useState('-select-');
     const [designation, setDesignation] = useState('');
     const [status, setStatus] = useState('');
     const [manager_name, setManagerName] = useState('');
@@ -34,6 +34,7 @@ function EmpEdit() {
     const navigate = useNavigate();
     const [manager_id, setSelectedManager] = useState("-select-");
     const [managerList, setManagerList] = useState([]);
+    const [locationList, setLocationList] = useState([])
 
     useEffect(() => {
         const configs = {
@@ -52,6 +53,10 @@ function EmpEdit() {
         .catch(function (error) {
           console.log(error);
         })
+    }, [locationList]);
+
+    useEffect(() => {
+        fetchLocationList();
     }, []);
 
     const handleManagerChange = (event) => {
@@ -68,6 +73,16 @@ function EmpEdit() {
         }
 
     };
+
+    const fetchLocationList = () => {
+        axios.get('/officeLocation')
+        .then(function (response) {
+          setLocationList(response.data.locations);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
 
     const httpConfig = {
         headers: {
@@ -365,13 +380,10 @@ function EmpEdit() {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="office_location_city">Office Location City</label>
-                                <input 
-                                    onChange={(event)=>{setOfficeLocCity(event.target.value)}}
-                                    value={office_location_city}
-                                    type="text"
-                                    className="form-control"
-                                    id="office_location_city"
-                                    name="office_location_city"/>
+                                <select name="office_location_city" id="office_location_city" required value={office_location_city} className="form-control" onChange={(event)=>{setOfficeLocCity(event.target.value)}}> 
+                                    <option value="-select-" > -- Select Location -- </option>
+                                    {locationList.map((location) => <option value={location.office_location_city}>{location.office_location_city}</option>)}    
+                                </select>
                             </div>
                             <div className="form-group">
                                 <label htmlFor="manager_name">Manager Name</label>

@@ -50,6 +50,10 @@ import CategoryList from "./pages/categories/CategoryList";
 import EnquiredByMe from "./pages/hirings/EnquiredByMe";
 import EnquiredToMe from "./pages/hirings/EnquiredToMe";
 
+import OfficeLocationList from "./pages/officeLocations/OfficeLocationList"
+import OfficeLocationCreate from "./pages/officeLocations/OfficeLocationCreate"
+import OfficeLocationEdit from "./pages/officeLocations/OfficeLocationEdit"
+
 function App() {
   const needsPasswordReset = JSON.parse(localStorage.getItem("user"))?.needsPasswordReset || null;
   const isLoggedIn= ((localStorage.getItem("user") !== null) && (needsPasswordReset !== 1));
@@ -100,6 +104,9 @@ function App() {
           <Route path="/enquiredbyme"  element={isLoggedIn ? <EnquiredByMe/> : <Login/>} />
           <Route path="/enquiredtome"  element={isLoggedIn ? <EnquiredToMe/> : <Login/>} />
           <Route exact path="/updatePassword"  element={<UpdatePassword/>} />
+          <Route path="/officeLocations"  element={isLoggedIn ? <OfficeLocationList/> : <Login/>} />
+          <Route path="/officeLocationCreate"  element={isLoggedIn ? <OfficeLocationCreate/> : <Login/>} />
+          <Route path="/officeLocationEdit/:id"  element={isLoggedIn ? <OfficeLocationEdit/> : <Login/>} />
       </Routes>
     </Router>
   );

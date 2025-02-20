@@ -15,7 +15,7 @@ function EmpCreate() {
     const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
-    const [office_location_city, setOfficeLocCity] = useState('');
+    const [office_location_city, setOfficeLocCity] = useState('-select-');
     const [designation, setDesignation] = useState('');
     const [status, setStatus] = useState('Active');
     const [manager_name, setManagerName] = useState('');
@@ -30,6 +30,7 @@ function EmpCreate() {
     const [managerList, setManagerList] = useState([]);
     const navigate = useNavigate();
     const [manager_id, setSelectedManager] = useState("-select-");
+    const [locationList, setLocationList] = useState([])
 
     useEffect(() => {
         const configs = {
@@ -48,7 +49,19 @@ function EmpCreate() {
         .catch(function (error) {
           console.log(error);
         })
+        fetchLocationList();
     }, []);
+
+    const fetchLocationList = () => {
+        axios.get('/officeLocation')
+        .then(function (response) {
+          setLocationList(response.data.locations);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
+
     const handleResumeChange = (e) => {
         if (AppFunc.validateUploadFile(e.target.files[0], "resume")) {
             setSelectedResume(e.target.files[0]);
@@ -350,18 +363,14 @@ function EmpCreate() {
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="office_location_city">Office Location City</label>
-                                <input 
-                                    onChange={(event)=>{setOfficeLocCity(event.target.value)}}
-                                    value={office_location_city}
-                                    type="text"
-                                    className="form-control needs-validation"
-                                    id="office_location_city"
-                                    name="office_location_city"
-                                    required/>
+                                <select name="office_location_city" id="office_location_city" required value={office_location_city} className="form-control" onChange={(event)=>{setOfficeLocCity(event.target.value)}}> 
+                                    <option value="-select-" > -- Select Location -- </option>
+                                    {locationList.map((location) => <option value={location.office_location_city}>{location.office_location_city}</option>)}    
+                                </select>
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="manager_name">Manager Name</label>
-                                <select name="manager_id" id="manager_id" value={manager_id} className="form-control" onChange={handleManagerChange}> 
+                                <select name="manager_id" id="manager_id" value={manager_id} required className="form-control" onChange={handleManagerChange}> 
                                     <option value="-select-" > -- Select Manager -- </option>
                                     {managerList.map((manager) => <option value={manager.user_id}>{manager.first_name}, {manager.last_name}</option>)}
                                 </select>
