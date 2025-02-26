@@ -8,7 +8,7 @@ import $ from 'jquery';
 
 
 function EmpFilteredList() {
-   
+    const [isInitialLoad, setIsInitialLoad] = useState(true);
     const {technologies} = useLocation().state;
     const [selectedSecondarySkill, setSelectedSecondarySkill] = useState([]);
     const [empList, setEmpList] = useState([])
@@ -70,8 +70,11 @@ function EmpFilteredList() {
     }, [technologies])
 
     useEffect(() => {
+        if (isInitialLoad) {
+            return;
+        }
         fetchEmpList();
-    }, [selectedLocation, selectedExp, selectedSecondarySkill])
+    }, [selectedLocation, selectedExp, selectedSecondarySkill, selectedAvailability])
 
     const resetSecondarySkillUI = () => {
 
@@ -133,13 +136,16 @@ function EmpFilteredList() {
             params: {
                 skill: technologies ? technologies?.split(',') : null,
                 exp: selectedExp >= 0 ? selectedExp : null,
-                location: selectedLocation            
+                location: selectedLocation,           
+                availability: selectedAvailability >= 0 ? selectedAvailability : null
             }
         }
         )
             .then(function (response) {
+                
+                setIsInitialLoad(false);
                 setEmpList(response.data.employees);
-            filterBySecondarySkill(response.data.employees);
+                filterBySecondarySkill(response.data.employees);
             })
             .catch(function (error) {
                 console.log(error);

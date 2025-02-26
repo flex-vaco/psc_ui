@@ -17,23 +17,12 @@ function EmployeeProfileCard(props) {
     }
 
     useEffect(()=> {
-        fetchEmpAllocation();
+        setAvailability((40 - props.employee.alc_per_week)) 
     },[props.employee.emp_id])
 
     useEffect(()=> {
         setDisplayStatus(availability >= props.availability);
     },[availability])
-
-    const fetchEmpAllocation = () => {
-        axios.post(`/empPrjAloc/empPrjAlcToday`, {empId: props.employee.emp_id})
-        .then(function (response) {
-            const empProjAlcToday = (response.data.empProjAllocToday[0] ? response.data.empProjAllocToday[0] : {alc_per_week: 0, emp_id: props.employee.emp_id});
-            setAvailability((40 - empProjAlcToday.alc_per_week)) 
-        })
-        .catch(function (error) {
-            console.log(error);
-        })
-    }
 
     return (<> {displayStatus && (
         <div className="col-6 col-lg-3 float-left my-1 ps-1 pe-1 cursor" onClick={(e) => props.handleProfileClick(props.employee.emp_id)}> 

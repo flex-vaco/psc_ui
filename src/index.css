@@ -936,6 +936,80 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   outline: 1px solid #f47b34ad;
 }
 
+.bg-danger {
+  --bs-bg-opacity: 1;
+  position: absolute;
+  top: 0px;
+  right: -5px;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  background-color: #F27B3F;
+  color: white;
+  font-weight: bold;
+}
+
+#navbarDropdownNotifications {
+  position: relative;
+}
+
+/* Add this CSS to your styles */
+.hiring-modal .modal-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.hiring-modal .col-12.comments_textarea {
+  margin-top: auto; 
+}
+
+.hiring-modal .comments_desc {
+  max-height: 250px; 
+  overflow-y: auto;  
+}
+
+.comment strong {
+  display: block;
+  font-size: 1.1em;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.comment.left {
+  text-align: left;
+  background-color: #f0f0f0;
+}
+
+.comment.right {
+  text-align: right;
+  background-color: #d0f0d0;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.card-body.comments_card_body p {
+  margin-bottom: 0.2rem;
+}
+
+.card-body.comments_card_body {
+  padding: 0.2rem 1rem 0.2rem 1rem;
+}
+
+.forgot-password {
+  color: #f47b34;
+  cursor: pointer;
+  text-align: left;
+  margin-top: 1rem;
+}
+
+.comment-section {
+  height: 60vh;
+  overflow-y: auto;
+}
+
 @media screen and (min-width: 1209px) and (max-width: 1440px){ 
   .card.text-center.min_height {
     min-height: 180px;

@@ -1,4 +1,4 @@
-import React, {useState } from 'react'
+import React, {useState, useEffect } from 'react'
 import { useNavigate, useLocation } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -28,6 +28,7 @@ function HireResource() {
     const handleWorkLocChange = (event) => {
         setWorkLocation(event.target.value);
     }
+    console.log(employee);
     const handleSave = () => {
         if(!APP_FUNCTIONS.validateForm(document.querySelectorAll('.needs-validation'))) return;
         Swal.showLoading();

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useNavigate } from "react-router-dom"
 import Swal from 'sweetalert2'
 import axios from 'axios'
@@ -15,7 +15,7 @@ function EmpCreate() {
     const [total_work_experience_years, setTotWorkExp] = useState('');
     const [rate_per_hour, setRatePerHour] = useState('');
     const [home_location_city, setHomeLocCity] = useState('');
-    const [office_location_city, setOfficeLocCity] = useState('');
+    const [office_location_city, setOfficeLocCity] = useState('-select-');
     const [designation, setDesignation] = useState('');
     const [status, setStatus] = useState('Active');
     const [manager_name, setManagerName] = useState('');
@@ -27,7 +27,40 @@ function EmpCreate() {
     const [selected_resume, setSelectedResume] = useState(null);
     const [profile_picture, setSelectedProfilePicture] = useState(null);
     const [employment_type, setSelectedEmpType] = useState('Full-time');
+    const [managerList, setManagerList] = useState([]);
     const navigate = useNavigate();
+    const [manager_id, setSelectedManager] = useState("-select-");
+    const [locationList, setLocationList] = useState([])
+
+    useEffect(() => {
+        const configs = {
+            headers: {
+              "Content-Type": "application/json",
+            },
+        };
+        const datas = {
+            role: 'manager',
+        };
+  
+        axios.post('/users/getUserByRole', datas, configs)
+        .then(function (response) {
+          setManagerList(response.data.users);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+        fetchLocationList();
+    }, []);
+
+    const fetchLocationList = () => {
+        axios.get('/officeLocation')
+        .then(function (response) {
+          setLocationList(response.data.locations);
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+    }
 
     const handleResumeChange = (e) => {
         if (AppFunc.validateUploadFile(e.target.files[0], "resume")) {
@@ -52,6 +85,22 @@ function EmpCreate() {
     const handleCancel = () => {
         navigate("/employees");
     }
+
+    const handleManagerChange = (event) => {
+        const selectedManagerId = event.target.value;
+        setSelectedManager(selectedManagerId);
+
+        const selectedManagerDetails = managerList.find((manager) => manager.user_id == selectedManagerId);
+        console.log(selectedManagerDetails);
+        if (selectedManagerDetails) {
+            setManagerName(`${selectedManagerDetails.first_name} ${selectedManagerDetails.last_name}`);
+            setManagerEmail(selectedManagerDetails.email);
+        } else {
+            setManagerName('');
+            setManagerEmail('');
+        }
+
+    };
 
     const handleSave = () => {
         if(!AppFunc.validateForm(document.querySelectorAll('.needs-validation'))) return;
@@ -314,25 +363,17 @@ function EmpCreate() {
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="office_location_city">Office Location City</label>
-                                <input 
-                                    onChange={(event)=>{setOfficeLocCity(event.target.value)}}
-                                    value={office_location_city}
-                                    type="text"
-                                    className="form-control needs-validation"
-                                    id="office_location_city"
-                                    name="office_location_city"
-                                    required/>
+                                <select name="office_location_city" id="office_location_city" required value={office_location_city} className="form-control" onChange={(event)=>{setOfficeLocCity(event.target.value)}}> 
+                                    <option value="-select-" > -- Select Location -- </option>
+                                    {locationList.map((location) => <option value={location.office_location_city}>{location.office_location_city}</option>)}    
+                                </select>
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="manager_name">Manager Name</label>
-                                <input 
-                                    onChange={(event)=>{setManagerName(event.target.value)}}
-                                    value={manager_name}
-                                    type="text"
-                                    className="form-control needs-validation"
-                                    id="manager_name"
-                                    name="manager_name"
-                                    required/>
+                                <select name="manager_id" id="manager_id" value={manager_id} required className="form-control" onChange={handleManagerChange}> 
+                                    <option value="-select-" > -- Select Manager -- </option>
+                                    {managerList.map((manager) => <option value={manager.user_id}>{manager.first_name}, {manager.last_name}</option>)}
+                                </select>
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="manager_email">Manager Email</label>
@@ -343,7 +384,9 @@ function EmpCreate() {
                                     className="form-control needs-validation"
                                     id="manager_email"
                                     name="manager_email"
-                                    required/>
+                                    required
+                                    readOnly
+                                    />
                             </div>
                             <div className="form-group col-md-6">
                                 <label htmlFor="resume">Resume</label>

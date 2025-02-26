@@ -91,7 +91,7 @@ function CategoryEdit() {
             <div className="container">
                 <div className="card">
                     <div className="card-header">
-                        <h4 className="text-center">Add New Category</h4>
+                        <h4 className="text-center">Edit Category</h4>
                     </div>
                     <div className="card-body">
                         <form>

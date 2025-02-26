@@ -41,8 +41,13 @@ const reportAccessTimesheetApprove = [
 const categoryAccessRole = [
   APP_CONSTANTS.USER_ROLES.ADMINISTRATOR
 ];
+const hiringAccessRole = [
+  APP_CONSTANTS.USER_ROLES.MANAGER,
+  APP_CONSTANTS.USER_ROLES.PRODUCER
+];
 const aiChatAccessRoles = reportAccessRoles;
 const userAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
+const locationAccessRoles = [APP_CONSTANTS.USER_ROLES.ADMINISTRATOR];
 export const activeUserRole = localStorage.getItem("user_role");
 export const activeUser = JSON.parse(localStorage.getItem("user"));
 
@@ -76,6 +81,9 @@ export const hasUtilizationAccess = (activeUserRole) => {
 export const hasUserAccess = (activeUserRole) => {
   return userAccessRoles.includes(activeUserRole) ? true : false;
 };
+export const hasLocationAccess = (activeUserRole) => {
+  return locationAccessRoles.includes(activeUserRole) ? true : false;
+};
 export const hasReportAccess = (activeUserRole) => {
   return reportAccessRoles.includes(activeUserRole) ? true : false;
 };
@@ -90,6 +98,9 @@ export const hasApproveTimesheetAccess = (activeUserRole) => {
 };
 export const hasCategoriesAccess = (activeUserRole) => {
   return categoryAccessRole.includes(activeUserRole) ? true : false;
+};
+export const hasHiringAccess = (activeUserRole) => {
+  return hiringAccessRole.includes(activeUserRole) ? true : false;
 };
 export const validateForm = (valdiationFields) => {
   //remove all previous invalid-feedback divs
