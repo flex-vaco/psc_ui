@@ -1010,6 +1010,17 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
   overflow-y: auto;
 }
 
+.rdt_TableHeadRow {
+  background-color: #f8f9fa !important; 
+}
+
+.rdt_TableHead {
+  color: #000 !important; 
+  font-weight: bold !important; 
+  text-align: left !important; 
+  font-size: 16px !important;
+}
+
 @media screen and (min-width: 1209px) and (max-width: 1440px){ 
   .card.text-center.min_height {
     min-height: 180px;

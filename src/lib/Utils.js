@@ -11,6 +11,27 @@ export const formatDateYYYYMMDD = (givenDate) => {
     const yyyy = myDate.getFullYear();
     return `${yyyy}-${mm}-${dd}`;
 };
+
+export const formatDateTime = (givenDate) => {
+    let myDate = new Date(givenDate);
+    let dd = myDate.getDate();
+    dd = dd < 10 ? "0" + dd.toString() : dd.toString();
+    let mm = myDate.getMonth() + 1;
+    mm = mm < 10 ? "0" + mm.toString() : mm.toString();
+    const yyyy = myDate.getFullYear();
+    
+    let hours = myDate.getHours();
+    hours = hours < 10 ? "0" + hours.toString() : hours.toString();
+    
+    let minutes = myDate.getMinutes();
+    minutes = minutes < 10 ? "0" + minutes.toString() : minutes.toString();
+    
+    let seconds = myDate.getSeconds();
+    seconds = seconds < 10 ? "0" + seconds.toString() : seconds.toString();
+
+    return `${yyyy}-${mm}-${dd} ${hours}:${minutes}:${seconds}`;
+};
+
 export const formatDateDDMM = (givenDate) => {
     let myDate = new Date(givenDate);
     let dd = myDate.getDate();

@@ -210,7 +210,7 @@ const HiringModal = (props) => {
                                                     </div>
 
                                                     <div className="d-flex flex-row align-items-center">
-                                                        <p className="small text-muted mb-0">{Utils.formatDateYYYYMMDD(comment.commented_at)}</p>
+                                                        <p className="small text-muted mb-0">{Utils.formatDateTime(comment.commented_at)}</p>
                                                     </div>
                                                 </div>
                                             </div>
