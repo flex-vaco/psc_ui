@@ -28,7 +28,6 @@ function HireResource() {
     const handleWorkLocChange = (event) => {
         setWorkLocation(event.target.value);
     }
-    console.log(employee);
     const handleSave = () => {
         if(!APP_FUNCTIONS.validateForm(document.querySelectorAll('.needs-validation'))) return;
         Swal.showLoading();

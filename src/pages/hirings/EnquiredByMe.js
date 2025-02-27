@@ -93,8 +93,7 @@ function EnquiredByMe() {
                         <option key={status} value={status}>{status}</option>
                       ))}
                     </select>
-                    <input style={{width:"35%"}} className="ms-1" id="search-value" type="text" placeholder="Type a value" value={searchText} onChange={(e) => setSearchText(e.target.value)}/>
-                </div>
+                  </div>
                 <div className="col text-center">
                   <h4>Hiring Enquired By Me</h4>
                 </div>
