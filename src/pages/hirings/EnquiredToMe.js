@@ -13,7 +13,7 @@ function EnquiredByMe() {
     const [modalIsOpen, setIsOpen] = useState(false);
     const [hiringModalDetails, setHiringModalDetails] = useState({});
     const [hiringModalComments, setHiringModalComments] = useState({})
-
+    const [hideHireBtn, setHideHireBtn] = useState(false);
     useEffect(() => {
         fetchHiringListByMe()
     }, [])
@@ -66,6 +66,7 @@ function EnquiredByMe() {
         axios.get(`/hirings/${row.hiring_id}`)
           .then((response) => {
             setHiringModalDetails(response.data.hirings[0])
+            setHideHireBtn(response.data.hirings[0].hiring_status === 'enquired' ? false : true);
           })
           .catch((error) => {
             console.log(error);
@@ -113,15 +114,7 @@ function EnquiredByMe() {
                 hiringDetails={hiringModalDetails}
                 hiringComments={hiringModalComments}
                 hideAddInListBtn={true}
-                hideHireBtn={true}
-                navigateToPage="/enquiredbyme"
-              />
-              <HiringModal
-                modelStatus={modalIsOpen}
-                hiringDetails={hiringModalDetails}
-                hiringComments={hiringModalComments}
-                hideAddInListBtn={true}
-                hideHireBtn={false}
+                hideHireBtn={hideHireBtn}
                 navigateToPage="/enquiredtome"
               />
             </div>

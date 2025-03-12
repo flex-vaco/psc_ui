@@ -9,7 +9,6 @@ import axios from 'axios';
 const HiringModal = (props) => {
 
     const [hiringModalIsOpen, setIsModelOpen] = useState(false);
-    const [hideHireBtn, setHideHireBtn] = useState(props.hideHireBtn);
     const [comments, setComments] = useState([]); 
     const [newComment, setNewComment] = useState("");
     const navigate = useNavigate();
@@ -29,27 +28,26 @@ const HiringModal = (props) => {
     
       const handleApprove = () => {
         setIsSaving(true);
-        const config = {
-          headers: {
-            "Content-Length": 0,
-            "Content-Type": "application/json",
-          },
-          responseType: "text",
+        const configs = {
+            headers: {
+              "Content-Type": "application/json",
+            },
         };
         const data = {
             hiring_id: props.hiringDetails.hiring_id,
             hiring_status: 'approved',
         };
-        axios.post(`/hirings/update/${props.hiringDetails.hiring_id}`, data, config)
+        axios.post(`/hirings/update/${props.hiringDetails.hiring_id}`, data, configs)
           .then(function (response) {
+
+            setIsModelOpen(false);
             Swal.fire({
                 icon: 'success',
                 title: 'Hiring Status Updated successfully!',
                 showConfirmButton: false,
                 timer: 1500
             });
-            setIsModelOpen(false);
-            navigate('/enquiredtome');
+            
           })
           .catch(function (error) {
             Swal.fire({
@@ -58,24 +56,25 @@ const HiringModal = (props) => {
                 showConfirmButton: false,
                 timer: 1500
             })
-            setIsSaving(false)
+            setIsSaving(false);
+            closeModal();
+
+            //navigate('/enquiredtome');
           });
       };
     
       const handleReject = () => {
         setIsSaving(true);
-        const config = {
-          headers: {
-            "Content-Length": 0,
-            "Content-Type": "application/json",
-          },
-          responseType: "text",
+        const configs = {
+            headers: {
+              "Content-Type": "application/json",
+            },
         };
         const data = {
             hiring_id: props.hiringDetails.hiring_id,
             hiring_status: 'rejected',
         };
-        axios.post(`/hirings/update/${props.hiringDetails.hiring_id}`, data, config)
+        axios.post(`/hirings/update/${props.hiringDetails.hiring_id}`, data, configs)
           .then(function (response) {
             Swal.fire({
                 icon: 'success',
@@ -83,8 +82,6 @@ const HiringModal = (props) => {
                 showConfirmButton: false,
                 timer: 1500
             });
-            setIsModelOpen(false);
-            navigate('/enquiredtome');
           })
           .catch(function (error) {
             Swal.fire({
@@ -93,12 +90,14 @@ const HiringModal = (props) => {
                 showConfirmButton: false,
                 timer: 1500
             })
-            setIsSaving(false)
+            setIsSaving(false);
+
+            setIsModelOpen(false);
+            //navigate('/enquiredtome');
           });
       };
     
       const handleSubmit = () => {
-        console.log("Submitted comment:", newComment);
         setComments([...comments, { comment: newComment, date: new Date() }]);
         
         setIsSaving(true);
@@ -173,7 +172,7 @@ const HiringModal = (props) => {
                     <div className="col-12 col-lg-6 float-left">
                         <div className="col-12 comments_textarea">
                             <div className="mt-3">
-                                
+                                <h4>Comments</h4>
                             </div>
                         </div>
                         <div className="row d-flex justify-content-center">
@@ -195,7 +194,7 @@ const HiringModal = (props) => {
                                     Comment
                                 </button>
                             </div>
-
+                                
                                 {comments.length > 0 ? (
                                     comments.map((comment, index) => (
                                         <div className="card mb-1 ">
@@ -204,9 +203,8 @@ const HiringModal = (props) => {
 
                                                 <div className="d-flex justify-content-between">
                                                     <div className="d-flex flex-row align-items-center">
-                                                        <img src={`${process.env.REACT_APP_API_BASE_URL}/uploads/technologies/img_avatar1.png`} alt="avatar" width="25"
-                                                        height="25" />
-                                                        <p className="small mb-0 ms-2">{comment.first_name}, {comment.last_name}</p>
+                                                        
+                                                        <p className="small mb-0"><b>By:</b> {comment.first_name}, {comment.last_name}</p>
                                                     </div>
 
                                                     <div className="d-flex flex-row align-items-center">

@@ -992,6 +992,7 @@ button.navbar-toggler.btn.btn-outline-secondary.ms-1.me-1 {
 
 .card-body.comments_card_body p {
   margin-bottom: 0.2rem;
+  font-weight: bold;
 }
 
 .card-body.comments_card_body {
