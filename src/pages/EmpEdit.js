@@ -130,13 +130,13 @@ function EmpEdit() {
             setProfilePicFileName(empDetails.profile_picture);
             
             // Set new fields from response
-            setFunctionalFocus(empDetails.functional_focus || '-select-');
-            setVacoDivision(empDetails.vaco_division || '-select-');
-            setCoreSkillset(empDetails.core_skillset ? empDetails.core_skillset.split(',') : []);
-            setRevenueCompanySize(empDetails.revenue_company_size ? empDetails.revenue_company_size.split(',') : []);
-            setIndustries(empDetails.industries ? empDetails.industries.split(',') : []);
-            setSoftwareErpExperience(empDetails.software_erp_experience ? empDetails.software_erp_experience.split(',') : []);
-            setHoursPreference(empDetails.hours_preference || '40.00');
+            setFunctionalFocus(empDetails.functional_focus_area || '-select-');
+            setVacoDivision(empDetails.highspring_division || '-select-');
+            setCoreSkillset(empDetails.primary_skills ? empDetails.primary_skills.split(',') : []);
+            setRevenueCompanySize(empDetails.max_company_revenue_size ? empDetails.max_company_revenue_size.split(',') : []);
+            setIndustries(empDetails.industries_experience ? empDetails.industries_experience.split(',') : []);
+            setSoftwareErpExperience(empDetails.erp_software_experience ? empDetails.erp_software_experience.split(',') : []);
+            setHoursPreference(empDetails.max_work_hours_prefered || '40.00');
 
             const selectedManagerDetails = managerList.find((manager) => manager.email === empDetails.manager_email);
             if (selectedManagerDetails) {
@@ -220,13 +220,8 @@ function EmpEdit() {
         data.append('primary_skills', core_skillset.join(','));
         data.append('max_company_revenue_size', revenue_company_size.join(','));
         data.append('industries_experience', industries.join(','));
-        data.append('erp_software_experience', software_erp_experience.join(','));
-        data.append('functional_focus', functional_focus);
-        data.append('vaco_division', vaco_division);
-        data.append('revenue_company_size', revenue_company_size.join(','));
-        data.append('industries', industries.join(','));
-        data.append('software_erp_experience', software_erp_experience.join(','));
-        data.append('hours_preference', hours_preference);
+        data.append('erp_software_experience', software_erp_experience.join(','));  
+        data.append('max_work_hours_prefered', hours_preference);
         
         if(selected_resume) data.append('resume', selected_resume);
         if(profile_picture) data.append('profile_picture', profile_picture);

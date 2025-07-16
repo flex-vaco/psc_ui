@@ -153,12 +153,7 @@ function EmpCreate() {
         data.append('max_company_revenue_size', revenue_company_size.join(','));
         data.append('industries_experience', industries.join(','));
         data.append('erp_software_experience', software_erp_experience.join(','));  
-        data.append('functional_focus', functional_focus);
-        data.append('vaco_division', vaco_division);
-        data.append('revenue_company_size', revenue_company_size.join(','));
-        data.append('industries', industries.join(','));
-        data.append('software_erp_experience', software_erp_experience.join(','));
-        data.append('hours_preference', hours_preference);
+        data.append('max_work_hours_prefered', hours_preference);
 
 
 
